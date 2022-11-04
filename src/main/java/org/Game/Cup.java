@@ -6,11 +6,10 @@ import static org.Game.Dice.sides;
 
 public class Cup {
 
-    private Dice dice1, dice2;
+    Dice dice1 = new Dice();
+    Dice dice2 = new Dice();
 
     public Cup(){
-        Dice dice1 = new Dice();
-        Dice dice2 = new Dice();
     }
 
     private final Random random = new Random();
@@ -23,6 +22,14 @@ public void rollDices() {
 }
 public int getDice1(){
     return dice1.getFace();
+}
+
+public int getDice2(){
+    return dice2.getFace();
+}
+public int getSum(){
+    int sum = getDice2() + getDice1();
+    return sum;
 }
 
 }
