@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="renamed package org.Game&#10;New branch: Dice">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Cup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Cup.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Main.java" afterDir="false" />
-    </list>
+    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="renamed package org.Game&#10;New branch: Dice" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
