@@ -8,11 +8,11 @@ public class Helper {
     public static String lang;
 
     // Reads file
-    public String lineReader(int lineNo) {
+    public String lineReader(String file, int lineNo) {
         // The line number
         String line = " ";
         try {
-            line = Files.readAllLines(Paths.get(lang)).get(lineNo);
+            line = Files.readAllLines(Paths.get(lang + file)).get(lineNo);
         } catch (IOException e) {
             System.out.println(e);
         }
