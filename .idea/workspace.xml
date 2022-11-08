@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="Danish txt descriptions for all chance cards added, as well as toString methods for the Card and Deck Classes">
+    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="Working Cards + small changes">
+      <change afterPath="$PROJECT_DIR$/English_Deck" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/English_Fields" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dansk" beforeDir="false" afterPath="$PROJECT_DIR$/Dansk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Card.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dansk" beforeDir="false" afterPath="$PROJECT_DIR$/Dansk_Deck" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/English" beforeDir="false" afterPath="$PROJECT_DIR$/Dansk_Fields" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Deck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Deck.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Helper.java" afterDir="false" />
     </list>
@@ -124,7 +126,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667921123921</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Working Cards + small changes">
+      <created>1667922878404</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1667922878404</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -147,7 +156,8 @@
     <MESSAGE value="Temporary file reader" />
     <MESSAGE value="File reader that works:)" />
     <MESSAGE value="Danish txt descriptions for all chance cards added, as well as toString methods for the Card and Deck Classes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Danish txt descriptions for all chance cards added, as well as toString methods for the Card and Deck Classes" />
+    <MESSAGE value="Working Cards + small changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Working Cards + small changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
