@@ -1,11 +1,9 @@
 package org.Game;
 
 public class GameBoard {
-    private Field[] field;
-
+    private Field[] field = new Field[24];
 
     public GameBoard() {
-        Field[] field = new Field[24];
         initGameBoard();
     }
 
