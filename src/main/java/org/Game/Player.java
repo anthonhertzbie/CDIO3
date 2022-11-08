@@ -1,7 +1,5 @@
 package org.Game;
 
-import java.util.Arrays;
-
 public class Player {
     private int playerPosition;
     String name;
