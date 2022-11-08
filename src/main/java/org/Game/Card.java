@@ -16,4 +16,12 @@ public class Card {
     public String getCardDescription() {
         return cardDescription;
     }
+
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+        builder.append(getCardNumber());
+        builder.append(" ");
+        builder.append(getCardDescription());
+        return builder.toString();
+    }
 }

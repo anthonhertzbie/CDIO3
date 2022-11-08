@@ -1,5 +1,7 @@
 package org.Game;
 
+import java.util.Arrays;
+
 import static org.Game.Helper.lang;
 
 public class Main {

@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="Deck and Cards without txt descriptions">
-      <change afterPath="$PROJECT_DIR$/Dansk" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/English" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/Game/Helper.java" afterDir="false" />
+    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="Temporary file reader">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Card.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Deck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Deck.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Main.java" afterDir="false" />
     </list>
@@ -84,7 +82,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667830285168</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Temporary file reader">
+      <created>1667908235812</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1667908235812</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -104,6 +109,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="renamed package org.Game&#10;New branch: Dice" />
     <MESSAGE value="Deck and Cards without txt descriptions" />
-    <option name="LAST_COMMIT_MESSAGE" value="Deck and Cards without txt descriptions" />
+    <MESSAGE value="Temporary file reader" />
+    <option name="LAST_COMMIT_MESSAGE" value="Temporary file reader" />
   </component>
 </project>

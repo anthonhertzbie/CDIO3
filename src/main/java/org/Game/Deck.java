@@ -4,13 +4,12 @@ import static org.Game.Helper.lang;
 
 public class Deck {
 
-    public Card[] card;
+    private Card[] card = new Card[24];
 
     /**
      * Deck constructor with 24 cards
      */
     public Deck() {
-        Card[] card = new Card[24];
         initDeck();
     }
 
@@ -47,9 +46,9 @@ public class Deck {
     public String toString(){
         StringBuilder kortspillet = new StringBuilder();
         kortspillet.append("[");
-        for (int i = 0; i < 51; i++) {
+        for (int i = 0; i < 24; i++) {
             kortspillet.append(card[i].toString());
-            if(i < 50) {
+            if(i < 23) {
                 kortspillet.append(", ");
             }
         }
