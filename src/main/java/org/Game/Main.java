@@ -1,10 +1,13 @@
 package org.Game;
 
+import java.util.Arrays;
+
+import static org.Game.Helper.lang;
+
 public class Main {
     public static void main(String[] args) {
-
-        System.out.println("Hello World");
-        }
-
-
+        lang = "Dansk";
+        Deck deck = new Deck();
+        System.out.println(deck);
     }
+}
