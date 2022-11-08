@@ -18,18 +18,18 @@ public class Deck {
      */
     private void initDeck() {
         Helper helper = new Helper();
-        for (int i = 0; i < card.length - 1 ; i++) {
-            card[i] = new Card(i, helper.lineReader(i));
+        for (int i = 0; i < card.length; i++) {
+            card[i] = new Card(helper.lineReader(i));
         }
 
     }
     public String toString(){
         StringBuilder kortspillet = new StringBuilder();
         kortspillet.append("[");
-        for (int i = 0; i < 24; i++) {
+        for (int i = 0; i < 20; i++) {
             kortspillet.append(card[i].toString());
-            if(i < 23) {
-                kortspillet.append(", ");
+            if(i < 19) {
+                kortspillet.append(", \n");
             }
         }
         kortspillet.append("]");

@@ -10,7 +10,7 @@ public class Helper {
     // Reads file
     public String lineReader(int lineNo) {
         // The line number
-        String line = null;
+        String line = " ";
         try {
             line = Files.readAllLines(Paths.get(lang)).get(lineNo);
         } catch (IOException e) {
