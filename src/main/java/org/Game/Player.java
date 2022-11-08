@@ -11,19 +11,22 @@ public class Player {
         acc.setPlayerBalance(startMoney);
     }
 
-    public void addPlayerPosition(int diceThrow, int money) {
+    public void addPlayerPosition(int diceThrow) {
         this.playerPosition += diceThrow;
-        acc.setPlayerBalance(money);
     }
 
-    public void setPlayerPosition(int playerPosition, int money) {
+    public void setPlayerPosition(int playerPosition) {
         this.playerPosition = playerPosition;
-        acc.setPlayerBalance(money);
     }
 
     public int getAccountBalance() {
         return acc.getPlayerBalance();
     }
+
+    public void setAccountBalance(int acc) {
+        this.acc.setPlayerBalance(acc);
+    }
+
     public int getPlayerPosition(){
         return playerPosition;
     }

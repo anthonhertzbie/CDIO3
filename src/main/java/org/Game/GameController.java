@@ -1,26 +1,25 @@
 package org.Game;
 
 import gui_fields.GUI_Car;
-import gui_fields.GUI_Field;
 import gui_fields.GUI_Player;
 import gui_fields.GUI_Street;
 import gui_main.GUI;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 public class GameController {
 
+
     Random random = new Random();
     Cup cup = new Cup();
     GUI_Street street = new GUI_Street();
     GameBoard gameBoard = new GameBoard();
-    GUI gui = new GUI();
 
-    List<GUI_Car> cars = new ArrayList<>();
     List<GUI_Player> gui_players = new ArrayList<>();
+
+
 
     int noPlayer = 2;
     int startMoney = 0;
@@ -31,6 +30,9 @@ public class GameController {
     //Instantiates Player class depending on number of players
     Player[] player = new Player[noPlayer];
 
+    GUI_Player[] players = new GUI_Player[noPlayer];
+    GUI_Car[] cars = new GUI_Car[noPlayer];
+
     //Makes players take turns in the consecutive order 0 through 4
     public void turn() {
         if (playerTurn < noPlayer){
@@ -40,8 +42,12 @@ public class GameController {
         }
     }
 
+
+
     //Starts game
     public void startGame(){
+        GUI gui = new GUI(gameBoard.gameBoard());
+
         //Sets starting balance in accordance to number of players
         if (noPlayer == 2){
             startMoney = 1000;
@@ -54,6 +60,10 @@ public class GameController {
         }
         for (int i = 0; i < noPlayer; i++) {
             player[i] = new Player(startMoney, 0, gui.getUserString("Enter player name: "));
+            cars[i] = new GUI_Car();
+            players[i] = new GUI_Player(player[i].getName(), player[i].getAccountBalance(), cars[i]);
+            gui.addPlayer(players[i]);
+            gameBoard.getField(0).setCar(players[i],true);
         }
 
 
@@ -61,7 +71,10 @@ public class GameController {
             gui.showMessage(player[playerTurn].getName() + "'s turn. Press OK to roll");
             cup.rollDices();
             gui.setDice(cup.getDice1(), cup.getDice2());
-            gameBoard.toString();
+            player[playerTurn].addPlayerPosition(cup.getSum());
+            gameBoard.getField(player[playerTurn].getPlayerPosition()).setCar(players[playerTurn], true);
+
+
 
 
         }

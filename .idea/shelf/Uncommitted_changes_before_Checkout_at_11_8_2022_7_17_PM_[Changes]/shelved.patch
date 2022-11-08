@@ -1,0 +1,183 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	
++++ b/.idea/workspace.xml	
+@@ -4,16 +4,29 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="Done">
+-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
++    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="renamed package org.Game&#10;New branch: Dice">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Account.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Player.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+     <option name="LAST_RESOLUTION" value="IGNORE" />
++  </component>
++  <component name="FileTemplateManagerImpl">
++    <option name="RECENT_TEMPLATES">
++      <list>
++        <option value="Class" />
++      </list>
++    </option>
+   </component>
+   <component name="Git.Settings">
++    <option name="RECENT_BRANCH_BY_REPOSITORY">
++      <map>
++        <entry key="$PROJECT_DIR$" value="main" />
++      </map>
++    </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+   <component name="MarkdownSettingsMigration">
+@@ -25,19 +38,17 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+-    "RunOnceActivity.OpenProjectViewOnStart": "true",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+-    "WebServerToolWindowFactoryState": "false",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.detected.package.tslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "node.js.selected.package.tslint": "(autodetect)"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+     <task active="true" id="Default" summary="Default task">
+@@ -47,13 +58,14 @@
+       <option name="presentableId" value="Default" />
+       <updated>1667229570603</updated>
+       <workItem from="1667229573670" duration="825000" />
++      <workItem from="1667478967204" duration="4668000" />
+     </task>
+-    <task id="LOCAL-00001" summary="Done">
+-      <created>1667915530365</created>
++    <task id="LOCAL-00001" summary="renamed package org.Game&#10;New branch: Dice">
++      <created>1667479829126</created>
+       <option name="number" value="00001" />
+       <option name="presentableId" value="LOCAL-00001" />
+       <option name="project" value="LOCAL" />
+-      <updated>1667915530365</updated>
++      <updated>1667479829126</updated>
+     </task>
+     <option name="localTasksCounter" value="2" />
+     <servers />
+@@ -73,7 +85,7 @@
+     </option>
+   </component>
+   <component name="VcsManagerConfiguration">
+-    <MESSAGE value="Done" />
+-    <option name="LAST_COMMIT_MESSAGE" value="Done" />
++    <MESSAGE value="renamed package org.Game&#10;New branch: Dice" />
++    <option name="LAST_COMMIT_MESSAGE" value="renamed package org.Game&#10;New branch: Dice" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: src/main/java/org/Game/GameController.java
+===================================================================
+diff --git a/src/main/java/org/Game/GameController.java b/src/main/java/org/Game/GameController.java
+--- a/src/main/java/org/Game/GameController.java	
++++ b/src/main/java/org/Game/GameController.java	
+@@ -1,25 +1,29 @@
+ package org.Game;
+ 
++import gui_main.GUI;
++
+ import java.util.Random;
+ 
+ public class GameController {
+ 
+ 
+     Random random = new Random();
++    Deck deck = new Deck();
++    Cup cup = new Cup();
++    GUI gui = new GUI();
+ 
+-    int noPlayers = 2;
++    int noPlayer = 2;
+     int startMoney = 0;
+ 
+     //Random player starts
+-    int playerTurn = random.nextInt(0, noPlayers);
++    int playerTurn = random.nextInt(0, noPlayer);
+ 
+     //Instantiates Player class depending on number of players
+-    Player[] players = new Player[noPlayers];
+-
++    Player[] player = new Player[noPlayer];
+ 
+     //Makes players take turns in the consecutive order 0 through 4
+     public void turn() {
+-        if (playerTurn < noPlayers){
++        if (playerTurn < noPlayer){
+             playerTurn += 1;
+         } else {
+             playerTurn = 0;
+@@ -30,17 +34,29 @@
+     public void GameController(){
+ 
+         //Sets starting balance in accordance to number of players
+-        if (noPlayers == 2){
++        if (noPlayer == 2){
+             startMoney = 1000;
+         }
+-        if (noPlayers == 3){
++        if (noPlayer == 3){
+             startMoney = 2000;
+         }
+-        if (noPlayers == 4){
++        if (noPlayer == 4){
+             startMoney = 3000;
+         }
+-        for (int i = 0; i < noPlayers; i++) {
+-            players[i] = new Player(startMoney, 0, "input fra spiller");
++        for (int i = 0; i < noPlayer; i++) {
++            player[i] = new Player(startMoney, 0, gui.getUserString("Enter player 1 name"));
++        }
++
++
++        while (true){
++
++            gui.getUserButtonPressed(player[playerTurn].getName() + "'s turn. Press OK to roll the dices: ");
++            cup.rollDices();
++            gui.setDice(cup.getDice1(), cup.getDice2());
++
++
++
++
+         }
+ 
+             //Big ass loop begins
+@@ -57,8 +73,6 @@
+             //if chance card is var
+             //Specific option
+ 
+-        turn(); //skifte-tur-metode
+-        players[playerTurn].getName(); //tager fat i specifik spiller
+ 
+ 
+         //Game ends when a players balance <=0
