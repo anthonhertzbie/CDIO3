@@ -24,16 +24,14 @@ public class Deck {
 
     }
     public String toString(){
-        StringBuilder kortspillet = new StringBuilder();
-        kortspillet.append("[");
+        StringBuilder cards = new StringBuilder();
         for (int i = 0; i < 20; i++) {
-            kortspillet.append(card[i].toString());
+            cards.append(card[i].toString());
             if(i < 19) {
-                kortspillet.append(" \n");
+                cards.append("\n");
             }
         }
-        kortspillet.append("]");
-        return kortspillet.toString();
+        return cards.toString();
     }
 
 
