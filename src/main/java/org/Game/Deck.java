@@ -1,8 +1,10 @@
 package org.Game;
 
+import static org.Game.Helper.lang;
+
 public class Deck {
 
-    private Card[] card;
+    public Card[] card;
 
     /**
      * Deck constructor with 24 cards
@@ -16,8 +18,8 @@ public class Deck {
      * The initializer for the specific chance cards
      */
     private void initDeck() {
-
-        card[0] = new Card(0, " ");
+        Helper helper = new Helper();
+        card[0] = new Card(0, helper.lineReader(1));
         card[1] = new Card(1, " ");
         card[2] = new Card(2, " ");
         card[3] = new Card(3, " ");
@@ -42,6 +44,19 @@ public class Deck {
         card[22] = new Card(22, " ");
         card[23] = new Card(23, " ");
     }
+    public String toString(){
+        StringBuilder kortspillet = new StringBuilder();
+        kortspillet.append("[");
+        for (int i = 0; i < 51; i++) {
+            kortspillet.append(card[i].toString());
+            if(i < 50) {
+                kortspillet.append(", ");
+            }
+        }
+        kortspillet.append("]");
+        return kortspillet.toString();
+    }
+
 
 
 }

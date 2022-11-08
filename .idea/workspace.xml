@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="renamed package org.Game&#10;New branch: Dice">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/Game/Card.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/Game/Deck.java" afterDir="false" />
+    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="Deck and Cards without txt descriptions">
+      <change afterPath="$PROJECT_DIR$/Dansk" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/English" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/Game/Helper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Deck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Deck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +52,13 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/src/main/java/org/Game" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -67,7 +77,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667479829126</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Deck and Cards without txt descriptions">
+      <created>1667830285168</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1667830285168</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -86,6 +103,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="renamed package org.Game&#10;New branch: Dice" />
-    <option name="LAST_COMMIT_MESSAGE" value="renamed package org.Game&#10;New branch: Dice" />
+    <MESSAGE value="Deck and Cards without txt descriptions" />
+    <option name="LAST_COMMIT_MESSAGE" value="Deck and Cards without txt descriptions" />
   </component>
 </project>
