@@ -42,22 +42,21 @@ public class GameController {
     //Starts game
     public void startGame(){
         GUI gui = new GUI(gameBoard.gameBoard());
-
         //Sets starting balance in accordance to number of players
         if (noPlayer == 2){
-            startMoney = 1000;
+            startMoney = 20000000;
         }
         if (noPlayer == 3){
-            startMoney = 2000;
+            startMoney = 18000000;
         }
         if (noPlayer == 4){
-            startMoney = 3000;
+            startMoney = 16000000;
         }
         for (int i = 0; i < noPlayer; i++) {
             player[i] = new Player(startMoney, 0, gui.getUserString("Enter player name: "));
             cars[i] = new GUI_Car();
             //Makes the gui-player and determines the players attributes
-            gui_players[i] = new GUI_Player(player[i].getName(), player[i].getAccountBalance(), cars[i]);
+            gui_players[i] = new GUI_Player(player[i].getName(), startMoney, cars[i]);
             gui.addPlayer(gui_players[i]);
             //Places the gui-player-car on the board
             gameBoard.getField(0).setCar(gui_players[i],true);
@@ -76,7 +75,13 @@ public class GameController {
             if (player[playerTurn].getPlayerPosition()+cup.getSum() < 24){
                 player[playerTurn].addPlayerPosition(cup.getSum());
             } else {
+                System.out.printf("Not counting start");
                 player[playerTurn].addPlayerPosition(cup.getSum()-24);
+                player[playerTurn].setAccountBalance(20000000);
+                gui_players[playerTurn].setBalance(player[playerTurn].getAccountBalance());
+                if (player[playerTurn].getPlayerPosition() == 18){
+                    player[playerTurn].setAccountBalance(-20000000);
+                }
             }
 
             //Just places the car in gui at the new position
@@ -86,10 +91,18 @@ public class GameController {
             player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
             gui_players[playerTurn].setBalance(player[playerTurn].getAccountBalance());
 
+
             if (player[playerTurn].getPlayerPosition() == 3 ||player[playerTurn].getPlayerPosition() == 9 || player[playerTurn].getPlayerPosition() == 15 || player[playerTurn].getPlayerPosition() == 21){
                 // Write something with chance-cards.
                 gui.displayChanceCard(deck.toString());
             }
+
+            if (player[playerTurn].getPlayerPosition() == 6){
+                player[playerTurn].setPlayerPosition(18);
+
+            }
+
+
 
 
             turn();
