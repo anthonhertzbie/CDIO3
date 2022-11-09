@@ -19,6 +19,7 @@ public class GameController {
 
     int noPlayer = 2;
     int startMoney = 0;
+    int indexPlayerOwner;
 
     //Random player starts
     int playerTurn = random.nextInt(0, noPlayer);
@@ -44,13 +45,13 @@ public class GameController {
         GUI gui = new GUI(gameBoard.gameBoard());
         //Sets starting balance in accordance to number of players
         if (noPlayer == 2){
-            startMoney = 20000000;
+            startMoney = 20;
         }
         if (noPlayer == 3){
-            startMoney = 18000000;
+            startMoney = 18;
         }
         if (noPlayer == 4){
-            startMoney = 16000000;
+            startMoney = 16;
         }
         for (int i = 0; i < noPlayer; i++) {
             player[i] = new Player(startMoney, 0, gui.getUserString("Enter player name: "));
@@ -75,20 +76,50 @@ public class GameController {
             if (player[playerTurn].getPlayerPosition()+cup.getSum() < 24){
                 player[playerTurn].addPlayerPosition(cup.getSum());
             } else {
-                System.out.printf("Not counting start");
                 player[playerTurn].addPlayerPosition(cup.getSum()-24);
-                player[playerTurn].setAccountBalance(20000000);
+                player[playerTurn].setAccountBalance(2);
                 gui_players[playerTurn].setBalance(player[playerTurn].getAccountBalance());
+                //May need to move this bit
                 if (player[playerTurn].getPlayerPosition() == 18){
-                    player[playerTurn].setAccountBalance(-20000000);
+                    player[playerTurn].setAccountBalance(-2);
                 }
             }
 
             //Just places the car in gui at the new position
             gameBoard.getField(player[playerTurn].getPlayerPosition()).setCar(gui_players[playerTurn], true);
 
-            // Bør være et if/else hvor man får rent*2 hvis en spiller ejer 2 grunde
+            //Big ass loop
+            System.out.println(gameBoard.getField(2).getOwnableLabel());
+
+            for (int i = 0; i < noPlayer - 1; i++){
+                if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnableLabel().substring(9).equals(player[i].getName())){
+                    indexPlayerOwner = i;
+                }
+            }
+            //(ownablelabel (for felt) = ownablelabel (for felt +1 eller -1)), så...
+            if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnableLabel().equals("Ejes af: ")&&(
+            player[playerTurn].getPlayerPosition()!= 0||player[playerTurn].getPlayerPosition()!= 3||
+                    player[playerTurn].getPlayerPosition()!= 6||player[playerTurn].getPlayerPosition()!= 9||
+                    player[playerTurn].getPlayerPosition()!= 12||player[playerTurn].getPlayerPosition()!= 15||
+                    player[playerTurn].getPlayerPosition()!= 18||player[playerTurn].getPlayerPosition()!= 21)){
+
+            gameBoard.getField(player[playerTurn].getPlayerPosition()).setOwnableLabel(player[playerTurn].getName());
+            //Lige nu kan man sætte et hus på et felt man ikke kan eje
+            gameBoard.getField(player[playerTurn].getPlayerPosition()).setHouses(1);
             player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
+            } else{
+              if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnableLabel().equals
+                      (gameBoard.getField(player[playerTurn].getPlayerPosition()+1).getOwnableLabel())||
+
+                      gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnableLabel().equals
+                              (gameBoard.getField(player[playerTurn].getPlayerPosition()-1).getOwnableLabel())){
+
+                                player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent())*-2);
+                                player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent())*2);
+              }
+
+            }
+            //Updates the gui-balance
             gui_players[playerTurn].setBalance(player[playerTurn].getAccountBalance());
 
 
@@ -97,10 +128,6 @@ public class GameController {
                 gui.displayChanceCard(deck.toString());
             }
 
-            if (player[playerTurn].getPlayerPosition() == 6){
-                player[playerTurn].setPlayerPosition(18);
-
-            }
 
 
 
