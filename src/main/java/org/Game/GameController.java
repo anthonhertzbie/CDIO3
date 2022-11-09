@@ -1,13 +1,9 @@
 package org.Game;
 
 import gui_fields.GUI_Car;
-import gui_fields.GUI_Chance;
 import gui_fields.GUI_Player;
-import gui_fields.GUI_Street;
 import gui_main.GUI;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class GameController {
@@ -15,7 +11,6 @@ public class GameController {
 
     Random random = new Random();
     Cup cup = new Cup();
-    GUI_Street street = new GUI_Street();
     GameBoard gameBoard = new GameBoard();
     Deck deck = new Deck();
     boolean jail = false;
@@ -31,7 +26,7 @@ public class GameController {
     //Instantiates Player class depending on number of players
     Player[] player = new Player[noPlayer];
 
-    GUI_Player[] players = new GUI_Player[noPlayer];
+    GUI_Player[] gui_players = new GUI_Player[noPlayer];
     GUI_Car[] cars = new GUI_Car[noPlayer];
 
     //Makes players take turns in the consecutive order 0 through 4
@@ -42,7 +37,6 @@ public class GameController {
             playerTurn = 0;
         }
     }
-
 
 
     //Starts game
@@ -62,31 +56,35 @@ public class GameController {
         for (int i = 0; i < noPlayer; i++) {
             player[i] = new Player(startMoney, 0, gui.getUserString("Enter player name: "));
             cars[i] = new GUI_Car();
-            players[i] = new GUI_Player(player[i].getName(), player[i].getAccountBalance(), cars[i]);
-            gui.addPlayer(players[i]);
-            gameBoard.getField(0).setCar(players[i],true);
+            //Makes the gui-player and determines the players attributes
+            gui_players[i] = new GUI_Player(player[i].getName(), player[i].getAccountBalance(), cars[i]);
+            gui.addPlayer(gui_players[i]);
+            //Places the gui-player-car on the board
+            gameBoard.getField(0).setCar(gui_players[i],true);
         }
 
 
         while (true) {
+            //Important note: the game stops until "OK" is pressed in the GUI
             gui.showMessage(player[playerTurn].getName() + "'s turn. Press OK to roll");
-            System.out.println(gameBoard.getField(0).getRent());
-            gameBoard.getField(player[playerTurn].getPlayerPosition()).setCar(players[playerTurn], false);
+            //Removes previous version of car-placement on the board
+            gameBoard.getField(player[playerTurn].getPlayerPosition()).setCar(gui_players[playerTurn], false);
             cup.rollDices();
             gui.setDice(cup.getDice1(), cup.getDice2());
 
+            //Loop that makes the players go around in circle instead of breaking at field 24
             if (player[playerTurn].getPlayerPosition()+cup.getSum() < 24){
                 player[playerTurn].addPlayerPosition(cup.getSum());
             } else {
                 player[playerTurn].addPlayerPosition(cup.getSum()-24);
             }
 
-
-            gameBoard.getField(player[playerTurn].getPlayerPosition()).setCar(players[playerTurn], true);
+            //Just places the car in gui at the new position
+            gameBoard.getField(player[playerTurn].getPlayerPosition()).setCar(gui_players[playerTurn], true);
 
             // Bør være et if/else hvor man får rent*2 hvis en spiller ejer 2 grunde
             player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
-            players[playerTurn].setBalance(player[playerTurn].getAccountBalance());
+            gui_players[playerTurn].setBalance(player[playerTurn].getAccountBalance());
 
             if (player[playerTurn].getPlayerPosition() == 3 ||player[playerTurn].getPlayerPosition() == 9 || player[playerTurn].getPlayerPosition() == 15 || player[playerTurn].getPlayerPosition() == 21){
                 // Write something with chance-cards.
