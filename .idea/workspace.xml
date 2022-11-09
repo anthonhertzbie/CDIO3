@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="Danish txt descriptions for all chance cards added, as well as toString methods for the Card and Deck Classes">
+    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="Updates to gameController">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dansk" beforeDir="false" afterPath="$PROJECT_DIR$/Dansk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Card.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Deck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Deck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Helper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Helper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/GameBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/GameBoard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/GameController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

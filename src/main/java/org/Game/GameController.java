@@ -1,6 +1,7 @@
 package org.Game;
 
 import gui_fields.GUI_Car;
+import gui_fields.GUI_Chance;
 import gui_fields.GUI_Player;
 import gui_fields.GUI_Street;
 import gui_main.GUI;
@@ -16,8 +17,6 @@ public class GameController {
     Cup cup = new Cup();
     GUI_Street street = new GUI_Street();
     GameBoard gameBoard = new GameBoard();
-
-    List<GUI_Player> gui_players = new ArrayList<>();
 
 
 
@@ -35,7 +34,7 @@ public class GameController {
 
     //Makes players take turns in the consecutive order 0 through 4
     public void turn() {
-        if (playerTurn < noPlayer){
+        if (playerTurn < noPlayer - 1){
             playerTurn += 1;
         } else {
             playerTurn = 0;
@@ -69,10 +68,28 @@ public class GameController {
 
         while (true) {
             gui.showMessage(player[playerTurn].getName() + "'s turn. Press OK to roll");
+            System.out.println(gameBoard.getField(0).getRent());
+            gameBoard.getField(player[playerTurn].getPlayerPosition()).setCar(players[playerTurn], false);
             cup.rollDices();
             gui.setDice(cup.getDice1(), cup.getDice2());
-            player[playerTurn].addPlayerPosition(cup.getSum());
+
+            if (player[playerTurn].getPlayerPosition()+cup.getSum() < 24){
+                player[playerTurn].addPlayerPosition(cup.getSum());
+            } else {
+                player[playerTurn].addPlayerPosition(cup.getSum()-24);
+            }
+
             gameBoard.getField(player[playerTurn].getPlayerPosition()).setCar(players[playerTurn], true);
+            player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
+            players[playerTurn].setBalance(player[playerTurn].getAccountBalance());
+
+            if (player[playerTurn].getPlayerPosition() == 3 ||player[playerTurn].getPlayerPosition() == 9 || player[playerTurn].getPlayerPosition() == 15 || player[playerTurn].getPlayerPosition() == 21){
+                // Write something with chance-cards.
+            }
+
+
+            turn();
+
 
 
 

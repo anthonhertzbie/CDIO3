@@ -6,14 +6,15 @@ import gui_fields.GUI_Street;
 import java.awt.*;
 
 public class GameBoard {
-    public GUI_Field[] field = new GUI_Field[24];
+    public GUI_Field[] field2 = new GUI_Field[24];
+    public GUI_Street[] field = new GUI_Street[24];
 
 
-    public GUI_Field getField(int currentField) {
+    public GUI_Street getField(int currentField) {
         return field[currentField];
     }
 
-    public GUI_Field[] gameBoard(){
+    public GUI_Street[] gameBoard(){
         field[0] = new GUI_Street("Start", "", "", "-50", Color.WHITE, Color.BLACK);
         field[1] = new GUI_Street("Start", "", "", "-50", Color.WHITE, Color.BLACK);
         field[2] = new GUI_Street("Start", "", "", "-50", Color.WHITE, Color.BLACK);
