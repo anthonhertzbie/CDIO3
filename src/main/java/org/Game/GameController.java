@@ -17,6 +17,8 @@ public class GameController {
     Cup cup = new Cup();
     GUI_Street street = new GUI_Street();
     GameBoard gameBoard = new GameBoard();
+    Deck deck = new Deck();
+    boolean jail = false;
 
 
 
@@ -79,12 +81,16 @@ public class GameController {
                 player[playerTurn].addPlayerPosition(cup.getSum()-24);
             }
 
+
             gameBoard.getField(player[playerTurn].getPlayerPosition()).setCar(players[playerTurn], true);
+
+            // Bør være et if/else hvor man får rent*2 hvis en spiller ejer 2 grunde
             player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
             players[playerTurn].setBalance(player[playerTurn].getAccountBalance());
 
             if (player[playerTurn].getPlayerPosition() == 3 ||player[playerTurn].getPlayerPosition() == 9 || player[playerTurn].getPlayerPosition() == 15 || player[playerTurn].getPlayerPosition() == 21){
                 // Write something with chance-cards.
+                gui.displayChanceCard(deck.toString());
             }
 
 
