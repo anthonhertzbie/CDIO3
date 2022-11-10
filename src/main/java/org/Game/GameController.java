@@ -1,10 +1,8 @@
 package org.Game;
 
-import gui_fields.GUI_Car;
-import gui_fields.GUI_Field;
-import gui_fields.GUI_Player;
 import gui_main.GUI;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class GameController {
@@ -14,22 +12,18 @@ public class GameController {
     Cup cup = new Cup();
     GameBoard gameBoard = new GameBoard();
     Deck deck = new Deck();
+
     boolean jail = false;
 
-
-    int noPlayer = 2;
-    int startMoney = 0;
+    int noPlayer;
+    int startMoney;
     int indexPlayerOwner;
-
     //Random player starts
-    int playerTurn = random.nextInt(0, noPlayer);
+    int playerTurn;
 
     //Instantiates Player class depending on number of players
-    Player[] player = new Player[noPlayer];
 
-    GUI_Player[] gui_players = new GUI_Player[noPlayer];
-    GUI_Car[] cars = new GUI_Car[noPlayer];
-
+    Player[] player;
     //Makes players take turns in the consecutive order 0 through 4
     public void turn() {
         if (playerTurn < noPlayer - 1){
@@ -39,113 +33,118 @@ public class GameController {
         }
     }
 
-
     //Starts game
     public void startGame(){
-        GUI gui = new GUI(gameBoard.gameBoard());
+
+        //Sets the ownerName as "For sale" on all the fields
+        GUI gui = new GUI(gameBoard.createGameBoard());
+        noPlayer = Integer.parseInt(gui.getUserSelection("Choose number of players", "2", "3", "4"));
+        player = new Player[noPlayer];
+
+
+
         //Sets starting balance in accordance to number of players
         if (noPlayer == 2){
             startMoney = 20;
         }
-        if (noPlayer == 3){
+        else if (noPlayer == 3){
             startMoney = 18;
         }
-        if (noPlayer == 4){
+        else if (noPlayer == 4){
             startMoney = 16;
         }
+        // Chooses a random starting player
+        playerTurn = random.nextInt(0, noPlayer);
+        // creates the players and adds them to the GUI
         for (int i = 0; i < noPlayer; i++) {
-            player[i] = new Player(startMoney, 0, gui.getUserString("Enter player name: "));
-            cars[i] = new GUI_Car();
-            //Makes the gui-player and determines the players attributes
-            gui_players[i] = new GUI_Player(player[i].getName(), startMoney, cars[i]);
-            gui.addPlayer(gui_players[i]);
-            //Places the gui-player-car on the board
-            gameBoard.getField(0).setCar(gui_players[i],true);
+            player[i] = new Player(i, startMoney, 0, gui.getUserString("Enter player name: "), gameBoard.getField(0));
+            gui.addPlayer(player[i].getGui_Player());
         }
 
 
         while (true) {
             //Important note: the game stops until "OK" is pressed in the GUI
-            gui.showMessage(player[playerTurn].getName() + "'s turn. Press OK to roll");
-            //Removes previous version of car-placement on the board
-            gameBoard.getField(player[playerTurn].getPlayerPosition()).setCar(gui_players[playerTurn], false);
-            cup.rollDices();
-            gui.setDice(cup.getDice1(), cup.getDice2());
 
 
-            //Loop that makes the players go around in circle instead of breaking at field 24
-            if (player[playerTurn].getPlayerPosition()+cup.getSum() < 24){
-                player[playerTurn].addPlayerPosition(cup.getSum());
-            } else {
-                player[playerTurn].addPlayerPosition(cup.getSum()-24);
-                player[playerTurn].setAccountBalance(2);
-                gui_players[playerTurn].setBalance(player[playerTurn].getAccountBalance());
-                //May need to move this bit
-                if (player[playerTurn].getPlayerPosition() == 18){
-                    player[playerTurn].setAccountBalance(-2);
-                }
+            // Rolls the dices and handles the jail function as diceroll is not allowed if in jail.
+            if (player[playerTurn].getJail(true)){
+                // ******** Lav et if-statement som trigger en ekstra knap hvis chancekort er trukket, mangler chancekort info **********\\\\\\\\
+                gui.getUserButtonPressed(player[playerTurn].getName() + " you are in jail. Pay to get out:", "Pay 1M");
+                player[playerTurn].setAccountBalance(-1);
+                player[playerTurn].setJail(false);
+                gui.showMessage("Thanks for the money man! Press OK to roll the dices: ");
+                cup.rollDices();
+                gui.setDice(cup.getDice1(), cup.getDice2());
+            }
+            else {
+                // Rolls the dices normally if the player is not in jail
+                gui.showMessage(player[playerTurn].getName() + "'s turn. Press OK to roll");
+                cup.rollDices();
+                gui.setDice(cup.getDice1(), cup.getDice2());
             }
 
-            //Just places the car in gui at the new position
-            gameBoard.getField(player[playerTurn].getPlayerPosition()).setCar(gui_players[playerTurn], true);
-
-            //Big ass loop
+            //Loop that makes the players go around in a circle instead of breaking at field 24
+            // IT BREAKS IF THE PLAYER LANDS ON FIELD 23 !!!!!!!!
+            if (player[playerTurn].getPlayerPosition()+cup.getSum() < 24){
+                player[playerTurn].addPlayerPosition(cup.getSum(),gameBoard.getField(cup.getSum() + player[playerTurn].getPlayerPosition()), gameBoard.getField(player[playerTurn].getPlayerPosition()));
+            } else {
+                player[playerTurn].addPlayerPosition(cup.getSum()-24, gameBoard.getField(cup.getSum() + player[playerTurn].getPlayerPosition() - 24), gameBoard.getField(player[playerTurn].getPlayerPosition()));
+                player[playerTurn].setAccountBalance(2);
+            }
+            // Sends player to jail
+            if (player[playerTurn].getPlayerPosition() == 6){
+                gui.showMessage("You landed on the 'Go to Jail' field and have been sent to prison.");
+                player[playerTurn].setPlayerPosition(18, gameBoard.getField(18), gameBoard.getField(6));
+                player[playerTurn].setJail(true);
+            }
+            // Handles gui nullpointererror when a field is not yet owned by anyone
             try {
                 for (int i = 0; i < noPlayer - 1; i++) {
+                    // Finds the index of the owner of the current field
                     if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(player[i].getName())) {
                         indexPlayerOwner = i;
                     }
                 }
             }
-            catch (Exception e){
-
+            // Handles the exception. Proceeds with the code.
+            catch (NullPointerException e){
             }
-            System.out.println(player[playerTurn].getPlayerPosition());
-            //(ownablelabel (for felt) = ownablelabel (for felt +1 eller -1)), så...
 
-            System.out.println(gameBoard.getField(5).getOwnerName());
-
-            if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null &&
-                    player[playerTurn].getPlayerPosition() != 0 && player[playerTurn].getPlayerPosition() != 3 &&
-                    player[playerTurn].getPlayerPosition() != 6 && player[playerTurn].getPlayerPosition() != 9 &&
-                    player[playerTurn].getPlayerPosition() != 12 && player[playerTurn].getPlayerPosition() != 15 &&
-                    player[playerTurn].getPlayerPosition() != 18 && player[playerTurn].getPlayerPosition() != 21){
+            // checks if a field is not owned, and if the field is buyable (e.g. not start and chancecards)
+            if (player[playerTurn].getPlayerPosition() != 0 && (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0)) {
+                // Sets player as new owner
                 gameBoard.getField(player[playerTurn].getPlayerPosition()).setOwnerName(player[playerTurn].getName());
-                System.out.println(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName());
-                System.out.println(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals("Ejes af: "));
-            //Lige nu kan man sætte et hus på et felt man ikke kan eje
-                gameBoard.getField(player[playerTurn].getPlayerPosition()).setBackGroundColor(gui_players[playerTurn].getPrimaryColor());
-                gameBoard.getField(player[playerTurn].getPlayerPosition());
+                //Colours the field the same colour as the car to show who owns the field
+                gameBoard.getField(player[playerTurn].getPlayerPosition()).setBackGroundColor(player[playerTurn].gui_Player.getPrimaryColor());
+                //Sets the new account balance after buying the property
                 player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
-            } else{
-                if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() ==
-                      (gameBoard.getField(player[playerTurn].getPlayerPosition()+1).getOwnerName())||
-                      gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() ==
-                              (gameBoard.getField(player[playerTurn].getPlayerPosition()-1).getOwnerName())){
-
-                                player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent())*-2);
-                                player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent())*2);
-              }
             }
-            //Updates the gui-balance
-            gui_players[playerTurn].setBalance(player[playerTurn].getAccountBalance());
-
-
+            // Checks if the current player own the field
+            else if (!Objects.equals(player[playerTurn].getName(), gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName())){
+                // checks if the field one step forward is also owned by the same color
+                if (player[playerTurn].getPlayerPosition() != 23 && Objects.equals(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gameBoard.getField(player[playerTurn].getPlayerPosition() + 1).getOwnerName())){
+                    //Sets the owners account balance after collecting double rent
+                    player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * 2);
+                    player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * -2);
+                }
+                // Same as prev but backwards
+                else if (player[playerTurn].getPlayerPosition() != 0 && Objects.equals(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gameBoard.getField(player[playerTurn].getPlayerPosition() - 1).getOwnerName())){
+                    player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * 2);
+                    player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * -2);
+                }
+                // Makes the player pay normal rent
+                else{
+                    player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
+                    //The owner collects rent
+                    player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * -1);
+                }
+            }
+            // Displays a chance card if landing on chance fields
             if (player[playerTurn].getPlayerPosition() == 3 ||player[playerTurn].getPlayerPosition() == 9 || player[playerTurn].getPlayerPosition() == 15 || player[playerTurn].getPlayerPosition() == 21){
                 // Write something with chance-cards.
                 gui.displayChanceCard(deck.toString());
             }
-
-
-
-
-
             turn();
-
-
-
-
-
         }
             //Big ass loop begins
             //If field type is a property and is unowned, the player buys the property

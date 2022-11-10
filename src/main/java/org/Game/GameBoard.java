@@ -14,7 +14,7 @@ public class GameBoard {
         return field[currentField];
     }
 
-    public GUI_Street[] gameBoard(){
+    public GUI_Street[] createGameBoard(){
         field[0] = new GUI_Street("Start", "", "", "0", Color.WHITE, Color.BLACK);
         field[1] = new GUI_Street("Start", "", "", "-1", Color.WHITE, Color.BLACK);
         field[2] = new GUI_Street("Start", "", "", "-1", Color.WHITE, Color.BLACK);
