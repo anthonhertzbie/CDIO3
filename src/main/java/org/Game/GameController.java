@@ -51,7 +51,9 @@ public class GameController {
         else if (noPlayer == 4){
             startMoney = 16;
         }
+        // Chooses a random starting player
         playerTurn = random.nextInt(0, noPlayer);
+        // creates the players and adds them to the GUI
         for (int i = 0; i < noPlayer; i++) {
             player[i] = new Player(i, startMoney, 0, gui.getUserString("Enter player name: "), gameBoard.getField(0));
             gui.addPlayer(player[i].getGui_Player());
@@ -61,9 +63,13 @@ public class GameController {
         while (true) {
             //Important note: the game stops until "OK" is pressed in the GUI
             gui.showMessage(player[playerTurn].getName() + "'s turn. Press OK to roll");
+
+            if (player[playerTurn].getPlayerPosition() == 18){
+                // ******** Lav et if-statement med chancekort heri, mangler chancekort info **********\\\\\\\\
+                gui.getUserButtonPressed(player[playerTurn].getName());
+            }
             cup.rollDices();
             gui.setDice(cup.getDice1(), cup.getDice2());
-
 
             //Loop that makes the players go around in a circle instead of breaking at field 24
             // IT BREAKS IF THE PLAYER LANDS ON FIELD 23 !!!!!!!!
@@ -72,68 +78,62 @@ public class GameController {
             } else {
                 player[playerTurn].addPlayerPosition(cup.getSum()-24, gameBoard.getField(cup.getSum() + player[playerTurn].getPlayerPosition() - 24), gameBoard.getField(player[playerTurn].getPlayerPosition()));
                 player[playerTurn].setAccountBalance(2);
-
-                //May need to move this bit
-                if (player[playerTurn].getPlayerPosition() == 18){
-                    player[playerTurn].setAccountBalance(-2);
-                }
             }
 
-
-
-
+            // Handles gui nullpointererror when a field is not yet owned by anyone
             try {
                 for (int i = 0; i < noPlayer - 1; i++) {
+                    // Finds the index of the owner of the current field
                     if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(player[i].getName())) {
                         indexPlayerOwner = i;
                     }
                 }
             }
-            // ?
-            catch (Exception e){
-
+            // Handles the exception. Proceeds with the code.
+            catch (NullPointerException e){
             }
-            System.out.println(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName());
-            try {
-            //if (ownerName for field is "For sale" and it is not field 0, 3, 6, 9, 12, 15, 18, 21), then...
-            if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null &&
-                    player[playerTurn].getPlayerPosition() != 0 && player[playerTurn].getPlayerPosition() != 3 &&
-                    player[playerTurn].getPlayerPosition() != 6 && player[playerTurn].getPlayerPosition() != 9 &&
-                    player[playerTurn].getPlayerPosition() != 12 && player[playerTurn].getPlayerPosition() != 15 &&
-                    player[playerTurn].getPlayerPosition() != 18 && player[playerTurn].getPlayerPosition() != 21){
-                System.out.println("I'm being run now");
-                //Sets ownerName as current players name
+
+            // checks if a field is not owned, and if the field is buyable (e.g. not start and chancecards)
+            if (player[playerTurn].getPlayerPosition() != 0 && (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0)) {
+                // Sets player as new owner
                 gameBoard.getField(player[playerTurn].getPlayerPosition()).setOwnerName(player[playerTurn].getName());
-                gameBoard.getField(player[playerTurn].getPlayerPosition()).setBackGroundColor(player[playerTurn].gui_Player.getPrimaryColor());
-
                 //Colours the field the same colour as the car to show who owns the field
-
+                gameBoard.getField(player[playerTurn].getPlayerPosition()).setBackGroundColor(player[playerTurn].gui_Player.getPrimaryColor());
                 //Sets the new account balance after buying the property
                 player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
             }
-
-                //if (ownerName (current field) = ownerName (current field +1 or -1) and ownerName (current field) is not current player name), then...
-            else if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(
-                        (gameBoard.getField(player[playerTurn].getPlayerPosition() + 1).getOwnerName())) ||
-                        gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals((gameBoard.getField(player[playerTurn].getPlayerPosition() - 1).getOwnerName())) && (
-                                !Objects.equals(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), player[playerTurn].getName()))) {
-
-                    //Sets current player´s account balance after paying double rent
-                    player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * 2);
+            // Checks if the current player own the field
+            else if (!Objects.equals(player[playerTurn].getName(), gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName())){
+                // checks if the field one step forward is also owned by the same color
+                if (player[playerTurn].getPlayerPosition() != 23 && Objects.equals(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gameBoard.getField(player[playerTurn].getPlayerPosition() + 1).getOwnerName())){
                     //Sets the owners account balance after collecting double rent
+                    player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * 2);
                     player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * -2);
                 }
-                //if (ownerName (current field) is not current player name), then...
-                else if (!Objects.equals(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), player[playerTurn].getName())) {
-                    //Current player pays rent
+                // Same as prev but backwards
+                else if (player[playerTurn].getPlayerPosition() != 0 && Objects.equals(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gameBoard.getField(player[playerTurn].getPlayerPosition() - 1).getOwnerName())){
+                    player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * 2);
+                    player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * -2);
+                }
+                // Makes the player pay normal rent
+                else{
                     player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
                     //The owner collects rent
                     player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * -1);
                 }
             }
-            catch (NullPointerException e){
-
+            // Sends player to jail
+            if (player[playerTurn].getPlayerPosition() == 6){
+                player[playerTurn].setPlayerPosition(18);
             }
+
+
+            //if (ownerName for field is "For sale" and it is not field 0, 3, 6, 9, 12, 15, 18, 21), then...
+
+
+                //if (ownerName (current field) = ownerName (current field +1 or -1) and ownerName (current field) is not current player name), then...
+
+
 
 
 
