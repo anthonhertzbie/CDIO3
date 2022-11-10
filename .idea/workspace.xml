@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="test">
-      <change afterPath="$PROJECT_DIR$/GUI_Messages" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/English_GUI_Messages" beforeDir="false" afterPath="$PROJECT_DIR$/English_GUI_Messages" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUI_Messages" beforeDir="false" afterPath="$PROJECT_DIR$/GUI_Messages" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,6 +72,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
