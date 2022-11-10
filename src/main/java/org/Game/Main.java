@@ -6,7 +6,6 @@ public class Main {
     public static void main(String[] args) {
         lang = "Dansk";
         Deck deck = new Deck();
-        System.out.println(deck);
 
         GameController gameController = new GameController();
         gameController.startGame();
