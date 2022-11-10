@@ -42,7 +42,8 @@ public class GameController {
         player = new Player[noPlayer];
 
 
-
+        // shuffles the deck
+        deck.shuffle();
         //Sets starting balance in accordance to number of players
         if (noPlayer == 2){
             startMoney = 20;
@@ -142,7 +143,7 @@ public class GameController {
             // Displays a chance card if landing on chance fields
             if (player[playerTurn].getPlayerPosition() == 3 ||player[playerTurn].getPlayerPosition() == 9 || player[playerTurn].getPlayerPosition() == 15 || player[playerTurn].getPlayerPosition() == 21){
                 // Write something with chance-cards.
-                gui.displayChanceCard(deck.toString());
+                gui.displayChanceCard(deck.draw().getCardDescription());
             }
             turn();
         }
