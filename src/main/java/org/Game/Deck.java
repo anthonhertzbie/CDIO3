@@ -1,6 +1,6 @@
 package org.Game;
 
-import static org.Game.Helper.lang;
+import java.util.Random;
 
 public class Deck {
 
@@ -23,17 +23,36 @@ public class Deck {
         }
 
     }
+
+    public void shuffle() {
+        Random random = new Random();
+        for (int i = 0; i < 10000; i++) {
+            int a = random.nextInt(0, 20);
+            int b = random.nextInt(0, 20);
+            Card savedcard = card[a];
+            card[a] = card[b];
+            card[b] = savedcard;
+        }
+    }
+
+    public Card draw() {
+        Card firstcard = card[0];
+        for (int i = 0; i < card.length - 1; i++) {
+            card[i] = card[i+1];
+        }
+        card[card.length - 1] = firstcard;
+        return firstcard;
+    }
+
     public String toString(){
-        StringBuilder kortspillet = new StringBuilder();
-        kortspillet.append("[");
+        StringBuilder cards = new StringBuilder();
         for (int i = 0; i < 20; i++) {
-            kortspillet.append(card[i].toString());
+            cards.append(card[i].toString());
             if(i < 19) {
-                kortspillet.append(" \n");
+                cards.append("\n");
             }
         }
-        kortspillet.append("]");
-        return kortspillet.toString();
+        return cards.toString();
     }
 
 

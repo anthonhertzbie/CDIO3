@@ -1,0 +1,29 @@
+Index: src/main/java/org/Game/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/Game/Main.java b/src/main/java/org/Game/Main.java
+--- a/src/main/java/org/Game/Main.java	
++++ b/src/main/java/org/Game/Main.java	
+@@ -1,13 +1,11 @@
+ package org.Game;
+ 
+-import java.util.Arrays;
+-
+-import static org.Game.Helper.lang;
+-
+ public class Main {
+     public static void main(String[] args) {
+-        lang = "Dansk";
+-        Deck deck = new Deck();
+-        System.out.println(deck);
++
++        GameController gameController = new GameController();
++        gameController.GameController();
++        }
++
++
+     }
+-}
+\ No newline at end of file
