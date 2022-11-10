@@ -1,6 +1,7 @@
 package org.Game;
 
 import gui_fields.GUI_Car;
+import gui_fields.GUI_Field;
 import gui_fields.GUI_Player;
 import gui_main.GUI;
 
@@ -14,7 +15,6 @@ public class GameController {
     GameBoard gameBoard = new GameBoard();
     Deck deck = new Deck();
     boolean jail = false;
-
 
 
     int noPlayer = 2;
@@ -72,6 +72,7 @@ public class GameController {
             cup.rollDices();
             gui.setDice(cup.getDice1(), cup.getDice2());
 
+
             //Loop that makes the players go around in circle instead of breaking at field 24
             if (player[playerTurn].getPlayerPosition()+cup.getSum() < 24){
                 player[playerTurn].addPlayerPosition(cup.getSum());
@@ -89,35 +90,42 @@ public class GameController {
             gameBoard.getField(player[playerTurn].getPlayerPosition()).setCar(gui_players[playerTurn], true);
 
             //Big ass loop
-            System.out.println(gameBoard.getField(2).getOwnableLabel());
-
-            for (int i = 0; i < noPlayer - 1; i++){
-                if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnableLabel().substring(9).equals(player[i].getName())){
-                    indexPlayerOwner = i;
+            try {
+                for (int i = 0; i < noPlayer - 1; i++) {
+                    if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(player[i].getName())) {
+                        indexPlayerOwner = i;
+                    }
                 }
             }
+            catch (Exception e){
+
+            }
+            System.out.println(player[playerTurn].getPlayerPosition());
             //(ownablelabel (for felt) = ownablelabel (for felt +1 eller -1)), så...
-            if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnableLabel().equals("Ejes af: ")&&(
-            player[playerTurn].getPlayerPosition()!= 0||player[playerTurn].getPlayerPosition()!= 3||
-                    player[playerTurn].getPlayerPosition()!= 6||player[playerTurn].getPlayerPosition()!= 9||
-                    player[playerTurn].getPlayerPosition()!= 12||player[playerTurn].getPlayerPosition()!= 15||
-                    player[playerTurn].getPlayerPosition()!= 18||player[playerTurn].getPlayerPosition()!= 21)){
 
-            gameBoard.getField(player[playerTurn].getPlayerPosition()).setOwnableLabel(player[playerTurn].getName());
+            System.out.println(gameBoard.getField(5).getOwnerName());
+
+            if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null &&
+                    player[playerTurn].getPlayerPosition() != 0 && player[playerTurn].getPlayerPosition() != 3 &&
+                    player[playerTurn].getPlayerPosition() != 6 && player[playerTurn].getPlayerPosition() != 9 &&
+                    player[playerTurn].getPlayerPosition() != 12 && player[playerTurn].getPlayerPosition() != 15 &&
+                    player[playerTurn].getPlayerPosition() != 18 && player[playerTurn].getPlayerPosition() != 21){
+                gameBoard.getField(player[playerTurn].getPlayerPosition()).setOwnerName(player[playerTurn].getName());
+                System.out.println(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName());
+                System.out.println(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals("Ejes af: "));
             //Lige nu kan man sætte et hus på et felt man ikke kan eje
-            gameBoard.getField(player[playerTurn].getPlayerPosition()).setHouses(1);
-            player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
+                gameBoard.getField(player[playerTurn].getPlayerPosition()).setBackGroundColor(gui_players[playerTurn].getPrimaryColor());
+                gameBoard.getField(player[playerTurn].getPlayerPosition());
+                player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
             } else{
-              if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnableLabel().equals
-                      (gameBoard.getField(player[playerTurn].getPlayerPosition()+1).getOwnableLabel())||
-
-                      gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnableLabel().equals
-                              (gameBoard.getField(player[playerTurn].getPlayerPosition()-1).getOwnableLabel())){
+                if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() ==
+                      (gameBoard.getField(player[playerTurn].getPlayerPosition()+1).getOwnerName())||
+                      gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() ==
+                              (gameBoard.getField(player[playerTurn].getPlayerPosition()-1).getOwnerName())){
 
                                 player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent())*-2);
                                 player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent())*2);
               }
-
             }
             //Updates the gui-balance
             gui_players[playerTurn].setBalance(player[playerTurn].getAccountBalance());
