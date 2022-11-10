@@ -19,7 +19,7 @@ public class Deck {
     private void initDeck() {
         Helper helper = new Helper();
         for (int i = 0; i < card.length; i++) {
-            card[i] = new Card(helper.lineReader(i));
+            card[i] = new Card(helper.lineReader("_Deck", i));
         }
 
     }
@@ -29,7 +29,7 @@ public class Deck {
         for (int i = 0; i < 20; i++) {
             kortspillet.append(card[i].toString());
             if(i < 19) {
-                kortspillet.append(", \n");
+                kortspillet.append(" \n");
             }
         }
         kortspillet.append("]");
