@@ -1,0 +1,300 @@
+Index: src/main/java/org/Game/GameController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.Game;\r\n\r\nimport gui_main.GUI;\r\n\r\nimport java.util.Objects;\r\nimport java.util.Random;\r\n\r\npublic class GameController {\r\n\r\n\r\n    Random random = new Random();\r\n    Cup cup = new Cup();\r\n    public GameBoard gameBoard = new GameBoard();\r\n    Deck deck = new Deck();\r\n    boolean jail = false;\r\n\r\n\r\n    int noPlayer = 2;\r\n    int startMoney = 0;\r\n    int indexPlayerOwner;\r\n\r\n\r\n    //Random player starts\r\n    int playerTurn = random.nextInt(0, noPlayer);\r\n\r\n    //Instantiates Player class depending on number of players\r\n\r\n    Player[] player = new Player[noPlayer];\r\n    //Makes players take turns in the consecutive order 0 through 4\r\n    public void turn() {\r\n        if (playerTurn < noPlayer - 1){\r\n            playerTurn += 1;\r\n        } else {\r\n            playerTurn = 0;\r\n        }\r\n    }\r\n\r\n\r\n    //Starts game\r\n    public void startGame(){\r\n\r\n        //Sets the ownerName as \"For sale\" on all the fields\r\n        GUI gui = new GUI(gameBoard.createGameBoard());\r\n        for (int i = 0; i < 24; i++) {\r\n            gameBoard.getField(i).setOwnerName(\"For sale\");\r\n        }\r\n        //Sets starting balance in accordance to number of players\r\n        if (noPlayer == 2){\r\n            startMoney = 20;\r\n        }\r\n        if (noPlayer == 3){\r\n            startMoney = 18;\r\n        }\r\n        if (noPlayer == 4){\r\n            startMoney = 16;\r\n        }\r\n        for (int i = 0; i < noPlayer; i++) {\r\n            player[i] = new Player(startMoney, 0, gui.getUserString(\"Enter player name: \"));\r\n            player[i].createPlayers(i, startMoney, player[i].getName(), gameBoard.getField(0));\r\n            gui.addPlayer(player[i].getGui_players()[i]);\r\n        }\r\n\r\n\r\n        while (true) {\r\n            //Important note: the game stops until \"OK\" is pressed in the GUI\r\n            gui.showMessage(player[playerTurn].getName() + \"'s turn. Press OK to roll\");\r\n\r\n\r\n\r\n            cup.rollDices();\r\n            player[playerTurn].addPlayerPosition(playerTurn, cup.getSum(), gameBoard.getField(cup.getSum() + player[playerTurn].getPlayerPosition()));\r\n            gui.setDice(cup.getDice1(), cup.getDice2());\r\n\r\n\r\n            //Loop that makes the players go around in a circle instead of breaking at field 24\r\n            // IT BREAKS IF THE PLAYER LANDS ON FIELD 23 !!!!!!!!\r\n            if (player[playerTurn].getPlayerPosition()+cup.getSum() < 24){\r\n                player[playerTurn].addPlayerPosition(playerTurn, cup.getSum(),gameBoard.getField(cup.getSum() + player[playerTurn].getPlayerPosition()));\r\n            } else {\r\n                player[playerTurn].addPlayerPosition(playerTurn, cup.getSum()-24, gameBoard.getField(cup.getSum() + player[playerTurn].getPlayerPosition()));\r\n                player[playerTurn].setAccountBalance(2);\r\n\r\n                //May need to move this bit\r\n                if (player[playerTurn].getPlayerPosition() == 18){\r\n                    player[playerTurn].setAccountBalance(-2);\r\n                }\r\n            }\r\n\r\n\r\n\r\n\r\n            try {\r\n                for (int i = 0; i < noPlayer - 1; i++) {\r\n                    if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(player[i].getName())) {\r\n                        indexPlayerOwner = i;\r\n                    }\r\n                }\r\n            }\r\n            // ?\r\n            catch (Exception e){\r\n\r\n            }\r\n            System.out.println(player[playerTurn].getPlayerPosition());\r\n\r\n            System.out.println(gameBoard.getField(5).getOwnerName());\r\n\r\n            //if (ownerName for field is \"For sale\" and it is not field 0, 3, 6, 9, 12, 15, 18, 21), then...\r\n            if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(\"For sale\") &&\r\n                    player[playerTurn].getPlayerPosition() != 0 && player[playerTurn].getPlayerPosition() != 3 &&\r\n                    player[playerTurn].getPlayerPosition() != 6 && player[playerTurn].getPlayerPosition() != 9 &&\r\n                    player[playerTurn].getPlayerPosition() != 12 && player[playerTurn].getPlayerPosition() != 15 &&\r\n                    player[playerTurn].getPlayerPosition() != 18 && player[playerTurn].getPlayerPosition() != 21){\r\n\r\n                //Sets ownerName as current players name\r\n                gameBoard.getField(player[playerTurn].getPlayerPosition()).setOwnerName(player[playerTurn].getName());\r\n                System.out.println(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName());\r\n                System.out.println(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(\"Ejes af: \"));\r\n\r\n                //Colours the field the same colour as the car to show who owns the field\r\n\r\n                //Sets the new account balance after buying the property\r\n                player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));\r\n            }\r\n            //if (ownerName (current field) = ownerName (current field +1 or -1) and ownerName (current field) is not current player name), then...\r\n            if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(\r\n                    (gameBoard.getField(player[playerTurn].getPlayerPosition()+1).getOwnerName()))||\r\n                    gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(\r\n                            (gameBoard.getField(player[playerTurn].getPlayerPosition()-1).getOwnerName()))&&(\r\n                            !Objects.equals(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), player[playerTurn].getName()))){\r\n\r\n                //Sets current player´s account balance after paying double rent\r\n                player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent())*2);\r\n                //Sets the owners account balance after collecting double rent\r\n                player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent())*-2);\r\n            }\r\n            //if (ownerName (current field) is not current player name), then...\r\n            if (!Objects.equals(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), player[playerTurn].getName())){\r\n                //Current player pays rent\r\n                player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));\r\n                //The owner collects rent\r\n                player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent())*-1);\r\n            }\r\n\r\n\r\n\r\n\r\n            if (player[playerTurn].getPlayerPosition() == 3 ||player[playerTurn].getPlayerPosition() == 9 || player[playerTurn].getPlayerPosition() == 15 || player[playerTurn].getPlayerPosition() == 21){\r\n                // Write something with chance-cards.\r\n                gui.displayChanceCard(deck.toString());\r\n            }\r\n\r\n\r\n\r\n\r\n\r\n            turn();\r\n\r\n\r\n\r\n\r\n\r\n        }\r\n            //Big ass loop begins\r\n            //If field type is a property and is unowned, the player buys the property\r\n            //If field type ia a property and is owned, the player pays rent\r\n            //If field type is a property and another player owns both, the player pays double rent\r\n            //If field type is parking the turn ends\r\n            //If field type is the prison\r\n            //the player can use the jailcard\r\n            //else the player can pay\r\n            //else the player is not allowed to roll until the third round\r\n            //If field type is chance\r\n            //chance card is drawn\r\n            //if chance card is var\r\n            //Specific option\r\n\r\n\r\n\r\n        //Game ends when a players balance <=0\r\n        //The player with the highest balance wins\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/Game/GameController.java b/src/main/java/org/Game/GameController.java
+--- a/src/main/java/org/Game/GameController.java	(revision 91625a4d33e18f20b955a5f9c267c1881182a9d0)
++++ b/src/main/java/org/Game/GameController.java	(date 1668107860693)
+@@ -1,5 +1,6 @@
+ package org.Game;
+ 
++import gui_fields.GUI_Field;
+ import gui_main.GUI;
+ 
+ import java.util.Objects;
+@@ -9,11 +10,12 @@
+ 
+ 
+     Random random = new Random();
++
+     Cup cup = new Cup();
+     public GameBoard gameBoard = new GameBoard();
+     Deck deck = new Deck();
+     boolean jail = false;
+-
++    GUI_Field prevField;
+ 
+     int noPlayer = 2;
+     int startMoney = 0;
+@@ -41,9 +43,7 @@
+ 
+         //Sets the ownerName as "For sale" on all the fields
+         GUI gui = new GUI(gameBoard.createGameBoard());
+-        for (int i = 0; i < 24; i++) {
+-            gameBoard.getField(i).setOwnerName("For sale");
+-        }
++
+         //Sets starting balance in accordance to number of players
+         if (noPlayer == 2){
+             startMoney = 20;
+@@ -57,18 +57,14 @@
+         for (int i = 0; i < noPlayer; i++) {
+             player[i] = new Player(startMoney, 0, gui.getUserString("Enter player name: "));
+             player[i].createPlayers(i, startMoney, player[i].getName(), gameBoard.getField(0));
+-            gui.addPlayer(player[i].getGui_players()[i]);
++            gui.addPlayer(player[i].getGui_players());
+         }
+ 
+ 
+         while (true) {
+             //Important note: the game stops until "OK" is pressed in the GUI
+             gui.showMessage(player[playerTurn].getName() + "'s turn. Press OK to roll");
+-
+-
+-
+             cup.rollDices();
+-            player[playerTurn].addPlayerPosition(playerTurn, cup.getSum(), gameBoard.getField(cup.getSum() + player[playerTurn].getPlayerPosition()));
+             gui.setDice(cup.getDice1(), cup.getDice2());
+ 
+ 
+@@ -77,12 +73,12 @@
+             if (player[playerTurn].getPlayerPosition()+cup.getSum() < 24){
+                 player[playerTurn].addPlayerPosition(playerTurn, cup.getSum(),gameBoard.getField(cup.getSum() + player[playerTurn].getPlayerPosition()));
+             } else {
+-                player[playerTurn].addPlayerPosition(playerTurn, cup.getSum()-24, gameBoard.getField(cup.getSum() + player[playerTurn].getPlayerPosition()));
+-                player[playerTurn].setAccountBalance(2);
++                player[playerTurn].addPlayerPosition(playerTurn, cup.getSum()-24, gameBoard.getField(cup.getSum() + player[playerTurn].getPlayerPosition() - 24));
++                player[playerTurn].setAccountBalance(2, noPlayer - 1);
+ 
+                 //May need to move this bit
+                 if (player[playerTurn].getPlayerPosition() == 18){
+-                    player[playerTurn].setAccountBalance(-2);
++                    player[playerTurn].setAccountBalance(-2, noPlayer - 1);
+                 }
+             }
+ 
+@@ -90,6 +86,7 @@
+ 
+ 
+             try {
++
+                 for (int i = 0; i < noPlayer - 1; i++) {
+                     if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(player[i].getName())) {
+                         indexPlayerOwner = i;
+@@ -100,47 +97,47 @@
+             catch (Exception e){
+ 
+             }
+-            System.out.println(player[playerTurn].getPlayerPosition());
+ 
+-            System.out.println(gameBoard.getField(5).getOwnerName());
++
+ 
+             //if (ownerName for field is "For sale" and it is not field 0, 3, 6, 9, 12, 15, 18, 21), then...
+-            if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals("For sale") &&
+-                    player[playerTurn].getPlayerPosition() != 0 && player[playerTurn].getPlayerPosition() != 3 &&
+-                    player[playerTurn].getPlayerPosition() != 6 && player[playerTurn].getPlayerPosition() != 9 &&
+-                    player[playerTurn].getPlayerPosition() != 12 && player[playerTurn].getPlayerPosition() != 15 &&
+-                    player[playerTurn].getPlayerPosition() != 18 && player[playerTurn].getPlayerPosition() != 21){
++                System.out.println("Bliver koden?");
++
++            try {
++                System.out.println(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName());
++                if ((gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null) &&
++                        player[playerTurn].getPlayerPosition() != 0 && player[playerTurn].getPlayerPosition() != 3 &&
++                        player[playerTurn].getPlayerPosition() != 6 && player[playerTurn].getPlayerPosition() != 9 &&
++                        player[playerTurn].getPlayerPosition() != 12 && player[playerTurn].getPlayerPosition() != 15 &&
++                        player[playerTurn].getPlayerPosition() != 18 && player[playerTurn].getPlayerPosition() != 21) {
+ 
+-                //Sets ownerName as current players name
+-                gameBoard.getField(player[playerTurn].getPlayerPosition()).setOwnerName(player[playerTurn].getName());
+-                System.out.println(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName());
+-                System.out.println(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals("Ejes af: "));
+-
+-                //Colours the field the same colour as the car to show who owns the field
+-
+-                //Sets the new account balance after buying the property
+-                player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
+-            }
+-            //if (ownerName (current field) = ownerName (current field +1 or -1) and ownerName (current field) is not current player name), then...
+-            if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(
+-                    (gameBoard.getField(player[playerTurn].getPlayerPosition()+1).getOwnerName()))||
+-                    gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(
+-                            (gameBoard.getField(player[playerTurn].getPlayerPosition()-1).getOwnerName()))&&(
+-                            !Objects.equals(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), player[playerTurn].getName()))){
++                    //Sets ownerName as current players name
++                    gameBoard.getField(player[playerTurn].getPlayerPosition()).setOwnerName(player[playerTurn].getName());
++                    System.out.println("Bliver også kørt her??");
++                    //Sets the new account balance after buying the property
++                    player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()), noPlayer);
++                }
++                //if (ownerName (current field) = ownerName (current field +1 or -1) and ownerName (current field) is not current player name), then...
++                else if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(
++                        (gameBoard.getField(player[playerTurn].getPlayerPosition() + 1).getOwnerName())) ||
++                        gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(
++                                (gameBoard.getField(player[playerTurn].getPlayerPosition() - 1).getOwnerName())) && (
++                                !Objects.equals(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), player[playerTurn].getName()))) {
+ 
+-                //Sets current player´s account balance after paying double rent
+-                player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent())*2);
+-                //Sets the owners account balance after collecting double rent
+-                player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent())*-2);
+-            }
+-            //if (ownerName (current field) is not current player name), then...
+-            if (!Objects.equals(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), player[playerTurn].getName())){
+-                //Current player pays rent
+-                player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
+-                //The owner collects rent
+-                player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent())*-1);
++                    //Sets current player´s account balance after paying double rent
++                    player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * 2, noPlayer);
++                    //Sets the owners account balance after collecting double rent
++                    player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * -2, noPlayer);
++                }
++                //if (ownerName (current field) is not current player name), then...
++                else if (!Objects.equals(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), player[playerTurn].getName())) {
++                    //Current player pays rent
++                    player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()), noPlayer);
++                    //The owner collects rent
++                    player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * -1, noPlayer);
++                }
+             }
+-
++            catch (Exception e){}
+ 
+ 
+ 
+Index: src/main/java/org/Game/Player.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.Game;\r\n\r\nimport gui_fields.GUI_Car;\r\nimport gui_fields.GUI_Field;\r\nimport gui_fields.GUI_Player;\r\n\r\nimport java.awt.*;\r\n\r\npublic class Player {\r\n    private int playerPosition;\r\n    String name;\r\n    Account acc = new Account();\r\n    private int noPlayer = 2;\r\n    GUI_Player[] gui_players = new GUI_Player[noPlayer];\r\n    GUI_Car[] cars = new GUI_Car[noPlayer];\r\n\r\n    public void createPlayers(int i, int startMoney, String name, GUI_Field field){\r\n        // Creates car and player in the gui\r\n        cars[i] = new GUI_Car();\r\n        gui_players[i] = new GUI_Player(name, startMoney, cars[i]);\r\n        //Makes the firs car red, the second car black and so on\r\n        if(i == 0){\r\n            cars[i].setPrimaryColor(Color.RED);\r\n        } else if(i == 1){\r\n            cars[i].setPrimaryColor(Color.black);\r\n        } else if(i == 2){\r\n            cars[i].setPrimaryColor(Color.green);\r\n        } else if(i == 3){\r\n            cars[i].setPrimaryColor(Color.blue);\r\n        }\r\n        //Places the gui-player-car on the board\r\n        field.setCar(gui_players[i],true);\r\n    }\r\n\r\n    public GUI_Player[] getGui_players() {\r\n        return gui_players;\r\n    }\r\n\r\n    public Player (int startMoney, int playerPosition, String navn){\r\n        this.playerPosition = playerPosition;\r\n        this.name = navn;\r\n        acc.setPlayerBalance(startMoney);\r\n    }\r\n\r\n    public void addPlayerPosition(int i, int diceThrow, GUI_Field field) {\r\n\r\n        //Removes previous version of car-placement on the board\r\n        field.setCar(gui_players[i], false);\r\n        this.playerPosition += diceThrow;\r\n        //Just places the car in gui at the new position\r\n        field.setCar(gui_players[i], true);\r\n        field.setBackGroundColor(gui_players[i].getPrimaryColor());\r\n    }\r\n    public void setPlayerPosition(int playerPosition) {\r\n        this.playerPosition = playerPosition;\r\n    }\r\n\r\n    public int getAccountBalance() {\r\n        return acc.getPlayerBalance();\r\n    }\r\n\r\n    public void setAccountBalance(int acc) {\r\n        this.acc.setPlayerBalance(acc);\r\n        this.gui_players[0].setBalance(this.acc.getPlayerBalance());\r\n        this.acc.setPlayerBalance(acc);\r\n    }\r\n\r\n    public int getPlayerPosition(){\r\n        return playerPosition;\r\n    }\r\n    public String getName(){\r\n        return name;\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/org/Game/Player.java b/src/main/java/org/Game/Player.java
+--- a/src/main/java/org/Game/Player.java	(revision 91625a4d33e18f20b955a5f9c267c1881182a9d0)
++++ b/src/main/java/org/Game/Player.java	(date 1668107195425)
+@@ -11,28 +11,29 @@
+     String name;
+     Account acc = new Account();
+     private int noPlayer = 2;
+-    GUI_Player[] gui_players = new GUI_Player[noPlayer];
+-    GUI_Car[] cars = new GUI_Car[noPlayer];
++    GUI_Player gui_players;
++    GUI_Car cars = new GUI_Car();
++
+ 
+     public void createPlayers(int i, int startMoney, String name, GUI_Field field){
+         // Creates car and player in the gui
+-        cars[i] = new GUI_Car();
+-        gui_players[i] = new GUI_Player(name, startMoney, cars[i]);
++        cars = new GUI_Car();
++        gui_players = new GUI_Player(name, startMoney, cars);
+         //Makes the firs car red, the second car black and so on
+         if(i == 0){
+-            cars[i].setPrimaryColor(Color.RED);
++            cars.setPrimaryColor(Color.RED);
+         } else if(i == 1){
+-            cars[i].setPrimaryColor(Color.black);
++            cars.setPrimaryColor(Color.black);
+         } else if(i == 2){
+-            cars[i].setPrimaryColor(Color.green);
++            cars.setPrimaryColor(Color.green);
+         } else if(i == 3){
+-            cars[i].setPrimaryColor(Color.blue);
++            cars.setPrimaryColor(Color.blue);
+         }
+         //Places the gui-player-car on the board
+-        field.setCar(gui_players[i],true);
++        field.setCar(gui_players,true);
+     }
+ 
+-    public GUI_Player[] getGui_players() {
++    public GUI_Player getGui_players() {
+         return gui_players;
+     }
+ 
+@@ -43,14 +44,14 @@
+     }
+ 
+     public void addPlayerPosition(int i, int diceThrow, GUI_Field field) {
+-
+         //Removes previous version of car-placement on the board
+-        field.setCar(gui_players[i], false);
++        field.setCar(gui_players, false);
+         this.playerPosition += diceThrow;
+         //Just places the car in gui at the new position
+-        field.setCar(gui_players[i], true);
+-        field.setBackGroundColor(gui_players[i].getPrimaryColor());
++        field.setCar(gui_players, true);
++        field.setBackGroundColor(gui_players.getPrimaryColor());
+     }
++
+     public void setPlayerPosition(int playerPosition) {
+         this.playerPosition = playerPosition;
+     }
+@@ -59,9 +60,9 @@
+         return acc.getPlayerBalance();
+     }
+ 
+-    public void setAccountBalance(int acc) {
++    public void setAccountBalance(int acc, int i) {
+         this.acc.setPlayerBalance(acc);
+-        this.gui_players[0].setBalance(this.acc.getPlayerBalance());
++        this.gui_players.setBalance(this.acc.getPlayerBalance());
+         this.acc.setPlayerBalance(acc);
+     }
+ 
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"1aa8222b-0e0f-4269-b2a7-255c3ae30a5b\" name=\"Changes\" comment=\"Working Cards + small changes\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/misc.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/misc.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_03_11_2022__16_13__Changes_.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_03_11_2022__16_13__Changes_.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_11_2022_13_11__Changes_.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_11_2022_13_11__Changes_.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/org/Game/GameBoard.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/org/Game/GameBoard.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/org/Game/GameController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/org/Game/GameController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/org/Game/Player.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/org/Game/Player.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"main\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"2GuDQSChMqEoaQPAlMzzg5rpGJN\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,\r\n    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,\r\n    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,\r\n    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"$PROJECT_DIR$\" />\r\n      <recent name=\"$PROJECT_DIR$/src\" />\r\n      <recent name=\"$PROJECT_DIR$/src/main/java/org/Game\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"Main\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"org.Game.Main\" />\r\n      <module name=\"CDIO3\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"org.Game.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Application.Main\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"1aa8222b-0e0f-4269-b2a7-255c3ae30a5b\" name=\"Changes\" comment=\"\" />\r\n      <created>1667229570603</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1667229570603</updated>\r\n      <workItem from=\"1667229573670\" duration=\"825000\" />\r\n      <workItem from=\"1667478967204\" duration=\"4668000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"renamed package org.Game&#10;New branch: Dice\">\r\n      <created>1667479829126</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1667479829126</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"Deck and Cards without txt descriptions\">\r\n      <created>1667830285168</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1667830285168</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"Temporary file reader\">\r\n      <created>1667908235812</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1667908235812</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"File reader that works:)\">\r\n      <created>1667909231343</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1667909231343</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00005\" summary=\"Danish txt descriptions for all chance cards added, as well as toString methods for the Card and Deck Classes\">\r\n      <created>1667921123921</created>\r\n      <option name=\"number\" value=\"00005\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1667921123921</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00006\" summary=\"Working Cards + small changes\">\r\n      <created>1667922878404</created>\r\n      <option name=\"number\" value=\"00006\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1667922878404</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"7\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"renamed package org.Game&#10;New branch: Dice\" />\r\n    <MESSAGE value=\"Deck and Cards without txt descriptions\" />\r\n    <MESSAGE value=\"Temporary file reader\" />\r\n    <MESSAGE value=\"File reader that works:)\" />\r\n    <MESSAGE value=\"Danish txt descriptions for all chance cards added, as well as toString methods for the Card and Deck Classes\" />\r\n    <MESSAGE value=\"Working Cards + small changes\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Working Cards + small changes\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 91625a4d33e18f20b955a5f9c267c1881182a9d0)
++++ b/.idea/workspace.xml	(date 1668105855810)
+@@ -4,12 +4,8 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="Working Cards + small changes">
+-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_03_11_2022__16_13__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_03_11_2022__16_13__Changes_.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_11_2022_13_11__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_11_2022_13_11__Changes_.xml" afterDir="false" />
++    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="Fixed bugs where the player could buy chance field">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/GameBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/GameBoard.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/GameController.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Player.java" afterDir="false" />
+     </list>
+@@ -137,7 +133,14 @@
+       <option name="project" value="LOCAL" />
+       <updated>1667922878404</updated>
+     </task>
+-    <option name="localTasksCounter" value="7" />
++    <task id="LOCAL-00007" summary="Fixed bugs where the player could buy chance field">
++      <created>1668104105839</created>
++      <option name="number" value="00007" />
++      <option name="presentableId" value="LOCAL-00007" />
++      <option name="project" value="LOCAL" />
++      <updated>1668104105839</updated>
++    </task>
++    <option name="localTasksCounter" value="8" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -161,6 +164,7 @@
+     <MESSAGE value="File reader that works:)" />
+     <MESSAGE value="Danish txt descriptions for all chance cards added, as well as toString methods for the Card and Deck Classes" />
+     <MESSAGE value="Working Cards + small changes" />
+-    <option name="LAST_COMMIT_MESSAGE" value="Working Cards + small changes" />
++    <MESSAGE value="Fixed bugs where the player could buy chance field" />
++    <option name="LAST_COMMIT_MESSAGE" value="Fixed bugs where the player could buy chance field" />
+   </component>
+ </project>
+\ No newline at end of file
