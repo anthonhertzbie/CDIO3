@@ -11,6 +11,7 @@ public class Player {
     Account acc = new Account();
     GUI_Player gui_Player;
     GUI_Car gui_car;
+    private boolean jail;
 
     public GUI_Player getGui_Player() {
         return gui_Player;
@@ -44,8 +45,12 @@ public class Player {
         field.setCar(gui_Player, true);
     }
 
-    public void setPlayerPosition(int playerPosition) {
+    public void setPlayerPosition(int playerPosition, GUI_Field field, GUI_Field prevField) {
+        //Removes previous version of car-placement on the board
+        prevField.setCar(gui_Player, false);
         this.playerPosition = playerPosition;
+        //Just places the car in gui at the new position
+        field.setCar(gui_Player, true);
     }
 
     public int getAccountBalance() {
@@ -55,6 +60,13 @@ public class Player {
     public void setAccountBalance(int acc) {
         this.acc.setPlayerBalance(acc);
         this.gui_Player.setBalance(this.acc.getPlayerBalance());
+    }
+
+    public void setJail(boolean jail) {
+        this.jail = jail;
+    }
+    public boolean getJail(boolean jail){
+        return this.jail;
     }
 
     public int getPlayerPosition(){

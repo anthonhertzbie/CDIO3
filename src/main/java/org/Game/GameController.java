@@ -13,6 +13,8 @@ public class GameController {
     GameBoard gameBoard = new GameBoard();
     Deck deck = new Deck();
 
+    boolean jail = false;
+
     int noPlayer;
     int startMoney;
     int indexPlayerOwner;
@@ -62,14 +64,24 @@ public class GameController {
 
         while (true) {
             //Important note: the game stops until "OK" is pressed in the GUI
-            gui.showMessage(player[playerTurn].getName() + "'s turn. Press OK to roll");
 
-            if (player[playerTurn].getPlayerPosition() == 18){
-                // ******** Lav et if-statement med chancekort heri, mangler chancekort info **********\\\\\\\\
-                gui.getUserButtonPressed(player[playerTurn].getName());
+
+            // Rolls the dices and handles the jail function as diceroll is not allowed if in jail.
+            if (player[playerTurn].getJail(true)){
+                // ******** Lav et if-statement som trigger en ekstra knap hvis chancekort er trukket, mangler chancekort info **********\\\\\\\\
+                gui.getUserButtonPressed(player[playerTurn].getName() + " you are in jail. Pay to get out:", "Pay 1M");
+                player[playerTurn].setAccountBalance(-1);
+                player[playerTurn].setJail(false);
+                gui.showMessage("Thanks for the money man! Press OK to roll the dices: ");
+                cup.rollDices();
+                gui.setDice(cup.getDice1(), cup.getDice2());
             }
-            cup.rollDices();
-            gui.setDice(cup.getDice1(), cup.getDice2());
+            else {
+                // Rolls the dices normally if the player is not in jail
+                gui.showMessage(player[playerTurn].getName() + "'s turn. Press OK to roll");
+                cup.rollDices();
+                gui.setDice(cup.getDice1(), cup.getDice2());
+            }
 
             //Loop that makes the players go around in a circle instead of breaking at field 24
             // IT BREAKS IF THE PLAYER LANDS ON FIELD 23 !!!!!!!!
@@ -79,7 +91,12 @@ public class GameController {
                 player[playerTurn].addPlayerPosition(cup.getSum()-24, gameBoard.getField(cup.getSum() + player[playerTurn].getPlayerPosition() - 24), gameBoard.getField(player[playerTurn].getPlayerPosition()));
                 player[playerTurn].setAccountBalance(2);
             }
-
+            // Sends player to jail
+            if (player[playerTurn].getPlayerPosition() == 6){
+                gui.showMessage("You landed on the 'Go to Jail' field and have been sent to prison.");
+                player[playerTurn].setPlayerPosition(18, gameBoard.getField(18), gameBoard.getField(6));
+                player[playerTurn].setJail(true);
+            }
             // Handles gui nullpointererror when a field is not yet owned by anyone
             try {
                 for (int i = 0; i < noPlayer - 1; i++) {
@@ -122,21 +139,7 @@ public class GameController {
                     player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * -1);
                 }
             }
-            // Sends player to jail
-            if (player[playerTurn].getPlayerPosition() == 6){
-                player[playerTurn].setPlayerPosition(18);
-            }
-
-
-            //if (ownerName for field is "For sale" and it is not field 0, 3, 6, 9, 12, 15, 18, 21), then...
-
-
-                //if (ownerName (current field) = ownerName (current field +1 or -1) and ownerName (current field) is not current player name), then...
-
-
-
-
-
+            // Displays a chance card if landing on chance fields
             if (player[playerTurn].getPlayerPosition() == 3 ||player[playerTurn].getPlayerPosition() == 9 || player[playerTurn].getPlayerPosition() == 15 || player[playerTurn].getPlayerPosition() == 21){
                 // Write something with chance-cards.
                 gui.displayChanceCard(deck.toString());
