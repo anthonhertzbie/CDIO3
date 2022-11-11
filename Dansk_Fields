@@ -1,24 +1,24 @@
-START Modtag 2M, når du passerer
-Burgerbaren
-Pizzeriaet
-Chance
-Slikbutikken
-Iskiosken
-I fængsel På besøg
-Museet
-Biblioteket
-Chance
-Skaterparken
-Swimmingpoolen
-Gratis parkering
-Spillehallen
-Biografen
-Chance
-Legetøjsbutikken
-Dyrehandlen
-Gå i fængsel
-Bowlinghallen
-Zoo
-Chance
-Vandlandet
-Strandpromenaden
+START Modtag 2M, når du passerer/Get 2M//0/LIGHT_GRAY/BLACK
+Burgerbaren/Rent -1M//-1/CYAN/BLACK
+Pizzeriaet/Rent -1M//-1/CYAN/BLACK
+Chance///0/WHITE/BLACK
+Slikbutikken/Rent -1M//-1/MAGENTA/BLACK
+Iskiosken/Rent -1M//-1/MAGENTA/BLACK
+I fængsel På besøg///0/GRAY/BLACK
+Museet/Rent -2M//-2/ORANGE/BLACK
+Biblioteket/Rent -2M//-2/ORANGE/BLACK
+Chance///0/WHITE/BLACK
+Skaterparken/Rent -2M//-2/DARK_GRAY/BLACK
+Swimmingpoolen/Rent -2M//-2/DARK_GRAY/BLACK
+Gratis parkering///0/WHITE/BLACK
+Spillehallen/Rent -3M//-3/PINK/BLACK
+Biografen/Rent -3M//-3/PINK/BLACK
+Chance///0/WHITE/BLACK
+Legetøjsbutikken/Rent -3M//-3/BLACK/WHITE
+Dyrehandlen/Rent -3M//-3/BLACK/WHITE
+Gå i fængsel///0/WHITE/BLACK
+Bowlinghallen/Rent -4M//-4/MAGENTA/BLACK
+Zoo/Rent -4M//-4/MAGENTA/BLACK
+Chance///0/WHITE/BLACK
+Vandlandet/Rent -5M//-5/ORANGE/BLACK
+Strandpromenaden/Rent -5M//-5/ORANGE/BLACK
