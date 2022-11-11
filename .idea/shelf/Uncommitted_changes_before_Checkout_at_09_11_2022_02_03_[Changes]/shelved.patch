@@ -1,0 +1,31 @@
+Index: src/main/java/org/Game/GameController.java
+===================================================================
+diff --git a/src/main/java/org/Game/GameController.java b/src/main/java/org/Game/GameController.java
+--- a/src/main/java/org/Game/GameController.java	
++++ b/src/main/java/org/Game/GameController.java	
+@@ -33,6 +33,7 @@
+ 
+     GUI_Player[] players = new GUI_Player[noPlayer];
+     GUI_Car[] cars = new GUI_Car[noPlayer];
++    String[] cards = deck.toString().split("\\r?\\n");;
+ 
+     //Makes players take turns in the consecutive order 0 through 4
+     public void turn() {
+@@ -81,7 +82,6 @@
+                 player[playerTurn].addPlayerPosition(cup.getSum()-24);
+             }
+ 
+-
+             gameBoard.getField(player[playerTurn].getPlayerPosition()).setCar(players[playerTurn], true);
+ 
+             // Bør være et if/else hvor man får rent*2 hvis en spiller ejer 2 grunde
+@@ -90,7 +90,8 @@
+ 
+             if (player[playerTurn].getPlayerPosition() == 3 ||player[playerTurn].getPlayerPosition() == 9 || player[playerTurn].getPlayerPosition() == 15 || player[playerTurn].getPlayerPosition() == 21){
+                 // Write something with chance-cards.
+-                gui.displayChanceCard(deck.toString());
++                gui.displayChanceCard(cards[0]);
++
+             }
+ 
+ 

@@ -110,7 +110,7 @@ public class GameController {
             }
 
             // checks if a field is not owned, and if the field is buyable (e.g. not start and chancecards)
-            if (player[playerTurn].getPlayerPosition() != 0 && (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0)) {
+            if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0) {
                 // Sets player as new owner
                 gameBoard.getField(player[playerTurn].getPlayerPosition()).setOwnerName(player[playerTurn].getName());
                 //Colours the field the same colour as the car to show who owns the field
