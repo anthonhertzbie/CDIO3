@@ -95,7 +95,7 @@ public class GameController {
             // Sends player to jail
             if (player[playerTurn].getPlayerPosition() == 6){
                 gui.showMessage("You landed on the 'Go to Jail' field and have been sent to prison.");
-                player[playerTurn].setPlayerPosition(18, gameBoard.getField(18), gameBoard.getField(6));
+                player[playerTurn].setPlayerPosition(6, gameBoard.getField(6), gameBoard.getField(18));
                 player[playerTurn].setJail(true);
             }
             // Handles gui nullpointererror when a field is not yet owned by anyone
