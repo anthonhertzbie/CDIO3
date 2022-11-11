@@ -13,8 +13,6 @@ public class GameController {
     GameBoard gameBoard = new GameBoard();
     Deck deck = new Deck();
 
-    boolean jail = false;
-
     int noPlayer;
     int startMoney;
     int indexPlayerOwner;
@@ -93,7 +91,7 @@ public class GameController {
                 player[playerTurn].setAccountBalance(2);
             }
             // Sends player to jail
-            if (player[playerTurn].getPlayerPosition() == 6){
+            if (player[playerTurn].getPlayerPosition() == 18){
                 gui.showMessage("You landed on the 'Go to Jail' field and have been sent to prison.");
                 player[playerTurn].setPlayerPosition(6, gameBoard.getField(6), gameBoard.getField(18));
                 player[playerTurn].setJail(true);
