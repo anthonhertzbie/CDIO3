@@ -1,13 +1,11 @@
 package org.Game;
 
-import gui_main.GUI;
-
 import java.util.Objects;
 import java.util.Random;
 
 public class GameController {
 
-
+    GUI_Controller gui_controller = new GUI_Controller();
     Random random = new Random();
     Cup cup = new Cup();
     GameBoard gameBoard = new GameBoard();
@@ -35,8 +33,9 @@ public class GameController {
     public void startGame(){
 
         //Sets the ownerName as "For sale" on all the fields
-        GUI gui = new GUI(gameBoard.createGameBoard());
-        noPlayer = Integer.parseInt(gui.getUserSelection("Choose number of players", "2", "3", "4"));
+
+        gui_controller.guiHelper("Dansk", gameBoard.createGameBoard());
+        noPlayer = Integer.parseInt(gui_controller.getUserButtonPressed("Choose number of players", "2", "3", "4"));
         player = new Player[noPlayer];
 
 
@@ -56,8 +55,9 @@ public class GameController {
         playerTurn = random.nextInt(0, noPlayer);
         // creates the players and adds them to the GUI
         for (int i = 0; i < noPlayer; i++) {
-            player[i] = new Player(i, startMoney, 0, gui.getUserString("Enter player name: "), gameBoard.getField(0));
-            gui.addPlayer(player[i].getGui_Player());
+
+            player[i] = new Player(i, startMoney, 0, gui_controller.getUserString("Enter player name: "), gameBoard.getField(0));
+            gui_controller.addPlayer(player[i].getGui_Player());
         }
 
 
@@ -68,18 +68,18 @@ public class GameController {
             // Rolls the dices and handles the jail function as diceroll is not allowed if in jail.
             if (player[playerTurn].getJail(true)){
                 // ******** Lav et if-statement som trigger en ekstra knap hvis chancekort er trukket, mangler chancekort info **********\\\\\\\\
-                gui.getUserButtonPressed(player[playerTurn].getName() + " you are in jail. Pay to get out:", "Pay 1M");
+                gui_controller.getUserButtonPressed(player[playerTurn].getName() + " you are in jail. Pay to get out:", "Pay 1M");
                 player[playerTurn].setAccountBalance(-1);
                 player[playerTurn].setJail(false);
-                gui.showMessage("Thanks for the money man! Press OK to roll the dices: ");
+                gui_controller.getShowMessage("Thanks for the money man! Press OK to roll the dices: ");
                 cup.rollDices();
-                gui.setDice(cup.getDice1(), cup.getDice2());
+                gui_controller.setDices(cup.getDice1(), cup.getDice2());
             }
             else {
                 // Rolls the dices normally if the player is not in jail
-                gui.showMessage(player[playerTurn].getName() + "'s turn. Press OK to roll");
+                gui_controller.getShowMessage(player[playerTurn].getName() + "'s turn. Press OK to roll");
                 cup.rollDices();
-                gui.setDice(cup.getDice1(), cup.getDice2());
+                gui_controller.setDices(cup.getDice1(),cup.getDice2());
             }
 
             //Loop that makes the players go around in a circle instead of breaking at field 24
@@ -92,7 +92,7 @@ public class GameController {
             }
             // Sends player to jail
             if (player[playerTurn].getPlayerPosition() == 18){
-                gui.showMessage("You landed on the 'Go to Jail' field and have been sent to prison.");
+                gui_controller.getShowMessage("You landed on the 'Go to Jail' field and have been sent to prison.");
                 player[playerTurn].setPlayerPosition(6, gameBoard.getField(6), gameBoard.getField(18));
                 player[playerTurn].setJail(true);
             }
@@ -141,7 +141,7 @@ public class GameController {
             // Displays a chance card if landing on chance fields
             if (player[playerTurn].getPlayerPosition() == 3 ||player[playerTurn].getPlayerPosition() == 9 || player[playerTurn].getPlayerPosition() == 15 || player[playerTurn].getPlayerPosition() == 21){
                 // Write something with chance-cards.
-                gui.displayChanceCard(deck.draw().getCardDescription());
+                gui_controller.displayChanceCard(deck.draw().getCardDescription());
             }
             turn();
         }
