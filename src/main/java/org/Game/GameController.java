@@ -114,7 +114,7 @@ public class GameController {
                 // Sets player as new owner
                 gameBoard.getField(player[playerTurn].getPlayerPosition()).setOwnerName(player[playerTurn].getName());
                 //Colours the field the same colour as the car to show who owns the field
-                gameBoard.getField(player[playerTurn].getPlayerPosition()).setBackGroundColor(player[playerTurn].gui_Player.getPrimaryColor());
+                gameBoard.getField(player[playerTurn].getPlayerPosition()).setBorder(player[playerTurn].gui_Player.getPrimaryColor());
                 //Sets the new account balance after buying the property
                 player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
             }
@@ -143,6 +143,14 @@ public class GameController {
                 // Write something with chance-cards.
                 gui_controller.displayChanceCard(deck.draw().getCardDescription());
             }
+
+            if(player[playerTurn].getAccountBalance() < 0){
+                if(noPlayer == 2){
+
+                    break;
+                }
+            }
+
             turn();
         }
             //Big ass loop begins
