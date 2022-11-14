@@ -1,24 +1,24 @@
-START Receive 2M when you pass
-The burger bar
-The pizza shop
-Chance
-The candy store
-The ice cream shop
-In prison Just visiting
-The museum
-The library
-Chance
-The skatepark
-The swimmingpool
-Free parkering
-The arcade
-The movie theater
-Chance
-The toy store
-The pet shop
-Go to prison
-The bowling alley
-The zoo
-Chance
-The waterpark
-The beach boardwalk
+START Receive 2M when you pass/Get 2M//0/255,255,255/BLACK
+The burger bar/Rent -1M//-1/255,0,127/BLACK
+The pizza shop/Rent -1M//-1/255,0,127/BLACK
+Chance///0/255,255,255/BLACK
+The candy store/Rent -1M//-1/204,255,255/BLACK
+The ice cream shop/Rent -1M//-1/204,255,255/BLACK
+In prison Just visiting///0/255,255,255/BLACK
+The museum/Rent -2M//-2/153,0,153/BLACK
+The library/Rent -2M//-2/153,0,153/BLACK
+Chance///0/255,255,255/BLACK
+The skatepark/Rent -2M//-2/255,128,0/BLACK
+The swimmingpool/Rent -2M//-2/255,128,0/BLACK
+Free parkering///0/255,255,255/BLACK
+The arcade/Rent -3M//-3/255,63,63/BLACK
+The movie theater/Rent -3M//-3/255,63,63/BLACK
+Chance///0/255,255,255/BLACK
+The toy store/Rent -3M//-3/255,255,153/WHITE
+The pet shop/Rent -3M//-3/255,255,153/WHITE
+Go to prison///0/255,255,255/BLACK
+The bowling alley/Rent -4M//-4/128,255,0/BLACK
+The zoo/Rent -4M//-4/128,255,0/BLACK
+Chance///0/255,255,255/BLACK
+The waterpark/Rent -5M//-5/61,120,255/BLACK
+The beach boardwalk/Rent -5M//-5/61,120,255/BLACK
