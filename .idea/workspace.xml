@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="Color changes">
+    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="Color changesv3">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dansk_Fields" beforeDir="false" afterPath="$PROJECT_DIR$/Dansk_Fields" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Field.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -160,7 +158,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668434753538</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Color changesv3">
+      <created>1668440160405</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1668440160405</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -188,7 +193,8 @@
     <MESSAGE value="Fixed bug; Go to prison moved from field 6 to 18" />
     <MESSAGE value="Shelfed stuff uploaded" />
     <MESSAGE value="Color changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Color changes" />
+    <MESSAGE value="Color changesv3" />
+    <option name="LAST_COMMIT_MESSAGE" value="Color changesv3" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
