@@ -25,13 +25,13 @@ public class Player {
         gui_Player = new GUI_Player(name, startMoney, gui_car);
         //Makes the firs car red, the second car black and so on
         if(i == 0){
-            gui_car.setPrimaryColor(Color.RED);
+            gui_car.setPrimaryColor(new Color(102,0,0));
         } else if(i == 1){
-            gui_car.setPrimaryColor(Color.yellow);
+            gui_car.setPrimaryColor(new Color(0,255,255));
         } else if(i == 2){
-            gui_car.setPrimaryColor(Color.green);
+            gui_car.setPrimaryColor(new Color(0,102,0));
         } else if(i == 3){
-            gui_car.setPrimaryColor(Color.blue);
+            gui_car.setPrimaryColor(new Color(255,153,255));
         }
         //Places the gui-player-car on the board
         field.setCar(gui_Player,true);

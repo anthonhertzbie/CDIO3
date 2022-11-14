@@ -5,6 +5,7 @@ import gui_fields.GUI_Street;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.SortedMap;
 
 public class Field {
 
@@ -15,6 +16,8 @@ public class Field {
     Color color;
     Color color2;
 
+    int R1, G1, B1;
+    int R2, G2, B2;
 
 
     public GUI_Street getField(String language, int lineNo) {
@@ -30,10 +33,18 @@ public class Field {
             color2 = null;
         }
         // Stealing stops
+        R1 = Integer.parseInt(fieldInformation[4].split(",")[0]);
+        G1 = Integer.parseInt(fieldInformation[4].split(",")[1]);
+        B1 = Integer.parseInt(fieldInformation[4].split(",")[2]);
+        System.out.println(R1);
+        System.out.println(G1);
+        System.out.println(B1);
+
 
         System.out.println(fieldInformation[5]);
         System.out.println(fieldInformation[0] + " || "+ fieldInformation[1]+ " || "+ fieldInformation[2]+ " || "+ fieldInformation[3]+ " || "+ fieldInformation[4]+ " || "+ fieldInformation[5]);
-        this.field = new GUI_Street(fieldInformation[0], fieldInformation[1], fieldInformation[2], fieldInformation[3], color, color2);
+        this.field = new GUI_Street(fieldInformation[0], fieldInformation[1], fieldInformation[2], fieldInformation[3], new Color(R1,G1,B1), color2);
+        this.field.setTextColor(Color.BLACK);
         return field;
     }
 }
