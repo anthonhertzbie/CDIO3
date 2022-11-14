@@ -35,7 +35,7 @@ public class Field {
         System.out.println(fieldInformation[5]);
         System.out.println(fieldInformation[0] + " || "+ fieldInformation[1]+ " || "+ fieldInformation[2]+ " || "+ fieldInformation[3]+ " || "+ fieldInformation[4]+ " || "+ fieldInformation[5]);
         this.field = new GUI_Street(fieldInformation[0], fieldInformation[1], fieldInformation[2], fieldInformation[3], new Color(R1,G1,B1), color);
-        this.field.setTextColor(Color.BLACK);
+        this.field.setBorder(Color.BLACK, Color.white);
         return field;
     }
 }

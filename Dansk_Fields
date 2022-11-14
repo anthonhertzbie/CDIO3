@@ -1,6 +1,6 @@
 START Modtag 2M, når du passerer/Get 2M//0/255,255,255/BLACK
-Burgerbaren/Rent -1M//-1/255,0,127/BLACK
-Pizzeriaet/Rent -1M//-1/255,0,127/BLACK
+Burgerbaren/Rent -1M//-1/204,102,0/BLACK
+Pizzeriaet/Rent -1M//-1/204,102,0/BLACK
 Chance///0/255,255,255/BLACK
 Slikbutikken/Rent -1M//-1/204,255,255/BLACK
 Iskiosken/Rent -1M//-1/204,255,255/BLACK
@@ -8,14 +8,14 @@ I fængsel På besøg///0/255,255,255/BLACK
 Museet/Rent -2M//-2/153,0,153/BLACK
 Biblioteket/Rent -2M//-2/153,0,153/BLACK
 Chance///0/255,255,255/BLACK
-Skaterparken/Rent -2M//-2/255,128,0/BLACK
-Swimmingpoolen/Rent -2M//-2/255,128,0/BLACK
+Skaterparken/Rent -2M//-2/255,153,51/BLACK
+Swimmingpoolen/Rent -2M//-2/255,153,51/BLACK
 Gratis parkering///0/255,255,255/BLACK
 Spillehallen/Rent -3M//-3/255,63,63/BLACK
 Biografen/Rent -3M//-3/255,63,63/BLACK
 Chance///0/255,255,255/BLACK
-Legetøjsbutikken/Rent -3M//-3/255,255,153/WHITE
-Dyrehandlen/Rent -3M//-3/255,255,153/WHITE
+Legetøjsbutikken/Rent -3M//-3/255,255,153/BLACK
+Dyrehandlen/Rent -3M//-3/255,255,153/BLACK
 Gå i fængsel///0/255,255,255/BLACK
 Bowlinghallen/Rent -4M//-4/128,255,0/BLACK
 Zoo/Rent -4M//-4/128,255,0/BLACK

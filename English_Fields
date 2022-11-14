@@ -1,6 +1,6 @@
 START Receive 2M when you pass/Get 2M//0/255,255,255/BLACK
-The burger bar/Rent -1M//-1/255,0,127/BLACK
-The pizza shop/Rent -1M//-1/255,0,127/BLACK
+The burger bar/Rent -1M//-1/204,102,0/BLACK
+The pizza shop/Rent -1M//-1/204,102,0/BLACK
 Chance///0/255,255,255/BLACK
 The candy store/Rent -1M//-1/204,255,255/BLACK
 The ice cream shop/Rent -1M//-1/204,255,255/BLACK
@@ -8,8 +8,8 @@ In prison Just visiting///0/255,255,255/BLACK
 The museum/Rent -2M//-2/153,0,153/BLACK
 The library/Rent -2M//-2/153,0,153/BLACK
 Chance///0/255,255,255/BLACK
-The skatepark/Rent -2M//-2/255,128,0/BLACK
-The swimmingpool/Rent -2M//-2/255,128,0/BLACK
+The skatepark/Rent -2M//-2/255,153,51/BLACK
+The swimmingpool/Rent -2M//-2/255,153,51/BLACK
 Free parkering///0/255,255,255/BLACK
 The arcade/Rent -3M//-3/255,63,63/BLACK
 The movie theater/Rent -3M//-3/255,63,63/BLACK
