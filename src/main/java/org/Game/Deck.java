@@ -7,19 +7,38 @@ public class Deck {
     private Card[] card = new Card[20];
 
     /**
-     * Deck constructor with 24 cards
+     * Deck constructor with 20 cards
      */
-    public Deck() {
-        initDeck();
+    public Deck(int noPlayers) {
+        initDeck(noPlayers);
     }
 
     /**
      * The initializer for the specific chance cards
      */
-    private void initDeck() {
+    private void initDeck(int noPlayers) {
         Helper helper = new Helper();
-        for (int i = 0; i < card.length; i++) {
-            card[i] = new Card(helper.lineReader("_Deck", i));
+        if(noPlayers == 4) {
+            for (int i = 0; i < card.length; i++) {
+                card[i] = new Card(i, helper.lineReader("_Deck", i));
+            }
+        }
+        if(noPlayers == 3) {
+            for (int i = 0; i < card.length; i++) {
+                if(i != 5)
+                    card[i] = new Card(i, helper.lineReader("_Deck", i));
+                else
+                    card[i] = null;
+            }
+        }
+        if(noPlayers == 2) {
+            for (int i = 0; i < card.length; i++) {
+                if(i == 5 || i == 0)
+                    card[i] = null;
+                else {
+                    card[i] = new Card(i, helper.lineReader("_Deck", i));
+                }
+            }
         }
 
     }
@@ -33,6 +52,14 @@ public class Deck {
             card[a] = card[b];
             card[b] = savedcard;
         }
+    }
+
+    public Card getFirstCard(){
+        return card[0];
+    }
+
+    public Card getLastCard(){
+        return card[19];
     }
 
     public Card draw() {

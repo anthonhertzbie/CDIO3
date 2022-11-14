@@ -9,7 +9,6 @@ public class GameController {
     Random random = new Random();
     Cup cup = new Cup();
     GameBoard gameBoard = new GameBoard();
-    Deck deck = new Deck();
 
     int noPlayer;
     int startMoney;
@@ -29,6 +28,43 @@ public class GameController {
         }
     }
 
+    public int ownableFields(){
+        int count = 0;
+        for (int i = 0; i < 24; i++) {
+            if(gameBoard.getField(i).getOwnerName() == null){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public void accounting(){
+        if (player[playerTurn].getPlayerPosition() != 23 && Objects.equals(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gameBoard.getField(player[playerTurn].getPlayerPosition() + 1).getOwnerName())){
+            //Sets the owners account balance after collecting double rent
+            player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * 2);
+            player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * -2);
+        }
+        // Same as prev but backwards
+        else if (player[playerTurn].getPlayerPosition() != 0 && Objects.equals(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gameBoard.getField(player[playerTurn].getPlayerPosition() - 1).getOwnerName())){
+            player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * 2);
+            player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * -2);
+        }
+        // Makes the player pay normal rent
+        else{
+            player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
+            //The owner collects rent
+            player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * -1);
+        }
+    }
+    public void buyField(){
+        // Sets player as new owner
+        gameBoard.getField(player[playerTurn].getPlayerPosition()).setOwnerName(player[playerTurn].getName());
+        //Colours the field the same colour as the car to show who owns the field
+        gameBoard.getField(player[playerTurn].getPlayerPosition()).setBorder(player[playerTurn].gui_Player.getPrimaryColor());
+        //Sets the new account balance after buying the property
+        player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
+    }
+
     //Starts game
     public void startGame(){
 
@@ -37,6 +73,7 @@ public class GameController {
         gui_controller.guiHelper("Dansk", gameBoard.createGameBoard());
         noPlayer = Integer.parseInt(gui_controller.getUserButtonPressed("Choose number of players", "2", "3", "4"));
         player = new Player[noPlayer];
+        Deck deck = new Deck(noPlayer);
 
 
         // shuffles the deck
@@ -66,7 +103,7 @@ public class GameController {
 
 
             // Rolls the dices and handles the jail function as diceroll is not allowed if in jail.
-            if (player[playerTurn].getJail(true)){
+            if (player[playerTurn].getJail()){
                 // ******** Lav et if-statement som trigger en ekstra knap hvis chancekort er trukket, mangler chancekort info **********\\\\\\\\
                 gui_controller.getUserButtonPressed(player[playerTurn].getName() + " you are in jail. Pay to get out:", "Pay 1M");
                 player[playerTurn].setAccountBalance(-1);
@@ -111,38 +148,133 @@ public class GameController {
 
             // checks if a field is not owned, and if the field is buyable (e.g. not start and chancecards)
             if (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0) {
-                // Sets player as new owner
-                gameBoard.getField(player[playerTurn].getPlayerPosition()).setOwnerName(player[playerTurn].getName());
-                //Colours the field the same colour as the car to show who owns the field
-                gameBoard.getField(player[playerTurn].getPlayerPosition()).setBorder(player[playerTurn].gui_Player.getPrimaryColor());
-                //Sets the new account balance after buying the property
-                player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
+                buyField();
             }
             // Checks if the current player own the field
             else if (!Objects.equals(player[playerTurn].getName(), gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName())){
                 // checks if the field one step forward is also owned by the same color
-                if (player[playerTurn].getPlayerPosition() != 23 && Objects.equals(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gameBoard.getField(player[playerTurn].getPlayerPosition() + 1).getOwnerName())){
-                    //Sets the owners account balance after collecting double rent
-                    player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * 2);
-                    player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * -2);
-                }
-                // Same as prev but backwards
-                else if (player[playerTurn].getPlayerPosition() != 0 && Objects.equals(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gameBoard.getField(player[playerTurn].getPlayerPosition() - 1).getOwnerName())){
-                    player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * 2);
-                    player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * -2);
-                }
-                // Makes the player pay normal rent
-                else{
-                    player[playerTurn].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
-                    //The owner collects rent
-                    player[indexPlayerOwner].setAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * -1);
-                }
+                accounting();
             }
             // Displays a chance card if landing on chance fields
-            if (player[playerTurn].getPlayerPosition() == 3 ||player[playerTurn].getPlayerPosition() == 9 || player[playerTurn].getPlayerPosition() == 15 || player[playerTurn].getPlayerPosition() == 21){
+            if (player[playerTurn].getPlayerPosition() == 3 ||player[playerTurn].getPlayerPosition() == 9 || player[playerTurn].getPlayerPosition() == 15 || player[playerTurn].getPlayerPosition() == 21) {
                 // Write something with chance-cards.
-                gui_controller.displayChanceCard(deck.draw().getCardDescription());
+                gui_controller.displayChanceCard(deck.getFirstCard().getCardDescription());
+                switch (deck.draw().getIndex()) {
+                    case 0:
+                        if(deck.getLastCard() == null)
+                        break;
+                        else{
+                            if(playerTurn == 2){
+                                if(ownableFields() == 0){
+                                    while(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() != null) {
+                                        player[playerTurn].addPlayerPosition(1, gameBoard.getField(1 + player[playerTurn].getPlayerPosition() - 24), gameBoard.getField(player[playerTurn].getPlayerPosition()));
+                                    }
+                                    accounting();
+                                }
+                                else{
+                                    while(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0){
+                                        player[playerTurn].addPlayerPosition(1, gameBoard.getField(1 + player[playerTurn].getPlayerPosition() - 24), gameBoard.getField(player[playerTurn].getPlayerPosition()));
+                                    }
+                                    buyField();
+                                }
+
+                            } else {
+                                player[2].setHasCard(true);
+                            }
+                            break;
+
+                        }
+                    case 1:
+                        player[playerTurn].setPlayerPosition(0,gameBoard.getField(1 + player[playerTurn].getPlayerPosition() - 24), gameBoard.getField(player[playerTurn].getPlayerPosition()));
+                        player[playerTurn].setAccountBalance(player[playerTurn].getAccountBalance() - 1);
+                    case 2:
+                        int userChoice = Integer.parseInt(gui_controller.getUserButtonPressed("DU MÅ RYKKE OP TIL 5 FELTER", "1", "2", "3", "4", "5"));
+                        player[playerTurn].addPlayerPosition(player[playerTurn].getPlayerPosition() + userChoice,gameBoard.getField(1 + player[playerTurn].getPlayerPosition() - 24), gameBoard.getField(player[playerTurn].getPlayerPosition()));
+                    case 3:
+                        if(player[playerTurn].getPlayerPosition() > 11){
+                            player[playerTurn].setAccountBalance(player[playerTurn].getAccountBalance() + 2);
+                        }
+                        if(gameBoard.getField(10).getOwnerName() == null){
+                        player[playerTurn].setPlayerPosition(0,gameBoard.getField(1 + player[playerTurn].getPlayerPosition() - 24), gameBoard.getField(player[playerTurn].getPlayerPosition()));
+                        }
+                    case 5:
+                        if(deck.getLastCard() == null)
+                            break;
+                        else{
+                            if(playerTurn == 3){
+                                if(ownableFields() == 0){
+                                    while(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() != null) {
+                                        player[playerTurn].addPlayerPosition(1, gameBoard.getField(1 + player[playerTurn].getPlayerPosition() - 24), gameBoard.getField(player[playerTurn].getPlayerPosition()));
+                                    }
+                                    accounting();
+                                }
+                                else{
+                                    while(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0){
+                                        player[playerTurn].addPlayerPosition(1, gameBoard.getField(1 + player[playerTurn].getPlayerPosition() - 24), gameBoard.getField(player[playerTurn].getPlayerPosition()));
+                                    }
+                                    buyField();
+                                }
+                            } else {
+                                player[3].setHasCard(true);
+                            }
+                            break;
+
+                        }
+                    case 11:
+                        if(deck.getLastCard() == null)
+                            break;
+                        else{
+                            if(playerTurn == 0){
+                                if(ownableFields() == 0){
+                                    while(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() != null) {
+                                        player[playerTurn].addPlayerPosition(1, gameBoard.getField(1 + player[playerTurn].getPlayerPosition() - 24), gameBoard.getField(player[playerTurn].getPlayerPosition()));
+                                    }
+                                    accounting();
+                                }
+                                else{
+                                    while(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0){
+                                        player[playerTurn].addPlayerPosition(1, gameBoard.getField(1 + player[playerTurn].getPlayerPosition() - 24), gameBoard.getField(player[playerTurn].getPlayerPosition()));
+                                    }
+                                    buyField();
+                                }
+
+                            } else {
+                                player[0].setHasCard(true);
+                            }
+                            break;
+
+                        }
+                    case 12:
+                        if(deck.getLastCard() == null)
+                            break;
+                        else{
+                            if(playerTurn == 1){
+                                if(ownableFields() == 0){
+                                    while(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() != null) {
+                                        player[playerTurn].addPlayerPosition(1, gameBoard.getField(1 + player[playerTurn].getPlayerPosition() - 24), gameBoard.getField(player[playerTurn].getPlayerPosition()));
+                                    }
+                                    accounting();
+                                }
+                                else{
+                                    while(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0){
+                                        player[playerTurn].addPlayerPosition(1, gameBoard.getField(1 + player[playerTurn].getPlayerPosition() - 24), gameBoard.getField(player[playerTurn].getPlayerPosition()));
+                                    }
+                                    buyField();
+                                }
+
+                            } else {
+                                player[1].setHasCard(true);
+                            }
+                            break;
+
+                        }
+
+
+                }
             }
+
+
+
 
             if(player[playerTurn].getAccountBalance() < 0){
                 if(noPlayer == 2){

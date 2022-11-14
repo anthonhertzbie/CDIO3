@@ -8,33 +8,44 @@ import java.awt.*;
 
 public class Player {
     private int playerPosition;
+
+    private int index;
     Account acc = new Account();
     GUI_Player gui_Player;
     GUI_Car gui_car;
     private boolean jail;
 
+    private boolean hasCard;
+
     public GUI_Player getGui_Player() {
         return gui_Player;
     }
 
-    public Player (int i, int startMoney, int playerPosition, String name, GUI_Field field){
+    public Player (int index, int startMoney, int playerPosition, String name, GUI_Field field){
         this.playerPosition = playerPosition;
         acc.setPlayerBalance(startMoney);
         // Creates car and player in the gui
         gui_car = new GUI_Car();
         gui_Player = new GUI_Player(name, startMoney, gui_car);
         //Makes the firs car red, the second car black and so on
-        if(i == 0){
+        if(index == 0){
             gui_car.setPrimaryColor(Color.RED);
-        } else if(i == 1){
+        } else if(index == 1){
             gui_car.setPrimaryColor(Color.yellow);
-        } else if(i == 2){
+        } else if(index == 2){
             gui_car.setPrimaryColor(Color.green);
-        } else if(i == 3){
+        } else if(index == 3){
             gui_car.setPrimaryColor(Color.blue);
         }
         //Places the gui-player-car on the board
         field.setCar(gui_Player,true);
+        this.index = index;
+        this.jail = false;
+        this.hasCard = false;
+    }
+
+    public int getIndex(){
+        return this.index;
     }
 
     public void addPlayerPosition(int diceThrow, GUI_Field field, GUI_Field prevField) {
@@ -65,8 +76,15 @@ public class Player {
     public void setJail(boolean jail) {
         this.jail = jail;
     }
-    public boolean getJail(boolean jail){
+    public boolean getJail(){
         return this.jail;
+    }
+
+    public void setHasCard(boolean hasCard) {
+        this.hasCard = hasCard;
+    }
+    public boolean getHasCard(){
+        return this.hasCard;
     }
 
     public int getPlayerPosition(){
