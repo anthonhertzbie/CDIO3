@@ -6,10 +6,9 @@ import gui_main.GUI;
 
 public class GUI_Controller {
     GUI gui;
-    Helper helper = new Helper();
     public void guiHelper(String language, GUI_Street[] fields){
         gui = new GUI(fields);
-        helper.lang = gui.getUserSelection("Language", "Dansk", "English");
+        Helper.lang = gui.getUserSelection("Language", "Dansk", "English");
         gui.close();
         gui = new GUI(fields);
     }
