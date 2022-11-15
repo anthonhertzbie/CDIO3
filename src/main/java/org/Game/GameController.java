@@ -149,7 +149,11 @@ public class GameController {
         //The player with the highest balance wins
     }
     //Makes players take turns in the consecutive order 0 through 4
-    public void turn() {
+
+    /**
+     * Increments the playerTurn variable with one.
+     */
+    private void turn() {
         if (playerTurn < noPlayer - 1){
             playerTurn += 1;
         } else {
@@ -158,7 +162,11 @@ public class GameController {
 
     }
 
-    public int ownableFields(){
+    /**
+     * Counts all available fields
+     * @return number of available fields
+     */
+    private int ownableFields(){
         int count = 0;
         for (int i = 0; i < 24; i++) {
             if(gameBoard.getField(i).getOwnerName() == null){
@@ -168,6 +176,9 @@ public class GameController {
         return count;
     }
 
+    /**
+     * Gives the field to the current player for free!
+     */
     private void freeField(){
         // Sets player as new owner
         gameBoard.getField(player[playerTurn].getPlayerPosition()).setOwnerName(player[playerTurn].getName());
@@ -175,6 +186,9 @@ public class GameController {
         gameBoard.getField(player[playerTurn].getPlayerPosition()).setBorder(player[playerTurn].gui_Player.getPrimaryColor());
     }
 
+    /**
+     * Handles the rent payment, checks for ownership of neighbouring fields.
+     */
     private void accounting(){
         if (player[playerTurn].getPlayerPosition() != 23 && Objects.equals(gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gameBoard.getField(player[playerTurn].getPlayerPosition() + 1).getOwnerName())){
             //Sets the owners account balance after collecting double rent
@@ -193,6 +207,10 @@ public class GameController {
             player[indexPlayerOwner].addAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) * -1);
         }
     }
+
+    /**
+     * Handles the purchase of a field.
+     */
     private void buyField(){
         // Sets player as new owner
         gameBoard.getField(player[playerTurn].getPlayerPosition()).setOwnerName(player[playerTurn].getName());
@@ -202,6 +220,12 @@ public class GameController {
         player[playerTurn].addAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
     }
 
+    /**
+     * Moves you to the color of one of the two fields
+     * @param chanceCardField The next chance field, in relation to the color.
+     * @param fieldOne the first field of that particular color.
+     * @param fieldTwo the subsequent field.
+     */
     private void moveToColor(int chanceCardField, int fieldOne, int fieldTwo){
         if (player[playerTurn].getPlayerPosition() >= chanceCardField) {
             player[playerTurn].addAccountBalance(2);
@@ -218,12 +242,14 @@ public class GameController {
         }
     }
 
+    /**
+     *Manages the player-specific chance cards
+     */
     private void manageField(){
         if (ownableFields() == 0) {
-            while (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() != null) {
-                player[playerTurn].addPlayerPosition(1, gameBoard.getField(1 + player[playerTurn].getPlayerPosition() - 24), gameBoard.getField(player[playerTurn].getPlayerPosition()));
-            }
-            accounting();
+            int userInput = Integer.parseInt(gui_controller.getUserButtonPressed("CHOOSE A FIELD TO BUY", "1", "2", "4", "5", "7", "8", "10", "11", "13", "14", "16", "17", "19", "20", "22", "23"));
+            player[playerTurn].setPlayerPosition(userInput - 1, gameBoard.getField(userInput - 1), gameBoard.getField(player[playerTurn].getPlayerPosition()));
+            player[playerTurn].addAccountBalance(Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()));
         } else {
             while (gameBoard.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gameBoard.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0) {
                 player[playerTurn].addPlayerPosition(1, gameBoard.getField(1 + player[playerTurn].getPlayerPosition() - 24), gameBoard.getField(player[playerTurn].getPlayerPosition()));
@@ -231,6 +257,10 @@ public class GameController {
             buyField();
         }
     }
+
+    /**
+     * Handles all chance card cases
+     */
     private void chanceCards() {
         gui_controller.displayChanceCard(deck.getFirstCard().getCardDescription());
         switch (deck.draw().getIndex()) {
