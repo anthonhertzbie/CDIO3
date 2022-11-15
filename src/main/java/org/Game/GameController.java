@@ -262,21 +262,22 @@ public class GameController {
      * Handles all chance card cases
      */
     private void chanceCards() {
+        deck.draw();
+        if(deck.getLastCard().getCardDescription() == null){
+            deck.draw();
+        }
         gui_controller.displayChanceCard(deck.getFirstCard().getCardDescription());
-        switch (deck.draw().getIndex()) {
+        switch (deck.getLastCard().getIndex()) {
             case 0:
-                if (deck.getLastCard() == null)
-                    break;
-                else {
-                    if (playerTurn == 2) {
+                if (playerTurn == 2) {
                         manageField();
 
-                    } else {
+                } else {
                         player[2].setHasCard(true);
-                    }
-                    break;
-
                 }
+                break;
+
+
             case 1:
                 player[playerTurn].setPlayerPosition(0, gameBoard.getField(0), gameBoard.getField(player[playerTurn].getPlayerPosition()));
                 player[playerTurn].addAccountBalance(2);
@@ -299,18 +300,13 @@ public class GameController {
                     break;
                 }
             case 5:
-                if (deck.getLastCard() == null)
-                    break;
-                else {
-                    if (playerTurn == 3) {
+                if (playerTurn == 3) {
                        manageField();
 
-                    } else {
+                } else {
                         player[3].setHasCard(true);
-                    }
-                    break;
-
                 }
+                break;
             case 6:
                 player[playerTurn].addAccountBalance(-2);
                 break;
