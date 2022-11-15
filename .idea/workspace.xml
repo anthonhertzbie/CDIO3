@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="renamed package org.Game&#10;New branch: Dice">
+    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="Primed classes to make chance cards">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Card.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Deck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Deck.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Player.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -147,7 +144,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668130491568</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Primed classes to make chance cards">
+      <created>1668441464057</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1668441464058</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -174,7 +178,8 @@
     <MESSAGE value="Seperating GUI functions and gamecontroller more clearly. Furthermore fixing bugs, such as out of index error if a person owns field 23.&#10;Mostly just reorganizing stuff to keep the code clean." />
     <MESSAGE value="Fixed bug; Go to prison moved from field 6 to 18" />
     <MESSAGE value="comitting shelfed stuff" />
-    <option name="LAST_COMMIT_MESSAGE" value="comitting shelfed stuff" />
+    <MESSAGE value="Primed classes to make chance cards" />
+    <option name="LAST_COMMIT_MESSAGE" value="Primed classes to make chance cards" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

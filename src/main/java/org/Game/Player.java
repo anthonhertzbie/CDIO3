@@ -17,6 +17,8 @@ public class Player {
 
     private boolean hasCard;
 
+    private boolean jailCard;
+
     public GUI_Player getGui_Player() {
         return gui_Player;
     }
@@ -42,6 +44,7 @@ public class Player {
         this.index = index;
         this.jail = false;
         this.hasCard = false;
+        this.jailCard = false;
     }
 
     public int getIndex(){
@@ -68,7 +71,7 @@ public class Player {
         return acc.getPlayerBalance();
     }
 
-    public void setAccountBalance(int acc) {
+    public void addAccountBalance(int acc) {
         this.acc.setPlayerBalance(acc);
         this.gui_Player.setBalance(this.acc.getPlayerBalance());
     }
@@ -86,6 +89,15 @@ public class Player {
     public boolean getHasCard(){
         return this.hasCard;
     }
+
+    public void setJailCard(boolean jailCard){
+        this.jailCard = jailCard;
+    }
+
+    public boolean getJailCard(){
+        return this.jailCard;
+    }
+
 
     public int getPlayerPosition(){
         return playerPosition;
