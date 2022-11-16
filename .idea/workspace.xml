@@ -4,6 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="Color changesv3">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_14_11_2022_13_49__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_14_11_2022_13_49__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_14_11_2022_13_54__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_14_11_2022_13_54__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_14_11_2022_13_55__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_14_11_2022_13_55__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_11_2022_13_31__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_11_2022_13_31__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_11_2022_13_50__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_11_2022_13_50__Changes_.xml" afterDir="false" />
     <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="All new methods in the controller, commented. +Minor fixes.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/GameController.java" afterDir="false" />
@@ -23,7 +29,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="Helper_Methods" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -39,6 +45,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Project.color&quot;: &quot;50114f&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
@@ -79,6 +86,7 @@
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -93,6 +101,7 @@
       <workItem from="1667229573670" duration="825000" />
       <workItem from="1667478967204" duration="4668000" />
       <workItem from="1668261011087" duration="2570000" />
+      <workItem from="1668431844715" duration="6510000" />
     </task>
     <task id="LOCAL-00001" summary="renamed package org.Game&#10;New branch: Dice">
       <created>1667479829126</created>
@@ -143,26 +152,26 @@
       <option name="project" value="LOCAL" />
       <updated>1668130491568</updated>
     </task>
-    <task id="LOCAL-00008" summary="Primed classes to make chance cards">
-      <created>1668441464057</created>
+    <task id="LOCAL-00008" summary="Shelfed stuff uploaded">
+      <created>1668430573708</created>
       <option name="number" value="00008" />
       <option name="presentableId" value="LOCAL-00008" />
       <option name="project" value="LOCAL" />
-      <updated>1668441464058</updated>
+      <updated>1668430573708</updated>
     </task>
-    <task id="LOCAL-00009" summary="Chance-cards DONE!">
-      <created>1668523100373</created>
+    <task id="LOCAL-00009" summary="Color changes">
+      <created>1668434753538</created>
       <option name="number" value="00009" />
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
-      <updated>1668523100373</updated>
+      <updated>1668434753538</updated>
     </task>
-    <task id="LOCAL-00010" summary="All new methods in the controller, commented. +Minor fixes.">
-      <created>1668525467527</created>
+    <task id="LOCAL-00010" summary="Color changesv3">
+      <created>1668440160405</created>
       <option name="number" value="00010" />
       <option name="presentableId" value="LOCAL-00010" />
       <option name="project" value="LOCAL" />
-      <updated>1668525467527</updated>
+      <updated>1668440160405</updated>
     </task>
     <option name="localTasksCounter" value="11" />
     <servers />
@@ -190,11 +199,10 @@
     <MESSAGE value="Working Cards + small changes" />
     <MESSAGE value="Seperating GUI functions and gamecontroller more clearly. Furthermore fixing bugs, such as out of index error if a person owns field 23.&#10;Mostly just reorganizing stuff to keep the code clean." />
     <MESSAGE value="Fixed bug; Go to prison moved from field 6 to 18" />
-    <MESSAGE value="comitting shelfed stuff" />
-    <MESSAGE value="Primed classes to make chance cards" />
-    <MESSAGE value="Chance-cards DONE!" />
-    <MESSAGE value="All new methods in the controller, commented. +Minor fixes." />
-    <option name="LAST_COMMIT_MESSAGE" value="All new methods in the controller, commented. +Minor fixes." />
+    <MESSAGE value="Shelfed stuff uploaded" />
+    <MESSAGE value="Color changes" />
+    <MESSAGE value="Color changesv3" />
+    <option name="LAST_COMMIT_MESSAGE" value="Color changesv3" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
