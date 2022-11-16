@@ -4,14 +4,10 @@ import gui_fields.GUI_Car;
 import gui_fields.GUI_Field;
 import gui_fields.GUI_Player;
 
-import java.awt.*;
-
 public class Player {
     private int playerPosition;
 
-    private int index;
     Account acc = new Account();
-    GUI_Player gui_Player;
     GUI_Car gui_car;
     private boolean jail;
 
@@ -19,52 +15,36 @@ public class Player {
 
     private boolean jailCard;
 
-    public GUI_Player getGui_Player() {
-        return gui_Player;
-    }
+    private int field;
 
-    public Player (int index, int startMoney, int playerPosition, String name, GUI_Field field){
+
+    public Player(int startMoney, int playerPosition){
         this.playerPosition = playerPosition;
         acc.setPlayerBalance(startMoney);
         // Creates car and player in the gui
-        gui_car = new GUI_Car();
-        gui_Player = new GUI_Player(name, startMoney, gui_car);
-        //Makes the firs car red, the second car black and so on
-        if(i == 0){
-            gui_car.setPrimaryColor(new Color(102,0,0));
-        } else if(i == 1){
-            gui_car.setPrimaryColor(new Color(0,255,255));
-        } else if(i == 2){
-            gui_car.setPrimaryColor(new Color(0,102,0));
-        } else if(i == 3){
-            gui_car.setPrimaryColor(new Color(255,153,255));
-        }
-        //Places the gui-player-car on the board
-        field.setCar(gui_Player,true);
-        this.index = index;
         this.jail = false;
         this.hasCard = false;
         this.jailCard = false;
+        this.field = 0;
     }
 
-    public int getIndex(){
-        return this.index;
+    public void setField(int field) {
+        this.field = field;
     }
 
-    public void addPlayerPosition(int diceThrow, GUI_Field field, GUI_Field prevField) {
+    public int getField() {
+        return field;
+    }
+
+    public void addPlayerPosition(int diceThrow) {
         //Removes previous version of car-placement on the board
-        prevField.setCar(gui_Player, false);
         this.playerPosition += diceThrow;
         //Just places the car in gui at the new position
-        field.setCar(gui_Player, true);
     }
 
-    public void setPlayerPosition(int playerPosition, GUI_Field field, GUI_Field prevField) {
+    public void setPlayerPosition(int playerPosition) {
         //Removes previous version of car-placement on the board
-        prevField.setCar(gui_Player, false);
         this.playerPosition = playerPosition;
-        //Just places the car in gui at the new position
-        field.setCar(gui_Player, true);
     }
 
     public int getAccountBalance() {
@@ -73,7 +53,7 @@ public class Player {
 
     public void addAccountBalance(int acc) {
         this.acc.setPlayerBalance(acc);
-        this.gui_Player.setBalance(this.acc.getPlayerBalance());
+      //  this.gui_Player.setBalance(this.acc.getPlayerBalance());
     }
 
     public void setJail(boolean jail) {
@@ -102,8 +82,8 @@ public class Player {
     public int getPlayerPosition(){
         return playerPosition;
     }
-    public String getName(){
-        return gui_Player.getName();
+  //  public String getName(){
+  //      return gui_Player.getName();
 
-    }
+
 }
