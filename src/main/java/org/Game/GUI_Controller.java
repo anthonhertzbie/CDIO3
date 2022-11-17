@@ -66,6 +66,8 @@ public class GUI_Controller {
         return fields[currentField];
     }
     public void setGui_car(int player, int field, int prevfield){
+        if(field > 24)
+            field -= 24;
         this.fields[prevfield].setCar(this.gui_Player[player], false);
         this.fields[field].setCar(this.gui_Player[player], true);
     }
