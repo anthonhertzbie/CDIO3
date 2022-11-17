@@ -8,7 +8,6 @@ public class GameController {
     GUI_Controller gui_controller = new GUI_Controller();
     Random random = new Random();
     GameBoard gameBoard = new GameBoard();
-
     Deck deck;
 
     int noPlayer;
@@ -22,9 +21,19 @@ public class GameController {
     //Starts game
     public void startGame() {
 
-        //Gives the player the option to select language and number of players
+        // Creates a gameboard which allows the player to select language
         gameBoard.createGameBoard();
-        gui_controller.guiHelper("Dansk", gui_controller.createGameBoard(gameBoard.getFields()));
+        gui_controller.createGameBoard(gameBoard.getFields());
+        gui_controller.guiStart();
+        Helper.lang = gui_controller.getUserButtonPressed("Choose language: ", "Dansk", "English");
+        // Closes the gameboard and launches a new gameboard with the selected langauge
+        gui_controller.guiClose();
+        gameBoard.createGameBoard();
+        gui_controller.createGameBoard(gameBoard.getFields());
+        gui_controller.guiStart();
+
+
+
         noPlayer = Integer.parseInt(gui_controller.getUserButtonPressed("Choose number of players", "2", "3", "4"));
         gui_controller.setGUI_NumberOfPlayersAndCars(noPlayer);
         Player = new Player[noPlayer];

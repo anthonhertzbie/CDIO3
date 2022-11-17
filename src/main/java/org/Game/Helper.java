@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Helper {
-    public static String lang;
+    public static String lang = "English";
 
     // Reads file
     public String lineReader(String file, int lineNo) {
