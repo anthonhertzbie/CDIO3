@@ -17,13 +17,12 @@ public class GameController {
     //Random player starts
     int playerTurn;
 
-    //Instantiates Player class depending on number of players
     Player[] Player;
 
     //Starts game
     public void startGame(){
 
-        //Sets the ownerName as "For sale" on all the fields
+        //Gives the player the option to select language and number of players
         gameBoard.createGameBoard();
         gui_controller.guiHelper("Dansk", gui_controller.createGameBoard(gameBoard.getFields()));
         noPlayer = Integer.parseInt(gui_controller.getUserButtonPressed("Choose number of players", "2", "3", "4"));
@@ -60,10 +59,8 @@ public class GameController {
         while (true) {
             //Important note: the game stops until "OK" is pressed in the GUI
 
-
-            // Rolls the dices and handles the jail function as diceroll is not allowed if in jail.
+            //Checks if the player is in jail and gives the option to pay to get out of jail
             if (Player[playerTurn].getJail()){
-                // ******** Lav et if-statement som trigger en ekstra knap hvis chancekort er trukket, mangler chancekort info **********\\\\\\\\
                 gui_controller.getUserButtonPressed(Player[playerTurn].getName() + " you are in jail. Pay to get out:", "Pay 1M");
                 Player[playerTurn].addAccountBalance(-1);
                 gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
@@ -80,7 +77,6 @@ public class GameController {
             }
 
             //Loop that makes the players go around in a circle instead of breaking at field 24
-            // IT BREAKS IF THE PLAYER LANDS ON FIELD 23 !!!!!!!!
             if (Player[playerTurn].getPlayerPosition()+cup.getSum() < 24){
                 gui_controller.setGui_car(playerTurn, Player[playerTurn].getPlayerPosition()+cup.getSum(),Player[playerTurn].getPlayerPosition());
                 Player[playerTurn].addPlayerPosition(cup.getSum());
@@ -98,7 +94,7 @@ public class GameController {
                 gui_controller.setGui_car(playerTurn, 6, 18);
                 Player[playerTurn].setJail(true);
             }
-            // Handles gui nullpointererror when a field is not yet owned by anyone
+            // Handles gui null-point-error when a field is not yet owned by anyone
             try {
                 for (int i = 0; i < noPlayer - 1; i++) {
                     // Finds the index of the owner of the current field
@@ -111,21 +107,18 @@ public class GameController {
             catch (NullPointerException e){
             }
 
-            // checks if a field is not owned, and if the field is buyable (e.g. not start and chancecards)
+            //Checks if a field is not owned, and if the field is buyable (e.g. not start and chance-cards)
             if (gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) != 0) {
                 buyField();
             }
             // Checks if the current player own the field
             else if (!Objects.equals(Player[playerTurn].getName(), gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName())){
-                // checks if the field one step forward is also owned by the same color
                 accounting();
             }
             // Displays a chance card if landing on chance fields
             if (Player[playerTurn].getPlayerPosition() == 3 || Player[playerTurn].getPlayerPosition() == 9 || Player[playerTurn].getPlayerPosition() == 15 || Player[playerTurn].getPlayerPosition() == 21) {
-                // Write something with chance-cards.
                 chanceCards();
             }
-
 
 
 
@@ -138,26 +131,8 @@ public class GameController {
 
             turn();
         }
-            //Big ass loop begins
-            //If field type is a property and is unowned, the player buys the property
-            //If field type ia a property and is owned, the player pays rent
-            //If field type is a property and another player owns both, the player pays double rent
-            //If field type is parking the turn ends
-            //If field type is the prison
-            //the player can use the jailcard
-            //else the player can pay
-            //else the player is not allowed to roll until the third round
-            //If field type is chance
-            //chance card is drawn
-            //if chance card is var
-            //Specific option
 
-
-
-        //Game ends when a players balance <=0
-        //The player with the highest balance wins
     }
-    //Makes players take turns in the consecutive order 0 through 4
 
     /**
      * Increments the playerTurn variable with one.
@@ -308,7 +283,7 @@ public class GameController {
                 gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
                 break;
             case 2:
-                // Fejl på dette kort, kan gå out of array
+                // This card can go out of aray
                 int userChoice = Integer.parseInt(gui_controller.getUserButtonPressed("DU MÅ RYKKE OP TIL 5 FELTER", "1", "2", "3", "4", "5"));
                 gui_controller.setGui_car(playerTurn, Player[playerTurn].getPlayerPosition() + userChoice, Player[playerTurn].getPlayerPosition());
                 Player[playerTurn].addPlayerPosition(userChoice);
