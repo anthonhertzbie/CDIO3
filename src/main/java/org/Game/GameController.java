@@ -19,7 +19,7 @@ public class GameController {
     Player[] Player;
 
     //Starts game
-    public void startGame(){
+    public void startGame() {
 
         // Creates a gameboard which allows the player to select language
         gameBoard.createGameBoard();
@@ -43,13 +43,11 @@ public class GameController {
         // shuffles the deck
         deck.shuffle();
         //Sets starting balance in accordance to number of players
-        if (noPlayer == 2){
+        if (noPlayer == 2) {
             startMoney = 20;
-        }
-        else if (noPlayer == 3){
+        } else if (noPlayer == 3) {
             startMoney = 18;
-        }
-        else if (noPlayer == 4){
+        } else if (noPlayer == 4) {
             startMoney = 16;
         }
         // Chooses a random starting player
@@ -69,7 +67,7 @@ public class GameController {
             //Important note: the game stops until "OK" is pressed in the GUI
 
             //Checks if the player is in jail and gives the option to pay to get out of jail
-            if (Player[playerTurn].getJail()){
+            if (Player[playerTurn].getJail()) {
                 gui_controller.getUserButtonPressed(Player[playerTurn].getName() + " you are in jail. Pay to get out:", "Pay 1M");
                 Player[playerTurn].addAccountBalance(-1);
                 gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
@@ -77,27 +75,20 @@ public class GameController {
                 gui_controller.getShowMessage("Thanks for the money man! Press OK to roll the dices: ");
                 cup.rollDices();
                 gui_controller.setDices(cup.getDice1(), cup.getDice2());
-            }
-            else {
+            } else {
                 // Rolls the dices normally if the player is not in jail
                 gui_controller.getShowMessage(Player[playerTurn].getName() + "'s turn. Press OK to roll");
                 cup.rollDices();
-                gui_controller.setDices(cup.getDice1(),cup.getDice2());
+                gui_controller.setDices(cup.getDice1(), cup.getDice2());
             }
 
             //Loop that makes the players go around in a circle instead of breaking at field 24
-            if (Player[playerTurn].getPlayerPosition()+cup.getSum() < 24){
-                gui_controller.setGui_car(playerTurn, Player[playerTurn].getPlayerPosition()+cup.getSum(),Player[playerTurn].getPlayerPosition());
-                Player[playerTurn].addPlayerPosition(cup.getSum());
-            } else {
-                gui_controller.setGui_car(playerTurn, Player[playerTurn].getPlayerPosition()+cup.getSum() - 24, Player[playerTurn].getPlayerPosition());
-                Player[playerTurn].addPlayerPosition(cup.getSum()-24);
-                Player[playerTurn].addAccountBalance(2);
-                gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
+            gui_controller.setGui_car(playerTurn, Player[playerTurn].getPlayerPosition() + cup.getSum(), Player[playerTurn].getPlayerPosition());
+            Player[playerTurn].addPlayerPosition(cup.getSum());
 
-            }
+
             // Sends player to jail
-            if (Player[playerTurn].getPlayerPosition() == 18){
+            if (Player[playerTurn].getPlayerPosition() == 18) {
                 gui_controller.getShowMessage("You landed on the 'Go to Jail' field and have been sent to prison.");
                 Player[playerTurn].setPlayerPosition(6);
                 gui_controller.setGui_car(playerTurn, 6, 18);
@@ -113,7 +104,7 @@ public class GameController {
                 }
             }
             // Handles the exception. Proceeds with the code.
-            catch (NullPointerException e){
+            catch (NullPointerException e) {
             }
 
             //Checks if a field is not owned, and if the field is buyable (e.g. not start and chance-cards)
@@ -121,7 +112,7 @@ public class GameController {
                 buyField();
             }
             // Checks if the current player own the field
-            else if (!Objects.equals(Player[playerTurn].getName(), gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName())){
+            else if (!Objects.equals(Player[playerTurn].getName(), gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName())) {
                 accounting();
             }
             // Displays a chance card if landing on chance fields
@@ -130,17 +121,14 @@ public class GameController {
             }
 
 
+            if (Player[playerTurn].getAccountBalance() < 0) {
+                if (noPlayer == 2) {
 
-            if(Player[playerTurn].getAccountBalance() < 0){
-                if(noPlayer == 2){
-
-                    break;
                 }
             }
 
             turn();
         }
-
     }
 
     /**
@@ -270,10 +258,11 @@ public class GameController {
      */
     private void chanceCards() {
         deck.draw();
-        if(deck.getLastCard().getCardDescription() == null){
+        while(deck.getLastCard().getCardDescription() == null){
             deck.draw();
         }
-        gui_controller.displayChanceCard(deck.getFirstCard().getCardDescription());
+        gui_controller.displayChanceCard(deck.getLastCard().getCardDescription());
+        gui_controller.getUserButtonPressed(" ", "Continue");
         switch (deck.getLastCard().getIndex()) {
             case 0:
                 if (playerTurn == 2) {
@@ -292,7 +281,6 @@ public class GameController {
                 gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
                 break;
             case 2:
-                // This card can go out of aray
                 int userChoice = Integer.parseInt(gui_controller.getUserButtonPressed("DU MÅ RYKKE OP TIL 5 FELTER", "1", "2", "3", "4", "5"));
                 gui_controller.setGui_car(playerTurn, Player[playerTurn].getPlayerPosition() + userChoice, Player[playerTurn].getPlayerPosition());
                 Player[playerTurn].addPlayerPosition(userChoice);
@@ -307,7 +295,7 @@ public class GameController {
                     break;
                 }
                 if(userChoice1.equals("1")){
-                    gui_controller.setGui_car(playerTurn, 1 + Player[playerTurn].getPlayerPosition() - 24, Player[playerTurn].getPlayerPosition());
+                    gui_controller.setGui_car(playerTurn, 1 + Player[playerTurn].getPlayerPosition(), Player[playerTurn].getPlayerPosition());
                     Player[playerTurn].addPlayerPosition(Player[playerTurn].getPlayerPosition() + 1);
                     break;
                 }

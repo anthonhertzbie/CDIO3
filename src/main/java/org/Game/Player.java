@@ -43,7 +43,12 @@ public class Player {
 
     public void addPlayerPosition(int diceThrow) {
         //Removes previous version of car-placement on the board
-        this.playerPosition += diceThrow;
+        if(playerPosition + diceThrow > 24){
+            playerPosition = this.playerPosition - 24;
+            playerPosition += diceThrow;
+        } else {
+            playerPosition += diceThrow;
+        }
         //Just places the car in gui at the new position
     }
 
