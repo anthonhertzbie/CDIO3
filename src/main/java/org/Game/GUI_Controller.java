@@ -14,11 +14,11 @@ public class GUI_Controller {
     GUI_Player[] gui_Player;
     GUI_Street[] fields = new GUI_Street[24];
 
-    public void guiHelper(String language, GUI_Street[] fields){
+    public void guiStart(){
         gui = new GUI(fields);
-        Helper.lang = gui.getUserSelection("Language", "Dansk", "English");
+    }
+    public void guiClose(){
         gui.close();
-        gui = new GUI(fields);
     }
     String getUserButtonPressed(String message, String ... options){
         return gui.getUserButtonPressed(message, options);
