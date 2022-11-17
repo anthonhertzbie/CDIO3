@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="Rearranging all gui elements to GUI_controller class">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Field.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Field.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/GUI_Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/GUI_Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/GameBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/GameBoard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Player.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -179,7 +175,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668625092679</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Rearranging all gui elements to GUI_controller class">
+      <created>1668649710711</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1668649710711</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -221,7 +224,8 @@
     <MESSAGE value="Color changes" />
     <MESSAGE value="Color changesv3" />
     <MESSAGE value="All new methods in the controller, commented. +Minor fixes." />
-    <option name="LAST_COMMIT_MESSAGE" value="All new methods in the controller, commented. +Minor fixes." />
+    <MESSAGE value="Rearranging all gui elements to GUI_controller class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Rearranging all gui elements to GUI_controller class" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

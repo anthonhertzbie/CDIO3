@@ -35,7 +35,7 @@ public class GUI_Controller {
     public void displayChanceCard(String card){
         gui.displayChanceCard(card);
     }
-    public void setGUI_NumberOfPlayers(int players){
+    public void setGUI_NumberOfPlayersAndCars(int players){
         gui_Player = new GUI_Player[players];
         gui_car = new GUI_Car[players];
     }

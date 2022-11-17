@@ -27,7 +27,7 @@ public class GameController {
         gameBoard.createGameBoard();
         gui_controller.guiHelper("Dansk", gui_controller.createGameBoard(gameBoard.getFields()));
         noPlayer = Integer.parseInt(gui_controller.getUserButtonPressed("Choose number of players", "2", "3", "4"));
-        gui_controller.setGUI_NumberOfPlayers(noPlayer);
+        gui_controller.setGUI_NumberOfPlayersAndCars(noPlayer);
         Player = new Player[noPlayer];
         deck = new Deck(noPlayer);
 
@@ -296,6 +296,7 @@ public class GameController {
                 Player[playerTurn].addAccountBalance(2);
                 break;
             case 2:
+                // Fejl på dette kort, kan gå out of array
                 int userChoice = Integer.parseInt(gui_controller.getUserButtonPressed("DU MÅ RYKKE OP TIL 5 FELTER", "1", "2", "3", "4", "5"));
                 gui_controller.setGui_car(playerTurn, Player[playerTurn].getPlayerPosition() + userChoice, Player[playerTurn].getPlayerPosition());
                 Player[playerTurn].addPlayerPosition(userChoice);
