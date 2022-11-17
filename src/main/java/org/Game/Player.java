@@ -15,6 +15,7 @@ public class Player {
     private boolean jailCard;
 
     private int field;
+
     String name;
 
     public String getName() {
