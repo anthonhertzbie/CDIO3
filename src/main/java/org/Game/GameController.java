@@ -23,11 +23,13 @@ public class GameController {
 
         // Creates a gameboard which allows the player to select language
         gameBoard.createGameBoard();
+        gui_controller.createGameBoard(gameBoard.getFields());
         gui_controller.guiStart();
         Helper.lang = gui_controller.getUserButtonPressed("Choose language: ", "Dansk", "English");
         // Closes the gameboard and launches a new gameboard with the selected langauge
         gui_controller.guiClose();
         gameBoard.createGameBoard();
+        gui_controller.createGameBoard(gameBoard.getFields());
         gui_controller.guiStart();
 
 
