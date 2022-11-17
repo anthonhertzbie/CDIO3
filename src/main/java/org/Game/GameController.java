@@ -252,7 +252,8 @@ public class GameController {
         while(deck.getLastCard().getCardDescription() == null){
             deck.draw();
         }
-        gui_controller.displayChanceCard(deck.getFirstCard().getCardDescription());
+        gui_controller.displayChanceCard(deck.getLastCard().getCardDescription());
+        gui_controller.getUserButtonPressed(" ", "Continue");
         switch (deck.getLastCard().getIndex()) {
             case 0:
                 if (playerTurn == 2) {
