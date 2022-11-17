@@ -7,7 +7,6 @@ public class GameController {
     Cup cup = new Cup();
     GUI_Controller gui_controller = new GUI_Controller();
     Random random = new Random();
-
     GameBoard gameBoard = new GameBoard();
 
     Deck deck;
@@ -17,7 +16,6 @@ public class GameController {
     int indexPlayerOwner;
     //Random player starts
     int playerTurn;
-    int currentField = 0;
 
     //Instantiates Player class depending on number of players
     Player[] Player;
@@ -26,9 +24,10 @@ public class GameController {
     public void startGame(){
 
         //Sets the ownerName as "For sale" on all the fields
-
-        gui_controller.guiHelper("Dansk", gui_controller.createGameBoard());
+        gameBoard.createGameBoard();
+        gui_controller.guiHelper("Dansk", gui_controller.createGameBoard(gameBoard.getFields()));
         noPlayer = Integer.parseInt(gui_controller.getUserButtonPressed("Choose number of players", "2", "3", "4"));
+        gui_controller.setGUI_NumberOfPlayers(noPlayer);
         Player = new Player[noPlayer];
         deck = new Deck(noPlayer);
 
@@ -50,9 +49,10 @@ public class GameController {
         // creates the players and adds them to the GUI
         for (int i = 0; i < noPlayer; i++) {
 
-            Player[i] = new Player(startMoney, 0);
-            gui_controller.getUserString("Enter player name: ");
+            Player[i] = new Player(startMoney, 0, gui_controller.getUserString("Enter player name: "));
+
             gui_controller.getField(0);
+            gui_controller.createGUI_Car(i, "startMoney", startMoney);
             gui_controller.createGUI_Player(i, Player[i]);
         }
 
@@ -190,7 +190,7 @@ public class GameController {
         // Sets player as new owner
         gui_controller.getField(Player[playerTurn].getPlayerPosition()).setOwnerName(Player[playerTurn].getName());
         //Colours the field the same colour as the car to show who owns the field
-        gui_controller.getField(Player[playerTurn].getPlayerPosition()).setBorder(Player[playerTurn].gui_Player.getPrimaryColor());
+        gui_controller.getField(Player[playerTurn].getPlayerPosition()).setBorder(gui_controller.gui_Player[playerTurn].getPrimaryColor());
     }
 
     /**
@@ -222,7 +222,7 @@ public class GameController {
         // Sets player as new owner
         gui_controller.getField(Player[playerTurn].getPlayerPosition()).setOwnerName(Player[playerTurn].getName());
         //Colours the field the same colour as the car to show who owns the field
-        gui_controller.getField(Player[playerTurn].getPlayerPosition()).setBorder(Player[playerTurn].gui_Player.getPrimaryColor());
+        gui_controller.getField(Player[playerTurn].getPlayerPosition()).setBorder(gui_controller.gui_Player[playerTurn].getPrimaryColor());
         //Sets the new account balance after buying the property
         Player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()));
     }
@@ -297,7 +297,7 @@ public class GameController {
                 break;
             case 2:
                 int userChoice = Integer.parseInt(gui_controller.getUserButtonPressed("DU MÅ RYKKE OP TIL 5 FELTER", "1", "2", "3", "4", "5"));
-                gui_controller.setGui_car(playerTurn, userChoice + Player[playerTurn].getPlayerPosition() - 24, Player[playerTurn].getPlayerPosition());
+                gui_controller.setGui_car(playerTurn, Player[playerTurn].getPlayerPosition() + userChoice, Player[playerTurn].getPlayerPosition());
                 Player[playerTurn].addPlayerPosition(userChoice);
                 break;
             case 3:

@@ -8,7 +8,6 @@ public class Player {
     private int playerPosition;
 
     Account acc = new Account();
-    GUI_Car gui_car;
     private boolean jail;
 
     private boolean hasCard;
@@ -16,9 +15,13 @@ public class Player {
     private boolean jailCard;
 
     private int field;
+    String name;
 
+    public String getName() {
+        return name;
+    }
 
-    public Player(int startMoney, int playerPosition){
+    public Player(int startMoney, int playerPosition, String name){
         this.playerPosition = playerPosition;
         acc.setPlayerBalance(startMoney);
         // Creates car and player in the gui
@@ -26,6 +29,7 @@ public class Player {
         this.hasCard = false;
         this.jailCard = false;
         this.field = 0;
+        this.name = name;
     }
 
     public void setField(int field) {
