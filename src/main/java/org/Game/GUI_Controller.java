@@ -59,7 +59,9 @@ public class GUI_Controller {
         gui_car[index].setPrimaryColor(new Color(255,153,255));
         }
     }
-
+    public void setGUI_AccountBalance(int index, int balance){
+        gui_Player[index].setBalance(balance);
+    }
     public GUI_Street getField(int currentField) {
         return fields[currentField];
     }

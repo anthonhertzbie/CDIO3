@@ -66,6 +66,7 @@ public class GameController {
                 // ******** Lav et if-statement som trigger en ekstra knap hvis chancekort er trukket, mangler chancekort info **********\\\\\\\\
                 gui_controller.getUserButtonPressed(Player[playerTurn].getName() + " you are in jail. Pay to get out:", "Pay 1M");
                 Player[playerTurn].addAccountBalance(-1);
+                gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
                 Player[playerTurn].setJail(false);
                 gui_controller.getShowMessage("Thanks for the money man! Press OK to roll the dices: ");
                 cup.rollDices();
@@ -87,6 +88,7 @@ public class GameController {
                 gui_controller.setGui_car(playerTurn, Player[playerTurn].getPlayerPosition()+cup.getSum() - 24, Player[playerTurn].getPlayerPosition());
                 Player[playerTurn].addPlayerPosition(cup.getSum()-24);
                 Player[playerTurn].addAccountBalance(2);
+                gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
 
             }
             // Sends player to jail
@@ -201,17 +203,23 @@ public class GameController {
             //Sets the owners account balance after collecting double rent
             Player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) * 2);
             Player[indexPlayerOwner].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) * -2);
+            gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
+            gui_controller.setGUI_AccountBalance(playerTurn, Player[indexPlayerOwner].getAccountBalance());
         }
         // Same as prev but backwards
         else if (Player[playerTurn].getPlayerPosition() != 0 && Objects.equals(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(Player[playerTurn].getPlayerPosition() - 1).getOwnerName())){
             Player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) * 2);
             Player[indexPlayerOwner].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) * -2);
+            gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
+            gui_controller.setGUI_AccountBalance(playerTurn, Player[indexPlayerOwner].getAccountBalance());
         }
         // Makes the player pay normal rent
         else{
             Player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()));
             //The owner collects rent
             Player[indexPlayerOwner].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) * -1);
+            gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
+            gui_controller.setGUI_AccountBalance(playerTurn, Player[indexPlayerOwner].getAccountBalance());
         }
     }
 
@@ -225,6 +233,7 @@ public class GameController {
         gui_controller.getField(Player[playerTurn].getPlayerPosition()).setBorder(gui_controller.gui_Player[playerTurn].getPrimaryColor());
         //Sets the new account balance after buying the property
         Player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()));
+        gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
     }
 
     /**
@@ -236,6 +245,7 @@ public class GameController {
     private void moveToColor(int chanceCardField, int fieldOne, int fieldTwo){
         if (Player[playerTurn].getPlayerPosition() >= chanceCardField) {
             Player[playerTurn].addAccountBalance(2);
+            gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
         }
         if (gui_controller.getField(fieldOne).getOwnerName() == null) {
             gui_controller.setGui_car(playerTurn, fieldOne, Player[playerTurn].getPlayerPosition());
@@ -261,6 +271,7 @@ public class GameController {
             gui_controller.setGui_car(playerTurn, userInput - 1, Player[playerTurn].getPlayerPosition());
             Player[playerTurn].setPlayerPosition(userInput - 1);
             Player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()));
+            gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
         } else {
             while (gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) != 0) {
                 gui_controller.setGui_car(playerTurn, 1 + Player[playerTurn].getPlayerPosition() - 24, Player[playerTurn].getPlayerPosition());
@@ -294,6 +305,7 @@ public class GameController {
                 gui_controller.setGui_car(playerTurn, 0, Player[playerTurn].getPlayerPosition());
                 Player[playerTurn].setPlayerPosition(0);
                 Player[playerTurn].addAccountBalance(2);
+                gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
                 break;
             case 2:
                 // Fejl på dette kort, kan gå out of array
@@ -325,6 +337,7 @@ public class GameController {
                 break;
             case 6:
                 Player[playerTurn].addAccountBalance(-2);
+                gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
                 break;
             case 7:
                 String userChoice2 = gui_controller.getUserButtonPressed("ORANGE ELLER GRØN?", "ORANGE", "GRØN");
@@ -380,6 +393,7 @@ public class GameController {
                 }
             case 13:
                 Player[playerTurn].addAccountBalance(1);
+                gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
                 break;
             case 14:
                 String userChoice3 = gui_controller.getUserButtonPressed("PINK ELLER MØRKEBLÅT?", "PINK", "MØRKEBLÅT");
@@ -393,6 +407,7 @@ public class GameController {
                 }
             case 15:
                 Player[playerTurn].addAccountBalance(2);
+                gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
                 break;
             case 16:
                 moveToColor(15, 13, 14);
@@ -400,6 +415,7 @@ public class GameController {
             case 17:
                 if (Player[playerTurn].getPlayerPosition() > 14) {
                     Player[playerTurn].addAccountBalance(2);
+                    gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
                 }
                 if (gui_controller.getField(10).getOwnerName() == null) {
                     gui_controller.setGui_car(playerTurn, 10, Player[playerTurn].getPlayerPosition());
