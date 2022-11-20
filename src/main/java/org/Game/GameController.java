@@ -203,6 +203,7 @@ public class GameController {
             gui_controller.setGUI_AccountBalance(playerTurn, Player[indexPlayerOwner].getAccountBalance());
         }
         // Makes the player pay normal rent
+        //Does not work !!!!!!!!!!!!!!!!!
         else{
             Player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()));
             //The owner collects rent
