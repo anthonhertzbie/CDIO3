@@ -59,6 +59,20 @@ public class GameController {
         while (true) {
             //Important note: the game stops until "OK" is pressed in the GUI
 
+            //Checks if current player has a chance card, runs chance card method and set hasCard to false
+            if (Player[playerTurn].getHasCard()){
+                chanceCards();
+                Player[playerTurn].setHasCard(false);
+            }
+            //GetOutOfJailCard-Function
+            if (Player[playerTurn].getJail() && Player[playerTurn].getJailCard()){
+                gui_controller.getUserButtonPressed(Player[playerTurn].getName() + " you are in jail. Use get-out-of-jail-card:", "Use jail-card");
+                Player[playerTurn].setJail(false);
+                Player[playerTurn].setJailCard(false);
+                gui_controller.getShowMessage("You got released from jail! Press OK to roll the dices: ");
+                cup.rollDices();
+                gui_controller.setDices(cup.getDice1(), cup.getDice2());
+            }
             //Checks if the player is in jail and gives the option to pay to get out of jail
             if (Player[playerTurn].getJail()){
                 gui_controller.getUserButtonPressed(Player[playerTurn].getName() + " you are in jail. Pay to get out:", "Pay 1M");
@@ -245,13 +259,23 @@ public class GameController {
             int userInput = Integer.parseInt(gui_controller.getUserButtonPressed("CHOOSE A FIELD TO BUY", "1", "2", "4", "5", "7", "8", "10", "11", "13", "14", "16", "17", "19", "20", "22", "23"));
             gui_controller.setGui_car(playerTurn, userInput - 1, Player[playerTurn].getPlayerPosition());
             Player[playerTurn].setPlayerPosition(userInput - 1);
-            Player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()));
-            gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
+            //Owner collects rent
+            Player[indexPlayerOwner].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) * -1);
+            //GUI-balance gets updated
+            gui_controller.setGUI_AccountBalance(playerTurn, Player[indexPlayerOwner].getAccountBalance());
+            buyField();
+
         } else {
+            //Do you get to choose the field at all?
             while (gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) != 0) {
+                //What does this line do?
                 gui_controller.setGui_car(playerTurn, 1 + Player[playerTurn].getPlayerPosition() - 24, Player[playerTurn].getPlayerPosition());
+                //Dicethrow? why?
                 Player[playerTurn].addPlayerPosition(1);
             }
+            int userInput = Integer.parseInt(gui_controller.getUserButtonPressed("CHOOSE A FIELD TO BUY", "1", "2", "4", "5", "7", "8", "10", "11", "13", "14", "16", "17", "19", "20", "22", "23"));
+            gui_controller.setGui_car(playerTurn, userInput - 1, Player[playerTurn].getPlayerPosition());
+            Player[playerTurn].setPlayerPosition(userInput - 1);
             buyField();
         }
     }
