@@ -1,5 +1,7 @@
 package org.Game;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Random;
 
@@ -260,6 +262,55 @@ public class GameController {
         }
     }
 
+    private int valueOfAllProperties(int player){
+        int netWorth = 0;
+        for (int i = 0; i < 24; i++) {
+            if(Objects.equals(Player[player].getName(), gui_controller.getField(i).getOwnerName())){
+                netWorth += Integer.parseInt(gui_controller.getField(i).getRent());
+            }
+        }
+        return netWorth;
+    }
+
+    private String winner(){
+        Integer[] arr;
+        String winner = "";
+        if (noPlayer == 2){
+            arr = new Integer[2];
+            for (int i = 0; i < 2; i++) {
+                arr[i] = Player[playerTurn].getAccountBalance();
+            }
+        } else if(noPlayer == 3){
+            arr = new Integer[3];
+            for (int i = 0; i < 3; i++) {
+                arr[i] = Player[playerTurn].getAccountBalance();
+            }
+        } else{
+            arr = new Integer[4];
+            for (int i = 0; i < 4; i++) {
+                arr[i] = Player[playerTurn].getAccountBalance();
+            }
+        }
+        Arrays.sort(arr, Collections.reverseOrder());
+        if (Objects.equals(arr[0], arr[1])){
+            if(valueOfAllProperties(0) > valueOfAllProperties(1)){
+
+                winner =
+            }
+        }else{
+            for (int i = 0; i < noPlayer; i++) {
+                if(Player[i].getAccountBalance() == arr[0]){
+                    winner = Player[i].getName();
+
+                }
+            }
+        }
+        return winner;
+    }
+
+    /**
+     * Draws a card
+     */
     private void drawCard(){
         chanceCards(deck.draw().getIndex());
         while(deck.getLastCard().getCardDescription() == null){
