@@ -124,9 +124,7 @@ public class GameController {
 
 
             if (Player[playerTurn].getAccountBalance() < 0) {
-                if (noPlayer == 2) {
-
-                }
+                winner2();
             }
 
             turn();
@@ -173,6 +171,7 @@ public class GameController {
      * Handles the rent payment, checks for ownership of neighbouring fields.
      */
     private void accounting(){
+        System.out.println(Player[playerTurn].getPlayerPosition());
         if (Player[playerTurn].getPlayerPosition() != 23 && Objects.equals(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(Player[playerTurn].getPlayerPosition() + 1).getOwnerName())){
             //Sets the owners account balance after collecting double rent
             Player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) * 2);
@@ -294,8 +293,6 @@ public class GameController {
         Arrays.sort(arr, Collections.reverseOrder());
         if (Objects.equals(arr[0], arr[1])){
             if(valueOfAllProperties(0) > valueOfAllProperties(1)){
-
-                winner =
             }
         }else{
             for (int i = 0; i < noPlayer; i++) {
@@ -306,6 +303,46 @@ public class GameController {
             }
         }
         return winner;
+    }
+
+    private String winner2() {
+        int[] playerBalances = new int[noPlayer];
+        int[] playerOwnedValue = new int[noPlayer];
+        int[] index = new int[noPlayer];
+        boolean draw = false;
+        int winner = -1;
+
+        for (int i = 0; i < noPlayer; i++){
+            playerBalances[i] = Player[i].getAccountBalance() + i;
+        }
+        Arrays.sort(playerBalances);
+        for (int i = 0; i < noPlayer; i++){
+            index[i] = playerBalances[i] % 10;
+        }
+
+
+        if (playerBalances[0] - playerBalances[0] % 10 != playerBalances[1] - playerBalances[1] % 10){
+            winner = index[0];
+        }
+        // If players have the same amount of end cash...
+        else {
+            for (int i = 0; i < noPlayer; i++) {
+                for (int ii = 0; ii < gameBoard.getFields().length; ii++) {
+                    if (Objects.equals(gui_controller.getField(ii).getOwnerName(), Player[i].getName())){
+                        playerOwnedValue[i] = Integer.parseInt(gui_controller.getField(ii).getRent()) + index[i];
+                    }
+                }
+            }
+            Arrays.sort(playerOwnedValue);
+            for (int i = 0; i < noPlayer; i++){
+                index[i] = playerBalances[i] % 10;
+            }
+            winner = index[0];
+        }
+        winner = Math.abs(index[0]);
+        System.out.println(index[0] + "is index");
+
+        return Player[winner].getName();
     }
 
     /**
