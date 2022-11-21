@@ -42,7 +42,7 @@ public class Player {
 
     public void addPlayerPosition(int diceThrow) {
         //Removes previous version of car-placement on the board
-        if(playerPosition + diceThrow > 24){
+        if(playerPosition + diceThrow >= 24){
             playerPosition = this.playerPosition - 24;
             playerPosition += diceThrow;
             addAccountBalance(2);
