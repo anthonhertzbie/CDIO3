@@ -117,7 +117,7 @@ public class GameController {
             }
             // Displays a chance card if landing on chance fields
             if (Player[playerTurn].getPlayerPosition() == 3 || Player[playerTurn].getPlayerPosition() == 9 || Player[playerTurn].getPlayerPosition() == 15 || Player[playerTurn].getPlayerPosition() == 21) {
-                chanceCards();
+                drawCard();
             }
 
 
@@ -262,17 +262,20 @@ public class GameController {
         }
     }
 
-    /**
-     * Handles all chance card cases
-     */
-    private void chanceCards() {
-        deck.draw();
+    private void drawCard(){
+        chanceCards(deck.draw().getIndex());
         while(deck.getLastCard().getCardDescription() == null){
-            deck.draw();
+            chanceCards(deck.draw().getIndex());
         }
         gui_controller.displayChanceCard(deck.getLastCard().getCardDescription());
         gui_controller.getUserButtonPressed(" ", "Continue");
-        switch (deck.getLastCard().getIndex()) {
+    }
+
+    /**
+     * Handles all chance card cases
+     */
+    private void chanceCards(int card) {
+        switch (card) {
             case 0:
                 if (playerTurn == 2) {
                         manageField();
@@ -300,7 +303,7 @@ public class GameController {
             case 4:
                 String userChoice1 = gui_controller.getUserButtonPressed("DU MÅ RYKKE ET FELT ELLER TRÆKKE ET KORT TIL", "1", "TRÆK ET KORT TIL");
                 if(userChoice1.equals("TRÆK ET KORT TIL")) {
-                    chanceCards();
+                    drawCard();
                     break;
                 }
                 if(userChoice1.equals("1")){
