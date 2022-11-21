@@ -45,6 +45,7 @@ public class Player {
         if(playerPosition + diceThrow > 24){
             playerPosition = this.playerPosition - 24;
             playerPosition += diceThrow;
+            addAccountBalance(2);
         } else {
             playerPosition += diceThrow;
         }

@@ -226,9 +226,8 @@ public class GameController {
             if (gui_controller.getField(fieldOne).getOwnerName() == null) {
                 freeField();
             } else if(Objects.equals(Player[playerTurn].getName(), gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName())){
-                freeField();
             } else{
-                buyField();
+                accounting();
             }
         } else {
             gui_controller.setGui_car(playerTurn, fieldTwo, Player[playerTurn].getPlayerPosition());
@@ -236,7 +235,6 @@ public class GameController {
             if (gui_controller.getField(fieldTwo).getOwnerName() == null) {
                 freeField();
             } else if(Objects.equals(Player[playerTurn].getName(), gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName())){
-                freeField();
             } else{
                 buyField();
             }
@@ -296,6 +294,9 @@ public class GameController {
                 int userChoice = Integer.parseInt(gui_controller.getUserButtonPressed("DU MÅ RYKKE OP TIL 5 FELTER", "1", "2", "3", "4", "5"));
                 gui_controller.setGui_car(playerTurn, Player[playerTurn].getPlayerPosition() + userChoice, Player[playerTurn].getPlayerPosition());
                 Player[playerTurn].addPlayerPosition(userChoice);
+                if(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent() == null && !Objects.equals(Player[playerTurn].getName() , gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName())){
+                    accounting();
+                }
                 break;
             case 3:
                 moveToColor(15,10,11);
