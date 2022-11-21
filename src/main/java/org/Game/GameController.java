@@ -219,18 +219,27 @@ public class GameController {
             Player[playerTurn].addAccountBalance(2);
             gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
         }
-        if (gui_controller.getField(fieldOne).getOwnerName() == null) {
+        String field = gui_controller.getUserButtonPressed("choose a field", "first field", "second field");
+        if (field.equals("first field")){
             gui_controller.setGui_car(playerTurn, fieldOne, Player[playerTurn].getPlayerPosition());
             Player[playerTurn].setPlayerPosition(fieldOne);
-            freeField();
-        } else if (gui_controller.getField(fieldTwo).getOwnerName() == null) {
+            if (gui_controller.getField(fieldOne).getOwnerName() == null) {
+                freeField();
+            } else if(Objects.equals(Player[playerTurn].getName(), gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName())){
+                freeField();
+            } else{
+                buyField();
+            }
+        } else {
             gui_controller.setGui_car(playerTurn, fieldTwo, Player[playerTurn].getPlayerPosition());
             Player[playerTurn].setPlayerPosition(fieldTwo);
-            freeField();
-        } else {
-            gui_controller.setGui_car(playerTurn, fieldOne, Player[playerTurn].getPlayerPosition());
-            Player[playerTurn].setPlayerPosition(fieldOne);
-            accounting();
+            if (gui_controller.getField(fieldTwo).getOwnerName() == null) {
+                freeField();
+            } else if(Objects.equals(Player[playerTurn].getName(), gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName())){
+                freeField();
+            } else{
+                buyField();
+            }
         }
     }
 
