@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="Winner fix... Calculating score for all houses owned still broken... Fix later..">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Account.java" afterDir="false" />
+    <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="Working on win conditions..">
       <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/Player.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -233,7 +230,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669106164293</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Working on win conditions..">
+      <created>1669119974042</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1669119974042</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -302,6 +306,7 @@
     <MESSAGE value="Winning conditions made. Out of index error not found - mght be a card?" />
     <MESSAGE value="fixed index error..." />
     <MESSAGE value="Winner fix... Calculating score for all houses owned still broken... Fix later.." />
-    <option name="LAST_COMMIT_MESSAGE" value="Winner fix... Calculating score for all houses owned still broken... Fix later.." />
+    <MESSAGE value="Working on win conditions.." />
+    <option name="LAST_COMMIT_MESSAGE" value="Working on win conditions.." />
   </component>
 </project>

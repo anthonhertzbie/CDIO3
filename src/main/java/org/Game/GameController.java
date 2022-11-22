@@ -310,8 +310,8 @@ public class GameController {
         Integer[] playerOwnedValue = new Integer[noPlayer];
         int[] index = new int[noPlayer];
         boolean draw = false;
-        Player[1].setplbalance(5);
-        Player[2].setplbalance(5);
+        Player[1].setplbalance(50);
+        Player[2].setplbalance(50);
 
         for (int i = 0; i < noPlayer; i++){
             playerBalances[i] = Player[i].getAccountBalance() * 10 + i;
@@ -329,13 +329,22 @@ public class GameController {
             for (int i = 0; i < noPlayer; i++) {
                 for (int ii = 0; ii < gameBoard.getFields().length; ii++) {
                     if (Objects.equals(gui_controller.getField(ii).getOwnerName(), Player[i].getName())){
-                        playerOwnedValue[i] = Math.abs(Integer.parseInt(gui_controller.getField(ii).getRent()));
+
+                        try{
+                            playerOwnedValue[i] += Math.abs(Integer.parseInt(gui_controller.getField(ii).getRent())*10);
+                        } catch(NullPointerException e){
+                            playerOwnedValue[i] = 0;
+                        }
+
                     }
                 }
             }
+            System.out.println(Arrays.toString(playerOwnedValue) + " is playerownedvalue");
+            System.out.println(Arrays.toString(index) + " is index");
             Arrays.sort(playerOwnedValue, Collections.reverseOrder());
             for (int i = 0; i < noPlayer; i++){
                 index[i] = playerOwnedValue[i] % 10;
+
             }
         }
 
