@@ -28,13 +28,13 @@ public class Deck {
                 if(i != 5)
                     card[i] = new Card(i, helper.lineReader("_Deck", i));
                 else
-                    card[i] = null;
+                    card[i] = new Card(i, null);
             }
         }
         if(noPlayers == 2) {
             for (int i = 0; i < card.length; i++) {
                 if(i == 5 || i == 0)
-                    card[i] = null;
+                    card[i] = new Card(i, null);
                 else {
                     card[i] = new Card(i, helper.lineReader("_Deck", i));
                 }
