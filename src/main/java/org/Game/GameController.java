@@ -308,6 +308,7 @@ public class GameController {
     private String winner2() {
         Integer[] playerBalances = new Integer[noPlayer];
         Integer[] playerOwnedValue = new Integer[noPlayer];
+        Integer[] sortAway;
         int[] index = new int[noPlayer];
         boolean draw = false;
         Player[1].setplbalance(50);
@@ -323,19 +324,20 @@ public class GameController {
             System.out.println("first index: " + index[i]);
         }
 
+
         // If players have the same amount of end cash...
         if (playerBalances[0] - playerBalances[0] % 10 == playerBalances[1] - playerBalances[1] % 10) {
             System.out.println("Im running this now");
             for (int i = 0; i < noPlayer; i++) {
+                playerOwnedValue[i] = i;
                 for (int ii = 0; ii < gameBoard.getFields().length; ii++) {
                     if (Objects.equals(gui_controller.getField(ii).getOwnerName(), Player[i].getName())){
 
                         try{
                             playerOwnedValue[i] += Math.abs(Integer.parseInt(gui_controller.getField(ii).getRent())*10);
                         } catch(NullPointerException e){
-                            playerOwnedValue[i] = 0;
+                            playerOwnedValue[i] += 0;
                         }
-
                     }
                 }
             }
@@ -344,11 +346,10 @@ public class GameController {
             Arrays.sort(playerOwnedValue, Collections.reverseOrder());
             for (int i = 0; i < noPlayer; i++){
                 index[i] = playerOwnedValue[i] % 10;
-
             }
         }
 
-        System.out.println(Arrays.toString(index) + "is index");
+        System.out.println(Arrays.toString(index) + "is index2");
         System.out.println("Winner is " + Player[index[0]].getName());
         return Player[index[0]].getName();
     }
