@@ -52,6 +52,10 @@ public class Player {
         //Just places the car in gui at the new position
     }
 
+    public void setplbalance(int balance){
+        this.acc.setplayerbalanceDelete(balance);
+    }
+
     public void setPlayerPosition(int playerPosition) {
         //Removes previous version of car-placement on the board
         this.playerPosition = playerPosition;

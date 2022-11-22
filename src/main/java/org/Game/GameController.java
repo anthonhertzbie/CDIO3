@@ -48,7 +48,7 @@ public class GameController {
         if (noPlayer == 2) {
             startMoney = 20;
         } else if (noPlayer == 3) {
-            startMoney = 18;
+            startMoney = 6;
         } else if (noPlayer == 4) {
             startMoney = 16;
         }
@@ -306,41 +306,40 @@ public class GameController {
     }
 
     private String winner2() {
-        int[] playerBalances = new int[noPlayer];
-        int[] playerOwnedValue = new int[noPlayer];
+        Integer[] playerBalances = new Integer[noPlayer];
+        Integer[] playerOwnedValue = new Integer[noPlayer];
         int[] index = new int[noPlayer];
         boolean draw = false;
+        Player[1].setplbalance(5);
+        Player[2].setplbalance(5);
 
         for (int i = 0; i < noPlayer; i++){
-            playerBalances[i] = Math.abs(Player[i].getAccountBalance() * 10) + i;
+            playerBalances[i] = Player[i].getAccountBalance() * 10 + i;
             System.out.println(Arrays.toString(playerBalances));
         }
-        Arrays.sort(playerBalances);
+        Arrays.sort(playerBalances, Collections.reverseOrder());
         for (int i = 0; i < noPlayer; i++){
             index[i] = playerBalances[i] % 10;
             System.out.println("first index: " + index[i]);
         }
 
-
-        if (playerBalances[0] - playerBalances[0] % 10 != playerBalances[1] - playerBalances[1] % 10){
-        }
         // If players have the same amount of end cash...
-        /*
-        else {
+        if (playerBalances[0] - playerBalances[0] % 10 == playerBalances[1] - playerBalances[1] % 10) {
+            System.out.println("Im running this now");
             for (int i = 0; i < noPlayer; i++) {
                 for (int ii = 0; ii < gameBoard.getFields().length; ii++) {
                     if (Objects.equals(gui_controller.getField(ii).getOwnerName(), Player[i].getName())){
-                        playerOwnedValue[i] = Integer.parseInt(gui_controller.getField(ii).getRent()) + index[i];
+                        playerOwnedValue[i] = Math.abs(Integer.parseInt(gui_controller.getField(ii).getRent()));
                     }
                 }
             }
-            Arrays.sort(playerOwnedValue);
+            Arrays.sort(playerOwnedValue, Collections.reverseOrder());
             for (int i = 0; i < noPlayer; i++){
                 index[i] = playerOwnedValue[i] % 10;
             }
         }
-         */
-        System.out.println(index[0] + "is index");
+
+        System.out.println(Arrays.toString(index) + "is index");
         System.out.println("Winner is " + Player[index[0]].getName());
         return Player[index[0]].getName();
     }

@@ -8,6 +8,8 @@ public class Account {
         return playerBalance;
     }
 
+    public void setplayerbalanceDelete(int inputs){playerBalance = inputs;}
+
     public void setPlayerBalance(int playerBalance) {
         this.playerBalance += playerBalance;
     }
