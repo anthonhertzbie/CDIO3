@@ -66,6 +66,7 @@ public class GameController {
 
 
         while (true) {
+            System.out.println("[Before turn] True balance of " + Player[playerTurn].getName() + " is " + Player[playerTurn].getAccountBalance());
             //Important note: the game stops until "OK" is pressed in the GUI
 
             //Checks if the player is in jail and gives the option to pay to get out of jail
@@ -96,6 +97,7 @@ public class GameController {
                 gui_controller.setGui_car(playerTurn, 6, 18);
                 Player[playerTurn].setJail(true);
             }
+            // Checks if current field is owned by someone, and returns their index number.
             // Handles gui null-point-error when a field is not yet owned by anyone
             try {
                 for (int i = 0; i < noPlayer - 1; i++) {
@@ -107,14 +109,17 @@ public class GameController {
             }
             // Handles the exception. Proceeds with the code.
             catch (NullPointerException e) {
+                indexPlayerOwner = playerTurn;
+                System.out.println("indexPlayerOwner is fxed");
             }
 
             //Checks if a field is not owned, and if the field is buyable (e.g. not start and chance-cards)
             if (gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) != 0) {
                 buyField();
             }
-            // Checks if the current player own the field
+            // Checks if another player owns the field and pays them
             else if (!Objects.equals(Player[playerTurn].getName(), gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName())) {
+                System.out.println("Accounting");
                 accounting();
             }
             // Displays a chance card if landing on chance fields
@@ -122,9 +127,10 @@ public class GameController {
                 //drawCard();
             }
             System.out.println(Player[playerTurn].getAccountBalance() + "Account balance is");
-
+            System.out.println("[after turn] True balance of " + Player[playerTurn].getName() + " is " + Player[playerTurn].getAccountBalance());
             if (Player[playerTurn].getAccountBalance() < 0) {
                 winner2();
+                break;
             }
 
             turn();
@@ -177,22 +183,24 @@ public class GameController {
             Player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) * 2);
             Player[indexPlayerOwner].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) * -2);
             gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
-            gui_controller.setGUI_AccountBalance(playerTurn, Player[indexPlayerOwner].getAccountBalance());
+            gui_controller.setGUI_AccountBalance(indexPlayerOwner, Player[indexPlayerOwner].getAccountBalance());
         }
         // Same as prev but backwards
         else if (Player[playerTurn].getPlayerPosition() != 0 && Objects.equals(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(Player[playerTurn].getPlayerPosition() - 1).getOwnerName())){
             Player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) * 2);
             Player[indexPlayerOwner].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) * -2);
             gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
-            gui_controller.setGUI_AccountBalance(playerTurn, Player[indexPlayerOwner].getAccountBalance());
+            gui_controller.setGUI_AccountBalance(indexPlayerOwner, Player[indexPlayerOwner].getAccountBalance());
         }
         // Makes the player pay normal rent
         else{
+            System.out.println("Is this where i break?");
             Player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()));
             //The owner collects rent
             Player[indexPlayerOwner].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) * -1);
             gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
-            gui_controller.setGUI_AccountBalance(playerTurn, Player[indexPlayerOwner].getAccountBalance());
+            gui_controller.setGUI_AccountBalance(indexPlayerOwner, Player[indexPlayerOwner].getAccountBalance());
+            System.out.println(Player[playerTurn].getAccountBalance() + " p2: " + Player[indexPlayerOwner].getAccountBalance());
         }
     }
 
@@ -305,14 +313,12 @@ public class GameController {
         return winner;
     }
 
-    private String winner2() {
+    private void winner2() {
         Integer[] playerBalances = new Integer[noPlayer];
-        Integer[] playerOwnedValue = new Integer[noPlayer];
-        Integer[] sortAway;
+        Integer[] playerEqualBalance;
+        int playerno = 0;
         int[] index = new int[noPlayer];
-        boolean draw = false;
-        Player[1].setplbalance(50);
-        Player[2].setplbalance(50);
+        String winner;
 
         for (int i = 0; i < noPlayer; i++){
             playerBalances[i] = Player[i].getAccountBalance() * 10 + i;
@@ -324,34 +330,55 @@ public class GameController {
             System.out.println("first index: " + index[i]);
         }
 
-
         // If players have the same amount of end cash...
         if (playerBalances[0] - playerBalances[0] % 10 == playerBalances[1] - playerBalances[1] % 10) {
             System.out.println("Im running this now");
-            for (int i = 0; i < noPlayer; i++) {
-                playerOwnedValue[i] = i;
+            for(int i = 0; i < noPlayer; i++){
+                if(playerBalances[0] - playerBalances[0] % 10 == playerBalances[i] - playerBalances[i] % 10){
+                    playerno += 1;
+                }
+            }
+            System.out.println(playerno + "playerno is//playerCount is : " + noPlayer);
+            playerEqualBalance = new Integer[playerno];
+            for (int i = 0; i < playerno; i++) {
+                playerEqualBalance[i] = index[i];
                 for (int ii = 0; ii < gameBoard.getFields().length; ii++) {
-                    if (Objects.equals(gui_controller.getField(ii).getOwnerName(), Player[i].getName())){
-
+                    if (Objects.equals(gui_controller.getField(ii).getOwnerName(), Player[index[i]].getName())){
                         try{
-                            playerOwnedValue[i] += Math.abs(Integer.parseInt(gui_controller.getField(ii).getRent())*10);
+                            playerEqualBalance[i] += Math.abs(Integer.parseInt(gui_controller.getField(ii).getRent())*10);
                         } catch(NullPointerException e){
-                            playerOwnedValue[i] += 0;
+                            playerEqualBalance[i] += 0;
                         }
                     }
                 }
             }
-            System.out.println(Arrays.toString(playerOwnedValue) + " is playerownedvalue");
+            System.out.println(Arrays.toString(playerEqualBalance) + " is playerownedvalue");
             System.out.println(Arrays.toString(index) + " is index");
-            Arrays.sort(playerOwnedValue, Collections.reverseOrder());
-            for (int i = 0; i < noPlayer; i++){
-                index[i] = playerOwnedValue[i] % 10;
+            Arrays.sort(playerEqualBalance, Collections.reverseOrder());
+            for (int i = 0; i < playerno; i++){
+                index[i] = playerEqualBalance[i] % 10;
+                playerEqualBalance[i] = playerEqualBalance[i] - playerEqualBalance[i] % 10;
             }
+            System.out.println("playerBalnces : " + Arrays.toString(playerEqualBalance));
+            System.out.println("Player to highest index has the balance:" + Player[index[0]].getAccountBalance());
+            System.out.println("Player to highest index has the balance:" + Player[index[1]].getAccountBalance());
+            System.out.println("Player to highest index has the balance:" + Player[index[2]].getAccountBalance());
+            if (!Objects.equals(playerEqualBalance[0], playerEqualBalance[1])) {
+                System.out.println(Arrays.toString(playerEqualBalance) + "is index1");
+                System.out.println("Winner is " + Player[index[0]].getName() + " with " + playerEqualBalance[0] + "$$");
+                gui_controller.getShowMessage("Cash was equal. Winner is " + Player[index[0]].getName() + " with " + playerEqualBalance[0] + "$$ in field-value");
+            }else{
+                System.out.println(Arrays.toString(playerEqualBalance) + "is index3");
+                System.out.println("Winner is " + Player[index[1]].getName() + " with " + playerEqualBalance[1] + "$$");
+                gui_controller.getShowMessage("Cash was equal. Field value was equal. It's a draw between " + Player[index[0]].getName() + " and " + Player[index[1]].getName() + " with " + playerEqualBalance[1] + "$$ in field-value");
+            }
+        } else{
+
+            System.out.println(Player[index[0]].getName() + " is the winner with " + Player[index[0]].getAccountBalance() + "$$");
+            gui_controller.getShowMessage(Player[index[0]].getName() + " is the winner with " + Player[index[0]].getAccountBalance() + "$$ in cash");
+
         }
 
-        System.out.println(Arrays.toString(index) + "is index2");
-        System.out.println("Winner is " + Player[index[0]].getName());
-        return Player[index[0]].getName();
     }
 
     /**
