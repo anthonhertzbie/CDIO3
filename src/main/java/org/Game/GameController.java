@@ -119,9 +119,9 @@ public class GameController {
             }
             // Displays a chance card if landing on chance fields
             if (Player[playerTurn].getPlayerPosition() == 3 || Player[playerTurn].getPlayerPosition() == 9 || Player[playerTurn].getPlayerPosition() == 15 || Player[playerTurn].getPlayerPosition() == 21) {
-                drawCard();
+                //drawCard();
             }
-
+            System.out.println(Player[playerTurn].getAccountBalance() + "Account balance is");
 
             if (Player[playerTurn].getAccountBalance() < 0) {
                 winner2();
@@ -310,21 +310,22 @@ public class GameController {
         int[] playerOwnedValue = new int[noPlayer];
         int[] index = new int[noPlayer];
         boolean draw = false;
-        int winner = -1;
 
         for (int i = 0; i < noPlayer; i++){
-            playerBalances[i] = Player[i].getAccountBalance() + i;
+            playerBalances[i] = Math.abs(Player[i].getAccountBalance() * 10) + i;
+            System.out.println(Arrays.toString(playerBalances));
         }
         Arrays.sort(playerBalances);
         for (int i = 0; i < noPlayer; i++){
             index[i] = playerBalances[i] % 10;
+            System.out.println("first index: " + index[i]);
         }
 
 
         if (playerBalances[0] - playerBalances[0] % 10 != playerBalances[1] - playerBalances[1] % 10){
-            winner = index[0];
         }
         // If players have the same amount of end cash...
+        /*
         else {
             for (int i = 0; i < noPlayer; i++) {
                 for (int ii = 0; ii < gameBoard.getFields().length; ii++) {
@@ -335,14 +336,13 @@ public class GameController {
             }
             Arrays.sort(playerOwnedValue);
             for (int i = 0; i < noPlayer; i++){
-                index[i] = playerBalances[i] % 10;
+                index[i] = playerOwnedValue[i] % 10;
             }
-            winner = index[0];
         }
-        winner = Math.abs(index[0]);
+         */
         System.out.println(index[0] + "is index");
-
-        return Player[winner].getName();
+        System.out.println("Winner is " + Player[index[0]].getName());
+        return Player[index[0]].getName();
     }
 
     /**
