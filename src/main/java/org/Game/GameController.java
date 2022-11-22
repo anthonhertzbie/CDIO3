@@ -48,7 +48,7 @@ public class GameController {
         if (noPlayer == 2) {
             startMoney = 20;
         } else if (noPlayer == 3) {
-            startMoney = 6;
+            startMoney = 18;
         } else if (noPlayer == 4) {
             startMoney = 16;
         }
@@ -124,7 +124,7 @@ public class GameController {
             }
             // Displays a chance card if landing on chance fields
             if (Player[playerTurn].getPlayerPosition() == 3 || Player[playerTurn].getPlayerPosition() == 9 || Player[playerTurn].getPlayerPosition() == 15 || Player[playerTurn].getPlayerPosition() == 21) {
-                //drawCard();
+                drawCard();
             }
             System.out.println(Player[playerTurn].getAccountBalance() + "Account balance is");
             System.out.println("[after turn] True balance of " + Player[playerTurn].getName() + " is " + Player[playerTurn].getAccountBalance());
