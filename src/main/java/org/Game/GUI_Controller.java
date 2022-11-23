@@ -1,9 +1,6 @@
 package org.Game;
 
-import gui_fields.GUI_Car;
-import gui_fields.GUI_Jail;
-import gui_fields.GUI_Player;
-import gui_fields.GUI_Street;
+import gui_fields.*;
 import gui_main.GUI;
 
 import java.awt.*;
@@ -11,9 +8,11 @@ import java.awt.*;
 public class GUI_Controller {
     GUI gui;
     GUI_Car[] gui_car;
-    GUI_Street field;
     GUI_Player[] gui_Player;
     GUI_Street[] fields = new GUI_Street[24];
+    GUI_Field[] field;
+    GUI_Jail jail;
+
 
     public void guiStart(){
         gui = new GUI(fields);
@@ -94,12 +93,14 @@ public class GUI_Controller {
             System.out.println(G1);
             System.out.println(B1);
 
-
             System.out.println(fieldInformation[5]);
             System.out.println(fieldInformation[0] + " || "+ fieldInformation[1]+ " || "+ fieldInformation[2]+ " || "+ fieldInformation[3]+ " || "+ fieldInformation[4]+ " || "+ fieldInformation[5]);
             this.fields[i] = new GUI_Street(fieldInformation[0], fieldInformation[1], fieldInformation[2], fieldInformation[3], new Color(R1,G1,B1), color);
             this.fields[i].setBorder(Color.BLACK, Color.white);
         }
+
+        jail = new GUI_Jail();
+
         return this.fields;
     }
 }

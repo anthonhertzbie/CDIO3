@@ -7,7 +7,6 @@
     <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="** Fixed bug where GUI didn't show the wrong number when landing on chance field&#10;** Fixed winner method such it works if more than one player has the same amount of end money&#10;** Fixed bug where GUI didn't show up correctly when landing on field owned by other player&#10;** Added functionality for the case where both cash and fields value is equal">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/GUI_Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/GUI_Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/GameController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +98,7 @@
       <workItem from="1667478967204" duration="4668000" />
       <workItem from="1668261011087" duration="2570000" />
       <workItem from="1668431844715" duration="6510000" />
-      <workItem from="1669150581688" duration="10541000" />
+      <workItem from="1669150581688" duration="12582000" />
     </task>
     <task id="LOCAL-00001" summary="renamed package org.Game&#10;New branch: Dice">
       <created>1667479829126</created>
@@ -255,7 +254,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669160272888</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="** Fixed bug where GUI didn't show the wrong number when landing on chance field&#10;** Fixed winner method such it works if more than one player has the same amount of end money&#10;** Fixed bug where GUI didn't show up correctly when landing on field owned by other player&#10;** Added functionality for the case where both cash and fields value is equal">
+      <created>1669161156661</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1669161156661</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
