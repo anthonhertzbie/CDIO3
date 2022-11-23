@@ -18,7 +18,7 @@ public class GameController {
     //Random player starts
     int playerTurn;
 
-    Player[] Player;
+    Player[] player;
 
     //Starts game
     public void startGame() {
@@ -38,7 +38,7 @@ public class GameController {
 
         noPlayer = Integer.parseInt(gui_controller.getUserButtonPressed("Choose number of players", "2", "3", "4"));
         gui_controller.setGUI_NumberOfPlayersAndCars(noPlayer);
-        Player = new Player[noPlayer];
+        player = new Player[noPlayer];
         deck = new Deck(noPlayer);
 
 
@@ -57,52 +57,52 @@ public class GameController {
         // creates the players and adds them to the GUI
         for (int i = 0; i < noPlayer; i++) {
 
-            Player[i] = new Player(startMoney, 0, gui_controller.getUserString("Enter player name: "));
+            player[i] = new Player(startMoney, 0, gui_controller.getUserString("Enter player name: "));
 
             gui_controller.getField(0);
             gui_controller.createGUI_Car(i, "startMoney", startMoney);
-            gui_controller.createGUI_Player(i, Player[i]);
+            gui_controller.createGUI_Player(i, player[i]);
         }
 
 
         while (true) {
-            System.out.println("[Before turn] True balance of " + Player[playerTurn].getName() + " is " + Player[playerTurn].getAccountBalance());
+            System.out.println("[Before turn] True balance of " + player[playerTurn].getName() + " is " + player[playerTurn].getAccountBalance());
             //Important note: the game stops until "OK" is pressed in the GUI
 
             //Checks if the player is in jail and gives the option to pay to get out of jail
-            if (Player[playerTurn].getJail()) {
-                gui_controller.getUserButtonPressed(Player[playerTurn].getName() + " you are in jail. Pay to get out:", "Pay 1M");
-                Player[playerTurn].addAccountBalance(-1);
-                gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
-                Player[playerTurn].setJail(false);
+            if (player[playerTurn].getJail()) {
+                gui_controller.getUserButtonPressed(player[playerTurn].getName() + " you are in jail. Pay to get out:", "Pay 1M");
+                player[playerTurn].addAccountBalance(-1);
+                gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
+                player[playerTurn].setJail(false);
                 gui_controller.getShowMessage("Thanks for the money man! Press OK to roll the dices: ");
                 cup.rollDices();
                 gui_controller.setDices(cup.getDice1(), cup.getDice2());
             } else {
                 // Rolls the dices normally if the player is not in jail
-                gui_controller.getShowMessage(Player[playerTurn].getName() + "'s turn. Press OK to roll");
+                gui_controller.getShowMessage(player[playerTurn].getName() + "'s turn. Press OK to roll");
                 cup.rollDices();
                 gui_controller.setDices(cup.getDice1(), cup.getDice2());
             }
 
             //Loop that makes the players go around in a circle instead of breaking at field 24
-            gui_controller.setGui_car(playerTurn, Player[playerTurn].getPlayerPosition() + cup.getSum(), Player[playerTurn].getPlayerPosition());
-            Player[playerTurn].addPlayerPosition(cup.getSum());
+            gui_controller.setGui_car(playerTurn, player[playerTurn].getPlayerPosition() + cup.getSum(), player[playerTurn].getPlayerPosition());
+            player[playerTurn].addPlayerPosition(cup.getSum());
 
 
             // Sends player to jail
-            if (Player[playerTurn].getPlayerPosition() == 18) {
+            if (player[playerTurn].getPlayerPosition() == 18) {
                 gui_controller.getShowMessage("You landed on the 'Go to Jail' field and have been sent to prison.");
-                Player[playerTurn].setPlayerPosition(6);
+                player[playerTurn].setPlayerPosition(6);
                 gui_controller.setGui_car(playerTurn, 6, 18);
-                Player[playerTurn].setJail(true);
+                player[playerTurn].setJail(true);
             }
             // Checks if current field is owned by someone, and returns their index number.
             // Handles gui null-point-error when a field is not yet owned by anyone
             try {
                 for (int i = 0; i < noPlayer - 1; i++) {
                     // Finds the index of the owner of the current field
-                    if (gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName().equals(Player[i].getName())) {
+                    if (gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(player[i].getName())) {
                         indexPlayerOwner = i;
                     }
                 }
@@ -114,26 +114,27 @@ public class GameController {
             }
 
             //Checks if a field is not owned, and if the field is buyable (e.g. not start and chance-cards)
-            if (gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) != 0) {
+            if (gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0) {
                 buyField();
             }
             // Checks if another player owns the field and pays them
-            else if (!Objects.equals(Player[playerTurn].getName(), gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName())) {
+            else if (!Objects.equals(player[playerTurn].getName(), gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName())) {
                 System.out.println("Accounting");
                 accounting();
             }
             // Displays a chance card if landing on chance fields
-            if (Player[playerTurn].getPlayerPosition() == 3 || Player[playerTurn].getPlayerPosition() == 9 || Player[playerTurn].getPlayerPosition() == 15 || Player[playerTurn].getPlayerPosition() == 21) {
+            if (player[playerTurn].getPlayerPosition() == 3 || player[playerTurn].getPlayerPosition() == 9 || player[playerTurn].getPlayerPosition() == 15 || player[playerTurn].getPlayerPosition() == 21) {
                 drawCard();
             }
-            System.out.println(Player[playerTurn].getAccountBalance() + "Account balance is");
-            System.out.println("[after turn] True balance of " + Player[playerTurn].getName() + " is " + Player[playerTurn].getAccountBalance());
-            if (Player[playerTurn].getAccountBalance() < 0) {
+            System.out.println(player[playerTurn].getAccountBalance() + "Account balance is");
+            System.out.println("[after turn] True balance of " + player[playerTurn].getName() + " is " + player[playerTurn].getAccountBalance());
+            if (player[playerTurn].getAccountBalance() < 0) {
                 winner2();
                 break;
             }
 
             turn();
+
         }
     }
 
@@ -168,39 +169,39 @@ public class GameController {
      */
     private void freeField(){
         // Sets player as new owner
-        gui_controller.getField(Player[playerTurn].getPlayerPosition()).setOwnerName(Player[playerTurn].getName());
+        gui_controller.getField(player[playerTurn].getPlayerPosition()).setOwnerName(player[playerTurn].getName());
         //Colours the field the same colour as the car to show who owns the field
-        gui_controller.getField(Player[playerTurn].getPlayerPosition()).setBorder(gui_controller.gui_Player[playerTurn].getPrimaryColor());
+        gui_controller.getField(player[playerTurn].getPlayerPosition()).setBorder(gui_controller.gui_Player[playerTurn].getPrimaryColor());
     }
 
     /**
      * Handles the rent payment, checks for ownership of neighbouring fields.
      */
     private void accounting(){
-        System.out.println(Player[playerTurn].getPlayerPosition());
-        if (Player[playerTurn].getPlayerPosition() != 23 && Objects.equals(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(Player[playerTurn].getPlayerPosition() + 1).getOwnerName())){
+        System.out.println(player[playerTurn].getPlayerPosition());
+        if (player[playerTurn].getPlayerPosition() != 23 && Objects.equals(gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(player[playerTurn].getPlayerPosition() + 1).getOwnerName())){
             //Sets the owners account balance after collecting double rent
-            Player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) * 2);
-            Player[indexPlayerOwner].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) * -2);
-            gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
-            gui_controller.setGUI_AccountBalance(indexPlayerOwner, Player[indexPlayerOwner].getAccountBalance());
+            player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) * 2);
+            player[indexPlayerOwner].addAccountBalance(Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) * -2);
+            gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
+            gui_controller.setGUI_AccountBalance(indexPlayerOwner, player[indexPlayerOwner].getAccountBalance());
         }
         // Same as prev but backwards
-        else if (Player[playerTurn].getPlayerPosition() != 0 && Objects.equals(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(Player[playerTurn].getPlayerPosition() - 1).getOwnerName())){
-            Player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) * 2);
-            Player[indexPlayerOwner].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) * -2);
-            gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
-            gui_controller.setGUI_AccountBalance(indexPlayerOwner, Player[indexPlayerOwner].getAccountBalance());
+        else if (player[playerTurn].getPlayerPosition() != 0 && Objects.equals(gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(player[playerTurn].getPlayerPosition() - 1).getOwnerName())){
+            player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) * 2);
+            player[indexPlayerOwner].addAccountBalance(Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) * -2);
+            gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
+            gui_controller.setGUI_AccountBalance(indexPlayerOwner, player[indexPlayerOwner].getAccountBalance());
         }
         // Makes the player pay normal rent
         else{
             System.out.println("Is this where i break?");
-            Player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()));
+            player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()));
             //The owner collects rent
-            Player[indexPlayerOwner].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) * -1);
-            gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
-            gui_controller.setGUI_AccountBalance(indexPlayerOwner, Player[indexPlayerOwner].getAccountBalance());
-            System.out.println(Player[playerTurn].getAccountBalance() + " p2: " + Player[indexPlayerOwner].getAccountBalance());
+            player[indexPlayerOwner].addAccountBalance(Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) * -1);
+            gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
+            gui_controller.setGUI_AccountBalance(indexPlayerOwner, player[indexPlayerOwner].getAccountBalance());
+            System.out.println(player[playerTurn].getAccountBalance() + " p2: " + player[indexPlayerOwner].getAccountBalance());
         }
     }
 
@@ -209,12 +210,12 @@ public class GameController {
      */
     private void buyField(){
         // Sets player as new owner
-        gui_controller.getField(Player[playerTurn].getPlayerPosition()).setOwnerName(Player[playerTurn].getName());
+        gui_controller.getField(player[playerTurn].getPlayerPosition()).setOwnerName(player[playerTurn].getName());
         //Colours the field the same colour as the car to show who owns the field
-        gui_controller.getField(Player[playerTurn].getPlayerPosition()).setBorder(gui_controller.gui_Player[playerTurn].getPrimaryColor());
+        gui_controller.getField(player[playerTurn].getPlayerPosition()).setBorder(gui_controller.gui_Player[playerTurn].getPrimaryColor());
         //Sets the new account balance after buying the property
-        Player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()));
-        gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
+        player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()));
+        gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
     }
 
     /**
@@ -224,30 +225,29 @@ public class GameController {
      * @param fieldTwo the subsequent field.
      */
     private void moveToColor(int chanceCardField, int fieldOne, int fieldTwo){
-        if (Player[playerTurn].getPlayerPosition() >= chanceCardField) {
-            Player[playerTurn].addAccountBalance(2);
-            gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
+        if (player[playerTurn].getPlayerPosition() >= chanceCardField) {
+            player[playerTurn].addAccountBalance(2);
+            gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
         }
         String field = gui_controller.getUserButtonPressed("choose a field", "first field", "second field");
         if (field.equals("first field")){
-            gui_controller.setGui_car(playerTurn, fieldOne, Player[playerTurn].getPlayerPosition());
-            Player[playerTurn].setPlayerPosition(fieldOne);
+            gui_controller.setGui_car(playerTurn, fieldOne, player[playerTurn].getPlayerPosition());
+            player[playerTurn].setPlayerPosition(fieldOne);
             if (gui_controller.getField(fieldOne).getOwnerName() == null) {
                 freeField();
-            } else if(Objects.equals(Player[playerTurn].getName(), gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName())){
-            } else{
+            } else if(!Objects.equals(player[playerTurn].getName(), gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName())){
                 accounting();
             }
         } else {
-            gui_controller.setGui_car(playerTurn, fieldTwo, Player[playerTurn].getPlayerPosition());
-            Player[playerTurn].setPlayerPosition(fieldTwo);
+            gui_controller.setGui_car(playerTurn, fieldTwo, player[playerTurn].getPlayerPosition());
+            player[playerTurn].setPlayerPosition(fieldTwo);
             if (gui_controller.getField(fieldTwo).getOwnerName() == null) {
                 freeField();
-            } else if(Objects.equals(Player[playerTurn].getName(), gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName())){
-            } else{
-                buyField();
+            } else if(!Objects.equals(player[playerTurn].getName(), gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName())){
+                accounting();
             }
         }
+        gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
     }
 
     /**
@@ -256,14 +256,14 @@ public class GameController {
     private void manageField(){
         if (ownableFields() == 0) {
             int userInput = Integer.parseInt(gui_controller.getUserButtonPressed("CHOOSE A FIELD TO BUY", "1", "2", "4", "5", "7", "8", "10", "11", "13", "14", "16", "17", "19", "20", "22", "23"));
-            gui_controller.setGui_car(playerTurn, userInput - 1, Player[playerTurn].getPlayerPosition());
-            Player[playerTurn].setPlayerPosition(userInput - 1);
-            Player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()));
-            gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
+            gui_controller.setGui_car(playerTurn, userInput - 1, player[playerTurn].getPlayerPosition());
+            player[playerTurn].setPlayerPosition(userInput - 1);
+            player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()));
+            gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
         } else {
-            while (gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent()) != 0) {
-                gui_controller.setGui_car(playerTurn, 1 + Player[playerTurn].getPlayerPosition() - 24, Player[playerTurn].getPlayerPosition());
-                Player[playerTurn].addPlayerPosition(1);
+            while (gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0) {
+                gui_controller.setGui_car(playerTurn, 1 + player[playerTurn].getPlayerPosition() - 24, player[playerTurn].getPlayerPosition());
+                player[playerTurn].addPlayerPosition(1);
             }
             buyField();
         }
@@ -272,7 +272,7 @@ public class GameController {
     private int valueOfAllProperties(int player){
         int netWorth = 0;
         for (int i = 0; i < 24; i++) {
-            if(Objects.equals(Player[player].getName(), gui_controller.getField(i).getOwnerName())){
+            if(Objects.equals(this.player[player].getName(), gui_controller.getField(i).getOwnerName())){
                 netWorth += Integer.parseInt(gui_controller.getField(i).getRent());
             }
         }
@@ -285,17 +285,17 @@ public class GameController {
         if (noPlayer == 2){
             arr = new Integer[2];
             for (int i = 0; i < 2; i++) {
-                arr[i] = Player[playerTurn].getAccountBalance();
+                arr[i] = player[playerTurn].getAccountBalance();
             }
         } else if(noPlayer == 3){
             arr = new Integer[3];
             for (int i = 0; i < 3; i++) {
-                arr[i] = Player[playerTurn].getAccountBalance();
+                arr[i] = player[playerTurn].getAccountBalance();
             }
         } else{
             arr = new Integer[4];
             for (int i = 0; i < 4; i++) {
-                arr[i] = Player[playerTurn].getAccountBalance();
+                arr[i] = player[playerTurn].getAccountBalance();
             }
         }
         Arrays.sort(arr, Collections.reverseOrder());
@@ -304,8 +304,8 @@ public class GameController {
             }
         }else{
             for (int i = 0; i < noPlayer; i++) {
-                if(Player[i].getAccountBalance() == arr[0]){
-                    winner = Player[i].getName();
+                if(player[i].getAccountBalance() == arr[0]){
+                    winner = player[i].getName();
 
                 }
             }
@@ -321,7 +321,7 @@ public class GameController {
         String winner;
 
         for (int i = 0; i < noPlayer; i++){
-            playerBalances[i] = Player[i].getAccountBalance() * 10 + i;
+            playerBalances[i] = player[i].getAccountBalance() * 10 + i;
             System.out.println(Arrays.toString(playerBalances));
         }
         Arrays.sort(playerBalances, Collections.reverseOrder());
@@ -343,7 +343,7 @@ public class GameController {
             for (int i = 0; i < playerno; i++) {
                 playerEqualBalance[i] = index[i];
                 for (int ii = 0; ii < gameBoard.getFields().length; ii++) {
-                    if (Objects.equals(gui_controller.getField(ii).getOwnerName(), Player[index[i]].getName())){
+                    if (Objects.equals(gui_controller.getField(ii).getOwnerName(), player[index[i]].getName())){
                         try{
                             playerEqualBalance[i] += Math.abs(Integer.parseInt(gui_controller.getField(ii).getRent())*10);
                         } catch(NullPointerException e){
@@ -360,22 +360,22 @@ public class GameController {
                 playerEqualBalance[i] = playerEqualBalance[i] - playerEqualBalance[i] % 10;
             }
             System.out.println("playerBalnces : " + Arrays.toString(playerEqualBalance));
-            System.out.println("Player to highest index has the balance:" + Player[index[0]].getAccountBalance());
-            System.out.println("Player to highest index has the balance:" + Player[index[1]].getAccountBalance());
-            System.out.println("Player to highest index has the balance:" + Player[index[2]].getAccountBalance());
+            System.out.println("Player to highest index has the balance:" + player[index[0]].getAccountBalance());
+            System.out.println("Player to highest index has the balance:" + player[index[1]].getAccountBalance());
+            System.out.println("Player to highest index has the balance:" + player[index[2]].getAccountBalance());
             if (!Objects.equals(playerEqualBalance[0], playerEqualBalance[1])) {
                 System.out.println(Arrays.toString(playerEqualBalance) + "is index1");
-                System.out.println("Winner is " + Player[index[0]].getName() + " with " + playerEqualBalance[0] + "$$");
-                gui_controller.getShowMessage("Cash was equal. Winner is " + Player[index[0]].getName() + " with " + playerEqualBalance[0] + "$$ in field-value");
+                System.out.println("Winner is " + player[index[0]].getName() + " with " + playerEqualBalance[0] + "$$");
+                gui_controller.getShowMessage("Cash was equal. Winner is " + player[index[0]].getName() + " with " + playerEqualBalance[0] + "$$ in field-value");
             }else{
                 System.out.println(Arrays.toString(playerEqualBalance) + "is index3");
-                System.out.println("Winner is " + Player[index[1]].getName() + " with " + playerEqualBalance[1] + "$$");
-                gui_controller.getShowMessage("Cash was equal. Field value was equal. It's a draw between " + Player[index[0]].getName() + " and " + Player[index[1]].getName() + " with " + playerEqualBalance[1] + "$$ in field-value");
+                System.out.println("Winner is " + player[index[1]].getName() + " with " + playerEqualBalance[1] + "$$");
+                gui_controller.getShowMessage("Cash was equal. Field value was equal. It's a draw between " + player[index[0]].getName() + " and " + player[index[1]].getName() + " with " + playerEqualBalance[1] + "$$ in field-value");
             }
         } else{
 
-            System.out.println(Player[index[0]].getName() + " is the winner with " + Player[index[0]].getAccountBalance() + "$$");
-            gui_controller.getShowMessage(Player[index[0]].getName() + " is the winner with " + Player[index[0]].getAccountBalance() + "$$ in cash");
+            System.out.println(player[index[0]].getName() + " is the winner with " + player[index[0]].getAccountBalance() + "$$");
+            gui_controller.getShowMessage(player[index[0]].getName() + " is the winner with " + player[index[0]].getAccountBalance() + "$$ in cash");
 
         }
 
@@ -385,40 +385,50 @@ public class GameController {
      * Draws a card
      */
     private void drawCard(){
-        chanceCards(deck.draw().getIndex());
+        deck.draw();
+        gui_controller.displayChanceCard(deck.getLastCard().getCardDescription());
+        gui_controller.getShowMessage("You have drawn a card");
+        chanceCards(deck.getLastCard().getIndex());
         while(deck.getLastCard().getCardDescription() == null){
             chanceCards(deck.draw().getIndex());
         }
-        gui_controller.displayChanceCard(deck.getLastCard().getCardDescription());
-        gui_controller.getUserButtonPressed(" ", "Continue");
+        gui_controller.getUserButtonPressed("Press when ready", "Continue");
+        gui_controller.displayChanceCard(" ");
     }
 
     /**
      * Handles all chance card cases
      */
     private void chanceCards(int card) {
+        gui_controller.displayChanceCard(deck.getLastCard().getCardDescription());
         switch (card) {
             case 0:
-                if (playerTurn == 2) {
+                if(noPlayer >= 4) {
+                    if (playerTurn == 2) {
                         manageField();
-
-                } else {
-                        Player[2].setHasCard(true);
+                    } else {
+                        player[2].setHasCard(true);
+                        drawCard();
+                    }
+                } else{
+                    drawCard();
                 }
                 break;
 
 
             case 1:
-                gui_controller.setGui_car(playerTurn, 0, Player[playerTurn].getPlayerPosition());
-                Player[playerTurn].setPlayerPosition(0);
-                Player[playerTurn].addAccountBalance(2);
-                gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
+                gui_controller.setGui_car(playerTurn, 0, player[playerTurn].getPlayerPosition());
+                player[playerTurn].setPlayerPosition(0);
+                player[playerTurn].addAccountBalance(2);
+                gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
                 break;
             case 2:
                 int userChoice = Integer.parseInt(gui_controller.getUserButtonPressed("DU MÅ RYKKE OP TIL 5 FELTER", "1", "2", "3", "4", "5"));
-                gui_controller.setGui_car(playerTurn, Player[playerTurn].getPlayerPosition() + userChoice, Player[playerTurn].getPlayerPosition());
-                Player[playerTurn].addPlayerPosition(userChoice);
-                if(gui_controller.getField(Player[playerTurn].getPlayerPosition()).getRent() == null && !Objects.equals(Player[playerTurn].getName() , gui_controller.getField(Player[playerTurn].getPlayerPosition()).getOwnerName())){
+                gui_controller.setGui_car(playerTurn, player[playerTurn].getPlayerPosition() + userChoice, player[playerTurn].getPlayerPosition());
+                player[playerTurn].addPlayerPosition(userChoice);
+                if(gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0){
+                    buyField();
+                } else if(!Objects.equals(player[playerTurn].getName() , gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName()) && Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0){
                     accounting();
                 }
                 break;
@@ -432,21 +442,30 @@ public class GameController {
                     break;
                 }
                 if(userChoice1.equals("1")){
-                    gui_controller.setGui_car(playerTurn, 1 + Player[playerTurn].getPlayerPosition(), Player[playerTurn].getPlayerPosition());
-                    Player[playerTurn].addPlayerPosition(Player[playerTurn].getPlayerPosition() + 1);
+                    gui_controller.setGui_car(playerTurn, 1 + player[playerTurn].getPlayerPosition(), player[playerTurn].getPlayerPosition());
+                    player[playerTurn].addPlayerPosition(player[playerTurn].getPlayerPosition() + 1);
+                    if(gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0){
+                        buyField();
+                    } else if(!Objects.equals(player[playerTurn].getName() , gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName()) && Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0){
+                        accounting();
+                    }
                     break;
                 }
             case 5:
-                if (playerTurn == 3) {
-                       manageField();
-
-                } else {
-                        Player[3].setHasCard(true);
+                if(noPlayer >= 3) {
+                    if (playerTurn == 3) {
+                        manageField();
+                    } else {
+                        player[3].setHasCard(true);
+                        drawCard();
+                    }
+                } else{
+                    drawCard();
                 }
                 break;
             case 6:
-                Player[playerTurn].addAccountBalance(-2);
-                gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
+                player[playerTurn].addAccountBalance(-2);
+                gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
                 break;
             case 7:
                 String userChoice2 = gui_controller.getUserButtonPressed("ORANGE ELLER GRØN?", "ORANGE", "GRØN");
@@ -462,17 +481,17 @@ public class GameController {
                 moveToColor(9, 4, 5);
                 break;
             case 9:
-                Player[playerTurn].setJailCard(true);
+                player[playerTurn].setJailCard(true);
                 break;
             case 10:
                 if (gui_controller.getField(23).getOwnerName() == null) {
-                    gui_controller.setGui_car(playerTurn, 23, Player[playerTurn].getPlayerPosition());
-                    Player[playerTurn].setPlayerPosition(23);
+                    gui_controller.setGui_car(playerTurn, 23, player[playerTurn].getPlayerPosition());
+                    player[playerTurn].setPlayerPosition(23);
                     buyField();
                     break;
                 } else {
-                    gui_controller.setGui_car(playerTurn, 23, Player[playerTurn].getPlayerPosition());
-                    Player[playerTurn].setPlayerPosition(23);
+                    gui_controller.setGui_car(playerTurn, 23, player[playerTurn].getPlayerPosition());
+                    player[playerTurn].setPlayerPosition(23);
                     accounting();
                     break;
                 }
@@ -484,7 +503,8 @@ public class GameController {
                         manageField();
 
                     } else {
-                        Player[0].setHasCard(true);
+                        player[0].setHasCard(true);
+                        drawCard();
                     }
                     break;
                 }
@@ -495,14 +515,15 @@ public class GameController {
                     if (playerTurn == 1) {
                         manageField();
                     } else {
-                        Player[1].setHasCard(true);
+                        player[1].setHasCard(true);
+                        drawCard();
                     }
                     break;
 
                 }
             case 13:
-                Player[playerTurn].addAccountBalance(1);
-                gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
+                player[playerTurn].addAccountBalance(1);
+                gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
                 break;
             case 14:
                 String userChoice3 = gui_controller.getUserButtonPressed("PINK ELLER MØRKEBLÅT?", "PINK", "MØRKEBLÅT");
@@ -515,24 +536,24 @@ public class GameController {
                     break;
                 }
             case 15:
-                Player[playerTurn].addAccountBalance(2);
-                gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
+                player[playerTurn].addAccountBalance(2);
+                gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
                 break;
             case 16:
                 moveToColor(15, 13, 14);
                 break;
             case 17:
-                if (Player[playerTurn].getPlayerPosition() > 14) {
-                    Player[playerTurn].addAccountBalance(2);
-                    gui_controller.setGUI_AccountBalance(playerTurn, Player[playerTurn].getAccountBalance());
+                if (player[playerTurn].getPlayerPosition() > 14) {
+                    player[playerTurn].addAccountBalance(2);
+                    gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
                 }
                 if (gui_controller.getField(10).getOwnerName() == null) {
-                    gui_controller.setGui_car(playerTurn, 10, Player[playerTurn].getPlayerPosition());
-                    Player[playerTurn].setPlayerPosition(10);
+                    gui_controller.setGui_car(playerTurn, 10, player[playerTurn].getPlayerPosition());
+                    player[playerTurn].setPlayerPosition(10);
                     freeField();
                 } else {
-                    gui_controller.setGui_car(playerTurn, 10, Player[playerTurn].getPlayerPosition());
-                    Player[playerTurn].setPlayerPosition(10);
+                    gui_controller.setGui_car(playerTurn, 10, player[playerTurn].getPlayerPosition());
+                    player[playerTurn].setPlayerPosition(10);
                     accounting();
                 }
                 break;

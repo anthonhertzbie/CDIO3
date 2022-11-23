@@ -1,5 +1,6 @@
 package org.Game;
 
+import gui_codebehind.GUI_Center;
 import gui_fields.*;
 import gui_main.GUI;
 
@@ -39,6 +40,7 @@ public class GUI_Controller {
         gui_Player = new GUI_Player[players];
         gui_car = new GUI_Car[players];
     }
+
     public void createGUI_Player(int index, Player player){
         gui_Player[index] = new GUI_Player(player.getName(), player.getAccountBalance(), gui_car[index]);
         //Places the gui-player-car on the board
