@@ -52,13 +52,13 @@ public class GUI_Controller {
         gui_car[index] = new GUI_Car();
         //Makes the firs car red, the second car black and so on
         if(index==0){
-        gui_car[index].setPrimaryColor(new Color(102,0,0));
+        gui_car[index].setPrimaryColor(new Color(255,0,0));
         }else if(index==1){
-        gui_car[index].setPrimaryColor(new Color(0,255,255));
+        gui_car[index].setPrimaryColor(new Color(0,0,0));
         }else if(index==2){
-        gui_car[index].setPrimaryColor(new Color(0,102,0));
+        gui_car[index].setPrimaryColor(new Color(0,255,0));
         }else if(index==3){
-        gui_car[index].setPrimaryColor(new Color(255,153,255));
+        gui_car[index].setPrimaryColor(new Color(0,0,255));
         }
     }
     public void setGUI_AccountBalance(int index, int balance){

@@ -66,7 +66,7 @@ public class GameController {
 
 
         while (true) {
-            System.out.println("[Before turn] True balance of " + player[playerTurn].getName() + " is " + player[playerTurn].getAccountBalance());
+            //System.out.println("[Before turn] True balance of " + player[playerTurn].getName() + " is " + player[playerTurn].getAccountBalance());
             //Important note: the game stops until "OK" is pressed in the GUI
 
             //Checks if the player is in jail and gives the option to pay to get out of jail
@@ -97,21 +97,7 @@ public class GameController {
                 gui_controller.setGui_car(playerTurn, 6, 18);
                 player[playerTurn].setJail(true);
             }
-            // Checks if current field is owned by someone, and returns their index number.
-            // Handles gui null-point-error when a field is not yet owned by anyone
-            try {
-                for (int i = 0; i < noPlayer - 1; i++) {
-                    // Finds the index of the owner of the current field
-                    if (gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(player[i].getName())) {
-                        indexPlayerOwner = i;
-                    }
-                }
-            }
-            // Handles the exception. Proceeds with the code.
-            catch (NullPointerException e) {
-                indexPlayerOwner = playerTurn;
-                System.out.println("indexPlayerOwner is fxed");
-            }
+            checkForOwner();
 
             //Checks if a field is not owned, and if the field is buyable (e.g. not start and chance-cards)
             if (gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0) {
@@ -119,25 +105,43 @@ public class GameController {
             }
             // Checks if another player owns the field and pays them
             else if (!Objects.equals(player[playerTurn].getName(), gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName())) {
-                System.out.println("Accounting");
                 accounting();
             }
             // Displays a chance card if landing on chance fields
             if (player[playerTurn].getPlayerPosition() == 3 || player[playerTurn].getPlayerPosition() == 9 || player[playerTurn].getPlayerPosition() == 15 || player[playerTurn].getPlayerPosition() == 21) {
                 drawCard();
             }
-            System.out.println(player[playerTurn].getAccountBalance() + "Account balance is");
-            System.out.println("[after turn] True balance of " + player[playerTurn].getName() + " is " + player[playerTurn].getAccountBalance());
             if (player[playerTurn].getAccountBalance() < 0) {
                 winner2();
                 break;
             }
 
             turn();
-
+            for (int i = 0; i < 4; i++) {
+                System.out.print(player[i].getName() + " " + player[i].getAccountBalance() + " ");
+            }
+            System.out.print("\n");
         }
+
     }
 
+    // Checks if current field is owned by someone, and returns their index number.
+    // Handles gui null-point-error when a field is not yet owned by anyone
+    private void checkForOwner() {
+        try {
+            for (int i = 0; i < noPlayer - 1; i++) {
+                // Finds the index of the owner of the current field
+                if (gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(player[i].getName())) {
+                    indexPlayerOwner = i;
+                }
+            }
+        }
+        // Handles the exception. Proceeds with the code.
+        catch (NullPointerException e) {
+            indexPlayerOwner = playerTurn;
+            //System.out.println("indexPlayerOwner is fxed");
+        }
+    }
     /**
      * Increments the playerTurn variable with one.
      */
@@ -178,8 +182,8 @@ public class GameController {
      * Handles the rent payment, checks for ownership of neighbouring fields.
      */
     private void accounting(){
-        System.out.println(player[playerTurn].getPlayerPosition());
-        if (player[playerTurn].getPlayerPosition() != 23 && Objects.equals(gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(player[playerTurn].getPlayerPosition() + 1).getOwnerName())){
+        checkForOwner();
+        if (Objects.equals(gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(player[playerTurn].getPlayerPosition() + 1).getOwnerName())){
             //Sets the owners account balance after collecting double rent
             player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) * 2);
             player[indexPlayerOwner].addAccountBalance(Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) * -2);
@@ -187,7 +191,7 @@ public class GameController {
             gui_controller.setGUI_AccountBalance(indexPlayerOwner, player[indexPlayerOwner].getAccountBalance());
         }
         // Same as prev but backwards
-        else if (player[playerTurn].getPlayerPosition() != 0 && Objects.equals(gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(player[playerTurn].getPlayerPosition() - 1).getOwnerName())){
+        else if (Objects.equals(gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(player[playerTurn].getPlayerPosition() - 1).getOwnerName())){
             player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) * 2);
             player[indexPlayerOwner].addAccountBalance(Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) * -2);
             gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
@@ -195,13 +199,11 @@ public class GameController {
         }
         // Makes the player pay normal rent
         else{
-            System.out.println("Is this where i break?");
             player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()));
             //The owner collects rent
             player[indexPlayerOwner].addAccountBalance(Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) * -1);
             gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
             gui_controller.setGUI_AccountBalance(indexPlayerOwner, player[indexPlayerOwner].getAccountBalance());
-            System.out.println(player[playerTurn].getAccountBalance() + " p2: " + player[indexPlayerOwner].getAccountBalance());
         }
     }
 
@@ -227,7 +229,6 @@ public class GameController {
     private void moveToColor(int chanceCardField, int fieldOne, int fieldTwo){
         if (player[playerTurn].getPlayerPosition() >= chanceCardField) {
             player[playerTurn].addAccountBalance(2);
-            gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
         }
         String field = gui_controller.getUserButtonPressed("choose a field", "first field", "second field");
         if (field.equals("first field")){
