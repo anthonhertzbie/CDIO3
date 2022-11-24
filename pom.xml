@@ -31,5 +31,10 @@
             <artifactId>matadorgui</artifactId>
             <version>3.1.7</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.7.1</version>
+        </dependency>
     </dependencies>
 </project>
