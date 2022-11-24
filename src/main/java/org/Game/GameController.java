@@ -66,24 +66,33 @@ public class GameController {
 
 
         while (true) {
-            //System.out.println("[Before turn] True balance of " + player[playerTurn].getName() + " is " + player[playerTurn].getAccountBalance());
             //Important note: the game stops until "OK" is pressed in the GUI
-
+            if (player[playerTurn].getHasCard()){
+                gui_controller.getShowMessage("You get to use the card you got earlier");
+                manageField();
+            }
             //Checks if the player is in jail and gives the option to pay to get out of jail
             if (player[playerTurn].getJail()) {
-                gui_controller.getUserButtonPressed(player[playerTurn].getName() + " you are in jail. Pay to get out:", "Pay 1M");
-                player[playerTurn].addAccountBalance(-1);
+                String userinput;
+                if (player[playerTurn].getJailCard()){
+                    userinput = gui_controller.getUserButtonPressed(player[playerTurn].getName() + " you are in jail. Pay to get out, or use your card", "Pay 1M", "Use your card");
+                }
+                else{
+                    userinput = gui_controller.getUserButtonPressed(player[playerTurn].getName() + " you are in jail. Pay to get out, or use your card", "Pay 1M");
+                }
+                if(userinput.equals("Pay 1M")) {
+                    player[playerTurn].addAccountBalance(-1);
+                }
+                if(userinput.equals("Use your card")){
+                    player[playerTurn].setJailCard(false);
+                }
                 gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
                 player[playerTurn].setJail(false);
-                gui_controller.getShowMessage("Thanks for the money man! Press OK to roll the dices: ");
-                cup.rollDices();
-                gui_controller.setDices(cup.getDice1(), cup.getDice2());
-            } else {
-                // Rolls the dices normally if the player is not in jail
-                gui_controller.getShowMessage(player[playerTurn].getName() + "'s turn. Press OK to roll");
-                cup.rollDices();
-                gui_controller.setDices(cup.getDice1(), cup.getDice2());
             }
+            // Rolls the dice
+            gui_controller.getShowMessage(player[playerTurn].getName() + "'s turn. Press OK to roll");
+            cup.rollDices();
+            gui_controller.setDices(cup.getDice1(), cup.getDice2());
 
             //Loop that makes the players go around in a circle instead of breaking at field 24
             gui_controller.setGui_car(playerTurn, player[playerTurn].getPlayerPosition() + cup.getSum(), player[playerTurn].getPlayerPosition());
@@ -109,12 +118,15 @@ public class GameController {
             }
             // Displays a chance card if landing on chance fields
             if (player[playerTurn].getPlayerPosition() == 3 || player[playerTurn].getPlayerPosition() == 9 || player[playerTurn].getPlayerPosition() == 15 || player[playerTurn].getPlayerPosition() == 21) {
-                drawCard();
+                chanceCards(0);
             }
+            /*
             if (player[playerTurn].getAccountBalance() < 0) {
                 winner2();
                 break;
             }
+
+             */
 
             turn();
             for (int i = 0; i < 4; i++) {
@@ -161,7 +173,7 @@ public class GameController {
     private int ownableFields(){
         int count = 0;
         for (int i = 0; i < 24; i++) {
-            if(gui_controller.getField(i).getOwnerName() == null){
+            if(gui_controller.getField(i).getOwnerName() == null && Integer.parseInt(gui_controller.getField(i).getRent()) != 0){
                 count++;
             }
         }
@@ -257,13 +269,16 @@ public class GameController {
     private void manageField(){
         if (ownableFields() == 0) {
             int userInput = Integer.parseInt(gui_controller.getUserButtonPressed("CHOOSE A FIELD TO BUY", "1", "2", "4", "5", "7", "8", "10", "11", "13", "14", "16", "17", "19", "20", "22", "23"));
-            gui_controller.setGui_car(playerTurn, userInput - 1, player[playerTurn].getPlayerPosition());
-            player[playerTurn].setPlayerPosition(userInput - 1);
+            gui_controller.setGui_car(playerTurn, userInput, player[playerTurn].getPlayerPosition());
+            player[playerTurn].setPlayerPosition(userInput);
             player[playerTurn].addAccountBalance(Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()));
             gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
+            buyField();
+            checkForOwner();
+            player[indexPlayerOwner].addAccountBalance(Integer.parseInt(gui_controller.getField(playerTurn).getRent()));
         } else {
-            while (gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0) {
-                gui_controller.setGui_car(playerTurn, 1 + player[playerTurn].getPlayerPosition() - 24, player[playerTurn].getPlayerPosition());
+            while (gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName() != null || Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) == 0) {
+                gui_controller.setGui_car(playerTurn, 1 + player[playerTurn].getPlayerPosition(), player[playerTurn].getPlayerPosition());
                 player[playerTurn].addPlayerPosition(1);
             }
             buyField();
