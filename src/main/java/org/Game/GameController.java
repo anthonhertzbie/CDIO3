@@ -67,10 +67,6 @@ public class GameController {
 
         while (true) {
             //Important note: the game stops until "OK" is pressed in the GUI
-            if (player[playerTurn].getHasCard()){
-                gui_controller.getShowMessage("You get to use the card you got earlier");
-                manageField();
-            }
             //Checks if the player is in jail and gives the option to pay to get out of jail
             if (player[playerTurn].getJail()) {
                 String userinput;
@@ -83,11 +79,26 @@ public class GameController {
                 if(userinput.equals("Pay 1M")) {
                     player[playerTurn].addAccountBalance(-1);
                 }
-                if(userinput.equals("Use your card")){
+                else if(userinput.equals("Use your card")){
                     player[playerTurn].setJailCard(false);
                 }
                 gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
                 player[playerTurn].setJail(false);
+            }
+            if (player[playerTurn].getHasCard()){
+                gui_controller.getShowMessage("You get to use the card you got earlier");
+                if (playerTurn == 0){
+                    gui_controller.displayChanceCard(deck.getCard(11).getCardDescription());
+                } else if (playerTurn == 1){
+                    gui_controller.displayChanceCard(deck.getCard(12).getCardDescription());
+                } else if (playerTurn == 2){
+                    gui_controller.displayChanceCard(deck.getCard(0).getCardDescription());
+                } else if (playerTurn == 3){
+                    gui_controller.displayChanceCard(deck.getCard(5).getCardDescription());
+                }
+
+                gui_controller.displayChanceCard("");
+                manageField();
             }
             // Rolls the dice
             gui_controller.getShowMessage(player[playerTurn].getName() + "'s turn. Press OK to roll");
@@ -118,15 +129,15 @@ public class GameController {
             }
             // Displays a chance card if landing on chance fields
             if (player[playerTurn].getPlayerPosition() == 3 || player[playerTurn].getPlayerPosition() == 9 || player[playerTurn].getPlayerPosition() == 15 || player[playerTurn].getPlayerPosition() == 21) {
-                //chanceCards(3);
-            }
-            /*
-            if (player[playerTurn].getAccountBalance() < 0) {
-                winner2();
-                break;
+                chanceCards(9);
             }
 
-             */
+            if (player[playerTurn].getAccountBalance() < 0) {
+                //winner2();
+                //break;
+            }
+
+
 
             turn();
             for (int i = 0; i < noPlayer; i++) {
@@ -209,8 +220,8 @@ public class GameController {
             else{
                 rentPayment();
             }
-        } else if(player[playerTurn].getPlayerPosition() == 0){
-            if (Objects.equals(gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(player[playerTurn].getPlayerPosition() + 1).getOwnerName())){
+        } else if(player[playerTurn].getPlayerPosition() == 23){
+            if (Objects.equals(gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(player[playerTurn].getPlayerPosition() - 1).getOwnerName())){
                 doubleRentPayment();
             }
             // Makes the player pay normal rent
@@ -219,7 +230,7 @@ public class GameController {
             }
 
         } else {
-            if (Objects.equals(gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(player[playerTurn].getPlayerPosition() - 1).getOwnerName())){
+            if (Objects.equals(gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(player[playerTurn].getPlayerPosition() + 1).getOwnerName())){
                 doubleRentPayment();
             }
             // Makes the player pay normal rent
@@ -436,12 +447,12 @@ public class GameController {
      */
     private void drawCard(){
         deck.draw();
-        gui_controller.displayChanceCard(deck.getLastCard().getCardDescription());
-        gui_controller.getShowMessage("You have drawn a card");
-        chanceCards(deck.getLastCard().getIndex());
         while(deck.getLastCard().getCardDescription() == null){
-            chanceCards(deck.draw().getIndex());
+            deck.draw();
         }
+        gui_controller.getShowMessage("You have drawn a card");
+        gui_controller.displayChanceCard(deck.getLastCard().getCardDescription());
+        chanceCards(deck.getLastCard().getIndex());
         gui_controller.getUserButtonPressed("Press when ready", "Continue");
         gui_controller.displayChanceCard(" ");
     }
@@ -455,7 +466,7 @@ public class GameController {
             case 0:
                 if(noPlayer >= 4) {
                     if (playerTurn == 2) {
-                        manageField();
+                        player[2].setHasCard(true);
                     } else {
                         player[2].setHasCard(true);
                         drawCard();
@@ -507,7 +518,7 @@ public class GameController {
             case 5:
                 if(noPlayer >= 3) {
                     if (playerTurn == 3) {
-                        manageField();
+                        player[3].setHasCard(true);
                     } else {
                         player[3].setHasCard(true);
                         drawCard();
@@ -553,7 +564,7 @@ public class GameController {
                     break;
                 else {
                     if (playerTurn == 0) {
-                        manageField();
+                        player[0].setHasCard(true);
 
                     } else {
                         player[0].setHasCard(true);
@@ -566,7 +577,7 @@ public class GameController {
                     break;
                 else {
                     if (playerTurn == 1) {
-                        manageField();
+                        player[1].setHasCard(true);
                     } else {
                         player[1].setHasCard(true);
                         drawCard();

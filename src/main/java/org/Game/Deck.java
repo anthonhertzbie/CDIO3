@@ -54,8 +54,8 @@ public class Deck {
         }
     }
 
-    public Card getFirstCard(){
-        return card[0];
+    public Card getCard(int index){
+        return card[index];
     }
 
     public Card getLastCard(){
