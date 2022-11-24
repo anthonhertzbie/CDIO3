@@ -86,7 +86,7 @@ public class GameController {
                 player[playerTurn].setJail(false);
             }
             if (player[playerTurn].getHasCard()){
-                gui_controller.getShowMessage("You get to use the card you got earlier");
+                gui_controller.getShowMessage(player[playerTurn].getName() + " you get to use the card you got earlier");
                 if (playerTurn == 0){
                     gui_controller.displayChanceCard(deck.getCard(11).getCardDescription());
                 } else if (playerTurn == 1){
@@ -96,7 +96,7 @@ public class GameController {
                 } else if (playerTurn == 3){
                     gui_controller.displayChanceCard(deck.getCard(5).getCardDescription());
                 }
-
+                player[playerTurn].setHasCard(false);
                 gui_controller.displayChanceCard("");
                 manageField();
             }
@@ -104,10 +104,12 @@ public class GameController {
             gui_controller.getShowMessage(player[playerTurn].getName() + "'s turn. Press OK to roll");
             cup.rollDices();
             gui_controller.setDices(cup.getDice1(), cup.getDice2());
+            sleep();
 
             //Loop that makes the players go around in a circle instead of breaking at field 24
             gui_controller.setGui_car(playerTurn, player[playerTurn].getPlayerPosition() + cup.getSum(), player[playerTurn].getPlayerPosition());
             player[playerTurn].addPlayerPosition(cup.getSum());
+            sleep();
 
 
             // Sends player to jail
@@ -129,12 +131,12 @@ public class GameController {
             }
             // Displays a chance card if landing on chance fields
             if (player[playerTurn].getPlayerPosition() == 3 || player[playerTurn].getPlayerPosition() == 9 || player[playerTurn].getPlayerPosition() == 15 || player[playerTurn].getPlayerPosition() == 21) {
-                chanceCards(9);
+                drawCard();
             }
 
             if (player[playerTurn].getAccountBalance() < 0) {
-                //winner2();
-                //break;
+                winner2();
+                break;
             }
 
 
@@ -146,6 +148,10 @@ public class GameController {
             System.out.print("\n");
         }
 
+    }
+    //Taken from: https://www.javatpoint.com/thread-sleep-in-java
+    private void sleep(){
+        try{Thread.sleep(1200);}catch(InterruptedException e){System.out.println(e);}
     }
 
     // Checks if current field is owned by someone, and returns their index number.
