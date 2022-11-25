@@ -1,8 +1,7 @@
 package org.Game;
 
-import gui_fields.GUI_Car;
-import gui_fields.GUI_Player;
-import gui_fields.GUI_Street;
+import gui_codebehind.GUI_Center;
+import gui_fields.*;
 import gui_main.GUI;
 
 import java.awt.*;
@@ -10,9 +9,11 @@ import java.awt.*;
 public class GUI_Controller {
     GUI gui;
     GUI_Car[] gui_car;
-    GUI_Street field;
     GUI_Player[] gui_Player;
     GUI_Street[] fields = new GUI_Street[24];
+    GUI_Field[] field;
+    GUI_Jail jail;
+
 
     public void guiStart(){
         gui = new GUI(fields);
@@ -39,6 +40,7 @@ public class GUI_Controller {
         gui_Player = new GUI_Player[players];
         gui_car = new GUI_Car[players];
     }
+
     public void createGUI_Player(int index, Player player){
         gui_Player[index] = new GUI_Player(player.getName(), player.getAccountBalance(), gui_car[index]);
         //Places the gui-player-car on the board
@@ -50,13 +52,13 @@ public class GUI_Controller {
         gui_car[index] = new GUI_Car();
         //Makes the firs car red, the second car black and so on
         if(index==0){
-        gui_car[index].setPrimaryColor(new Color(102,0,0));
+        gui_car[index].setPrimaryColor(new Color(255,0,0));
         }else if(index==1){
-        gui_car[index].setPrimaryColor(new Color(0,255,255));
+        gui_car[index].setPrimaryColor(new Color(0,0,0));
         }else if(index==2){
-        gui_car[index].setPrimaryColor(new Color(0,102,0));
+        gui_car[index].setPrimaryColor(new Color(0,255,0));
         }else if(index==3){
-        gui_car[index].setPrimaryColor(new Color(255,153,255));
+        gui_car[index].setPrimaryColor(new Color(0,0,255));
         }
     }
     public void setGUI_AccountBalance(int index, int balance){
@@ -78,29 +80,29 @@ public class GUI_Controller {
         String[] fieldInformation;
         for (int i = 0; i < 24; i++){
             fieldInformation = fields[i].split("/");
-        // Stolen from https://stackoverflow.com/questions/2854043/converting-a-string-to-color-in-java, Erick Robertson && ZZ Coder
-        try {
-            java.lang.reflect.Field colorReflect = Class.forName("java.awt.Color").getField(fieldInformation[5]);
-            color = (Color)colorReflect.get(null);
-        } catch (Exception e) {
-            color = null; // Not defined
+            // Stolen from https://stackoverflow.com/questions/2854043/converting-a-string-to-color-in-java, Erick Robertson && ZZ Coder
+            try {
+                java.lang.reflect.Field colorReflect = Class.forName("java.awt.Color").getField(fieldInformation[5]);
+                color = (Color)colorReflect.get(null);
+            } catch (Exception e) {
+                color = null; // Not defined
+            }
+            // Stealing stops
+            R1 = Integer.parseInt(fieldInformation[4].split(",")[0]);
+            G1 = Integer.parseInt(fieldInformation[4].split(",")[1]);
+            B1 = Integer.parseInt(fieldInformation[4].split(",")[2]);
+            System.out.println(R1);
+            System.out.println(G1);
+            System.out.println(B1);
+
+            System.out.println(fieldInformation[5]);
+            System.out.println(fieldInformation[0] + " || "+ fieldInformation[1]+ " || "+ fieldInformation[2]+ " || "+ fieldInformation[3]+ " || "+ fieldInformation[4]+ " || "+ fieldInformation[5]);
+            this.fields[i] = new GUI_Street(fieldInformation[0], fieldInformation[1], fieldInformation[2], fieldInformation[3], new Color(R1,G1,B1), color);
+            this.fields[i].setBorder(Color.BLACK, Color.white);
         }
-        // Stealing stops
-        R1 = Integer.parseInt(fieldInformation[4].split(",")[0]);
-        G1 = Integer.parseInt(fieldInformation[4].split(",")[1]);
-        B1 = Integer.parseInt(fieldInformation[4].split(",")[2]);
-        System.out.println(R1);
-        System.out.println(G1);
-        System.out.println(B1);
 
+        jail = new GUI_Jail();
 
-        System.out.println(fieldInformation[5]);
-        System.out.println(fieldInformation[0] + " || "+ fieldInformation[1]+ " || "+ fieldInformation[2]+ " || "+ fieldInformation[3]+ " || "+ fieldInformation[4]+ " || "+ fieldInformation[5]);
-        this.fields[i] = new GUI_Street(fieldInformation[0], fieldInformation[1], fieldInformation[2], fieldInformation[3], new Color(R1,G1,B1), color);
-        this.fields[i].setBorder(Color.BLACK, Color.white);
-
-
-        }
         return this.fields;
     }
 }

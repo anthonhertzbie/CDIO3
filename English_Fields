@@ -14,8 +14,8 @@ Free parkering///0/255,255,255/BLACK
 The arcade/Rent -3M//-3/255,63,63/BLACK
 The movie theater/Rent -3M//-3/255,63,63/BLACK
 Chance///0/255,255,255/BLACK
-The toy store/Rent -3M//-3/255,255,153/WHITE
-The pet shop/Rent -3M//-3/255,255,153/WHITE
+The toy store/Rent -3M//-3/255,255,153/BLACK
+The pet shop/Rent -3M//-3/255,255,153/BLACK
 Go to prison///0/255,255,255/BLACK
 The bowling alley/Rent -4M//-4/128,255,0/BLACK
 The zoo/Rent -4M//-4/128,255,0/BLACK
