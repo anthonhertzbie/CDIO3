@@ -121,7 +121,6 @@ public class GameController {
                 gui_controller.setGui_car(playerTurn, 6, 18);
                 player[playerTurn].setJail(true);
             }
-            checkForOwner();
 
             //Checks if a field is not owned, and if the field is buyable (e.g. not start and chance-cards)
             if (gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName() == null && Integer.parseInt(gui_controller.getField(player[playerTurn].getPlayerPosition()).getRent()) != 0) {
@@ -153,17 +152,19 @@ public class GameController {
     }
     //Taken from: https://www.javatpoint.com/thread-sleep-in-java
     private void sleep(){
-        try{Thread.sleep(1200);}catch(InterruptedException e){System.out.println(e);}
+        try{Thread.sleep(0);}catch(InterruptedException e){System.out.println(e);}
     }
 
     // Checks if current field is owned by someone, and returns their index number.
     // Handles gui null-point-error when a field is not yet owned by anyone
     private void checkForOwner() {
         try {
-            for (int i = 0; i < noPlayer - 1; i++) {
+            for (int i = 0; i < noPlayer; i++) {
                 // Finds the index of the owner of the current field
                 if (gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(player[i].getName())) {
                     indexPlayerOwner = i;
+                    System.out.println(indexPlayerOwner);
+                    System.out.println(playerTurn);
                 }
             }
         }
@@ -230,15 +231,6 @@ public class GameController {
             }
         } else if(player[playerTurn].getPlayerPosition() == 23){
             if (Objects.equals(gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(player[playerTurn].getPlayerPosition() - 1).getOwnerName())){
-                doubleRentPayment();
-            }
-            // Makes the player pay normal rent
-            else{
-                rentPayment();
-            }
-
-        } else {
-            if (Objects.equals(gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(player[playerTurn].getPlayerPosition() + 1).getOwnerName())){
                 doubleRentPayment();
             }
             // Makes the player pay normal rent
@@ -436,7 +428,7 @@ public class GameController {
         gui_controller.displayChanceCard(deck.getLastCard().getCardDescription());
         switch (card) {
             case 0:
-                if(noPlayer >= 4) {
+                if(noPlayer >= 3) {
                     if (playerTurn == 2) {
                         player[2].setHasCard(true);
                     } else {
@@ -488,7 +480,7 @@ public class GameController {
                     break;
                 }
             case 5:
-                if(noPlayer >= 3) {
+                if(noPlayer >= 4) {
                     if (playerTurn == 3) {
                         player[3].setHasCard(true);
                     } else {
@@ -532,31 +524,21 @@ public class GameController {
                     break;
                 }
             case 11:
-                if (deck.getLastCard() == null)
-                    break;
-                else {
-                    if (playerTurn == 0) {
-                        player[0].setHasCard(true);
-
-                    } else {
-                        player[0].setHasCard(true);
-                        drawCard();
-                    }
-                    break;
+                if (playerTurn == 0) {
+                    player[0].setHasCard(true);
+                } else {
+                    player[0].setHasCard(true);
+                    drawCard();
                 }
+                break;
             case 12:
-                if (deck.getLastCard() == null)
-                    break;
-                else {
-                    if (playerTurn == 1) {
-                        player[1].setHasCard(true);
-                    } else {
-                        player[1].setHasCard(true);
-                        drawCard();
-                    }
-                    break;
-
+                if (playerTurn == 1) {
+                    player[1].setHasCard(true);
+                } else {
+                    player[1].setHasCard(true);
+                    drawCard();
                 }
+                break;
             case 13:
                 player[playerTurn].addAccountBalance(1);
                 gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
@@ -601,7 +583,7 @@ public class GameController {
 
                 }
                 if(userChoice4.equals(helper.lineReader("_Messages",34))){
-                    moveToColor(15, 14,13);
+                    moveToColor(15, 13,14);
                     break;
                 }
             case 19:
