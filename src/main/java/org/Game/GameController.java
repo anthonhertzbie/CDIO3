@@ -12,8 +12,6 @@ public class GameController {
     GameBoard gameBoard = new GameBoard();
     Deck deck;
 
-    Helper helper = new Helper();
-
     int noPlayer;
     int startMoney;
     int indexPlayerOwner;
@@ -24,21 +22,21 @@ public class GameController {
 
     //Starts game
     public void startGame() {
-
+        System.out.println(gameBoard.getFields().length);
         // Creates a gameboard which allows the player to select language
         gameBoard.createGameBoard();
         gui_controller.createGameBoard(gameBoard.getFields());
         gui_controller.guiStart();
         Helper.lang = gui_controller.getUserButtonPressed("Choose language: ", "Dansk", "English");
-        // Closes the gameboard and launches a new gameboard with the selected langauge
+        // Closes the gameboard and launches a new one with the chose language
         gui_controller.guiClose();
         gameBoard.createGameBoard();
         gui_controller.createGameBoard(gameBoard.getFields());
         gui_controller.guiStart();
 
 
-
-        noPlayer = Integer.parseInt(gui_controller.getUserButtonPressed(helper.lineReader("_Messages",0), "2", "3", "4"));
+        // Sets the number of player praticipating in the game
+        noPlayer = Integer.parseInt(gui_controller.getUserButtonPressed("Choose number of players", "2", "3", "4"));
         gui_controller.setGUI_NumberOfPlayersAndCars(noPlayer);
         player = new Player[noPlayer];
         deck = new Deck(noPlayer);
@@ -56,71 +54,61 @@ public class GameController {
         }
         // Chooses a random starting player
         playerTurn = random.nextInt(0, noPlayer);
+
         // creates the players and adds them to the GUI
         for (int i = 0; i < noPlayer; i++) {
-
-            player[i] = new Player(startMoney, 0, gui_controller.getUserString(helper.lineReader("_Messages",1)));
-
+            player[i] = new Player(startMoney, 0, gui_controller.getUserString("Enter player name: "));
             gui_controller.getField(0);
             gui_controller.createGUI_Car(i, "startMoney", startMoney);
             gui_controller.createGUI_Player(i, player[i]);
         }
 
-
+        /**
+         * Main game loop.
+         */
         while (true) {
             //Important note: the game stops until "OK" is pressed in the GUI
+            if (player[playerTurn].getHasCard()){
+                gui_controller.getShowMessage("You get to use the card you got earlier");
+                manageField();
+            }
             //Checks if the player is in jail and gives the option to pay to get out of jail
             if (player[playerTurn].getJail()) {
                 String userinput;
                 if (player[playerTurn].getJailCard()){
-                    userinput = gui_controller.getUserButtonPressed(player[playerTurn].getName() + helper.lineReader("_Messages",2), helper.lineReader("_Messages",3), helper.lineReader("_Messages", 4));
+                    userinput = gui_controller.getUserButtonPressed(player[playerTurn].getName() + " you are in jail. Pay to get out, or use your card", "Pay 1M", "Use your card");
                 }
                 else{
-                    userinput = gui_controller.getUserButtonPressed(player[playerTurn].getName() + helper.lineReader("_Messages",38), helper.lineReader("_Messages",3));
+                    userinput = gui_controller.getUserButtonPressed(player[playerTurn].getName() + " you are in jail. Pay to get out, or use your card", "Pay 1M");
                 }
-                if(userinput.equals(helper.lineReader("_Messages",3))) {
+                if(userinput.equals("Pay 1M")) {
                     player[playerTurn].addAccountBalance(-1);
                 }
-                else if(userinput.equals(helper.lineReader("_Messages",4))){
+                if(userinput.equals("Use your card")){
                     player[playerTurn].setJailCard(false);
                 }
                 gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
                 player[playerTurn].setJail(false);
             }
-            if (player[playerTurn].getHasCard()){
-                gui_controller.getShowMessage(player[playerTurn].getName() + helper.lineReader("_Messages",5));
-                if (playerTurn == 0){
-                    gui_controller.displayChanceCard(deck.getCard(11).getCardDescription());
-                } else if (playerTurn == 1){
-                    gui_controller.displayChanceCard(deck.getCard(12).getCardDescription());
-                } else if (playerTurn == 2){
-                    gui_controller.displayChanceCard(deck.getCard(0).getCardDescription());
-                } else if (playerTurn == 3){
-                    gui_controller.displayChanceCard(deck.getCard(5).getCardDescription());
-                }
-                player[playerTurn].setHasCard(false);
-                gui_controller.displayChanceCard("");
-                manageField();
-            }
+
             // Rolls the dice
-            gui_controller.getShowMessage(player[playerTurn].getName() + helper.lineReader("_Messages",6));
+            gui_controller.getShowMessage(player[playerTurn].getName() + "'s turn. Press OK to roll");
             cup.rollDices();
             gui_controller.setDices(cup.getDice1(), cup.getDice2());
-            sleep();
 
             //Loop that makes the players go around in a circle instead of breaking at field 24
             gui_controller.setGui_car(playerTurn, player[playerTurn].getPlayerPosition() + cup.getSum(), player[playerTurn].getPlayerPosition());
             player[playerTurn].addPlayerPosition(cup.getSum());
-            sleep();
-
 
             // Sends player to jail
             if (player[playerTurn].getPlayerPosition() == 18) {
-                gui_controller.getShowMessage(helper.lineReader("_Messages",7));
+                gui_controller.getShowMessage("You landed on the 'Go to Jail' field and have been sent to prison.");
                 player[playerTurn].setPlayerPosition(6);
                 gui_controller.setGui_car(playerTurn, 6, 18);
                 player[playerTurn].setJail(true);
             }
+
+            // Gets the index of the owner of a field
             checkForOwner();
 
             //Checks if a field is not owned, and if the field is buyable (e.g. not start and chance-cards)
@@ -135,15 +123,15 @@ public class GameController {
             if (player[playerTurn].getPlayerPosition() == 3 || player[playerTurn].getPlayerPosition() == 9 || player[playerTurn].getPlayerPosition() == 15 || player[playerTurn].getPlayerPosition() == 21) {
                 drawCard();
             }
-
+            // Win condition
             if (player[playerTurn].getAccountBalance() < 0) {
-                winner();
+                winner2();
                 break;
             }
-
-
-
+            // Next players turn
             turn();
+
+
             for (int i = 0; i < noPlayer; i++) {
                 System.out.print(player[i].getName() + " " + player[i].getAccountBalance() + " ");
             }
@@ -151,35 +139,35 @@ public class GameController {
         }
 
     }
-    //Taken from: https://www.javatpoint.com/thread-sleep-in-java
-    private void sleep(){
-        try{Thread.sleep(1200);}catch(InterruptedException e){System.out.println(e);}
-    }
 
-    // Checks if current field is owned by someone, and returns their index number.
-    // Handles gui null-point-error when a field is not yet owned by anyone
+
+    /**
+     * Gets the index number of the owner for a field
+     */
     private void checkForOwner() {
+        // Handles null-pointer error in case noone owns the field.
         try {
             for (int i = 0; i < noPlayer - 1; i++) {
-                // Finds the index of the owner of the current field
+                // Finds the index of the owner of the current field and saves it
                 if (gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName().equals(player[i].getName())) {
                     indexPlayerOwner = i;
                 }
             }
         }
-        // Handles the exception. Proceeds with the code.
+        // Handles the exception, sets index to the current players index to ensure nothing happens
         catch (NullPointerException e) {
             indexPlayerOwner = playerTurn;
-            //System.out.println("indexPlayerOwner is fxed");
         }
-        System.out.println(helper.lineReader("_Messages",8) + indexPlayerOwner);
     }
+
     /**
-     * Increments the playerTurn variable with one.
+     * Switches the players turn
      */
     private void turn() {
+        // adds 1 to get the next players turn if the next player turns is within the amount of players
         if (playerTurn < noPlayer - 1){
             playerTurn += 1;
+            // Sets the player turn to first player if player turn exceeds max amount of players
         } else {
             playerTurn = 0;
         }
@@ -192,6 +180,7 @@ public class GameController {
      */
     private int ownableFields(){
         int count = 0;
+        // Finds empty fields
         for (int i = 0; i < 24; i++) {
             if(gui_controller.getField(i).getOwnerName() == null && Integer.parseInt(gui_controller.getField(i).getRent()) != 0){
                 count++;
@@ -215,38 +204,33 @@ public class GameController {
      */
     private void accounting(){
         checkForOwner();
-
-        if (player[playerTurn].getPlayerPosition() != 23 && player[playerTurn].getPlayerPosition() != 0) {
+        // Checks if player is "at the edge" of the board, either 0 or 23 in this case. Edge cases is handled seperately.
+        if (player[playerTurn].getPlayerPosition() != gameBoard.getFields().length - 1 && player[playerTurn].getPlayerPosition() != 0) {
+            //Checks if the field in front of the field is owned by
             if (Objects.equals(gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(player[playerTurn].getPlayerPosition() + 1).getOwnerName())) {
-                //Sets the owners account balance after collecting double rent
+                // Makes player pay double rent to the field owner
                 doubleRentPayment();
             }
+            //Checks if the field before the field is owned by the same player
             else if (Objects.equals(gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(player[playerTurn].getPlayerPosition() - 1).getOwnerName())){
+                // Makes player pay double rent to the field owner
                 doubleRentPayment();
             }
-            // Makes the player pay normal rent
             else{
+                // Makes the player pay normal rent
                 rentPayment();
             }
-        } else if(player[playerTurn].getPlayerPosition() == 23){
+        // Handles the special case where a player lands on field 23
+        } else if (player[playerTurn].getPlayerPosition() == 23){
             if (Objects.equals(gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(player[playerTurn].getPlayerPosition() - 1).getOwnerName())){
+                // Makes player pay double rent to the field owner
                 doubleRentPayment();
             }
-            // Makes the player pay normal rent
             else{
-                rentPayment();
-            }
-
-        } else {
-            if (Objects.equals(gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName(), gui_controller.getField(player[playerTurn].getPlayerPosition() + 1).getOwnerName())){
-                doubleRentPayment();
-            }
-            // Makes the player pay normal rent
-            else{
+                // Makes the player pay normal rent
                 rentPayment();
             }
         }
-        // Same as prev but backwards
 
     }
 
@@ -290,13 +274,14 @@ public class GameController {
         if (player[playerTurn].getPlayerPosition() >= chanceCardField) {
             player[playerTurn].addAccountBalance(2);
         }
-        String field = gui_controller.getUserButtonPressed(helper.lineReader("_Messages",9), helper.lineReader("_Messages",10), helper.lineReader("_Messages",11));
-        if (field.equals(helper.lineReader("_Messages",10))){
+        String field = gui_controller.getUserButtonPressed("choose a field", "first field", "second field");
+        if (field.equals("first field")){
             gui_controller.setGui_car(playerTurn, fieldOne, player[playerTurn].getPlayerPosition());
             player[playerTurn].setPlayerPosition(fieldOne);
             if (gui_controller.getField(fieldOne).getOwnerName() == null) {
                 freeField();
             } else if(!Objects.equals(player[playerTurn].getName(), gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName())){
+                System.out.println("IM ACCOUNTING 1");
                 accounting();
             }
         } else {
@@ -305,6 +290,7 @@ public class GameController {
             if (gui_controller.getField(fieldTwo).getOwnerName() == null) {
                 freeField();
             } else if(!Objects.equals(player[playerTurn].getName(), gui_controller.getField(player[playerTurn].getPlayerPosition()).getOwnerName())){
+                System.out.println("Im account2");
                 accounting();
             }
         }
@@ -316,7 +302,7 @@ public class GameController {
      */
     private void manageField(){
         if (ownableFields() == 0) {
-            int userInput = Integer.parseInt(gui_controller.getUserButtonPressed(helper.lineReader("_Messages",12), "1", "2", "4", "5", "7", "8", "10", "11", "13", "14", "16", "17", "19", "20", "22", "23"));
+            int userInput = Integer.parseInt(gui_controller.getUserButtonPressed("CHOOSE A FIELD TO BUY", "1", "2", "4", "5", "7", "8", "10", "11", "13", "14", "16", "17", "19", "20", "22", "23"));
             if (userInput < player[playerTurn].getPlayerPosition()){
                 player[playerTurn].addAccountBalance(2);
             }
@@ -346,7 +332,41 @@ public class GameController {
         return netWorth;
     }
 
-    private void winner() {
+    private String winner(){
+        Integer[] arr;
+        String winner = "";
+        if (noPlayer == 2){
+            arr = new Integer[2];
+            for (int i = 0; i < 2; i++) {
+                arr[i] = player[playerTurn].getAccountBalance();
+            }
+        } else if(noPlayer == 3){
+            arr = new Integer[3];
+            for (int i = 0; i < 3; i++) {
+                arr[i] = player[playerTurn].getAccountBalance();
+            }
+        } else{
+            arr = new Integer[4];
+            for (int i = 0; i < 4; i++) {
+                arr[i] = player[playerTurn].getAccountBalance();
+            }
+        }
+        Arrays.sort(arr, Collections.reverseOrder());
+        if (Objects.equals(arr[0], arr[1])){
+            if(valueOfAllProperties(0) > valueOfAllProperties(1)){
+            }
+        }else{
+            for (int i = 0; i < noPlayer; i++) {
+                if(player[i].getAccountBalance() == arr[0]){
+                    winner = player[i].getName();
+
+                }
+            }
+        }
+        return winner;
+    }
+
+    private void winner2() {
         Integer[] playerBalances = new Integer[noPlayer];
         Integer[] playerEqualBalance;
         int playerno = 0;
@@ -399,16 +419,16 @@ public class GameController {
             if (!Objects.equals(playerEqualBalance[0], playerEqualBalance[1])) {
                 System.out.println(Arrays.toString(playerEqualBalance) + "is index1");
                 System.out.println("Winner is " + player[index[0]].getName() + " with " + playerEqualBalance[0] + "$$");
-                gui_controller.getShowMessage(helper.lineReader("_Messages",13) + player[index[0]].getName() + helper.lineReader("_Messages",14) + playerEqualBalance[0] + helper.lineReader("_Messages",15));
+                gui_controller.getShowMessage("Cash was equal. Winner is " + player[index[0]].getName() + " with " + playerEqualBalance[0] + "$$ in field-value");
             }else{
                 System.out.println(Arrays.toString(playerEqualBalance) + "is index3");
                 System.out.println("Winner is " + player[index[1]].getName() + " with " + playerEqualBalance[1] + "$$");
-                gui_controller.getShowMessage(helper.lineReader("_Messages",16) + player[index[0]].getName() + helper.lineReader("_Messages",17) + player[index[1]].getName() + helper.lineReader("_Messages",14) + playerEqualBalance[1] + helper.lineReader("_Messages",15));
+                gui_controller.getShowMessage("Cash was equal. Field value was equal. It's a draw between " + player[index[0]].getName() + " and " + player[index[1]].getName() + " with " + playerEqualBalance[1] + "$$ in field-value");
             }
         } else{
 
             System.out.println(player[index[0]].getName() + " is the winner with " + player[index[0]].getAccountBalance() + "$$");
-            gui_controller.getShowMessage(player[index[0]].getName() + helper.lineReader("_Messages",18) + player[index[0]].getAccountBalance() + helper.lineReader("_Messages",19));
+            gui_controller.getShowMessage(player[index[0]].getName() + " is the winner with " + player[index[0]].getAccountBalance() + "$$ in cash");
 
         }
 
@@ -419,13 +439,13 @@ public class GameController {
      */
     private void drawCard(){
         deck.draw();
-        while(deck.getLastCard().getCardDescription() == null){
-            deck.draw();
-        }
-        gui_controller.getShowMessage(helper.lineReader("_Messages",20));
         gui_controller.displayChanceCard(deck.getLastCard().getCardDescription());
+        gui_controller.getShowMessage("You have drawn a card");
         chanceCards(deck.getLastCard().getIndex());
-        gui_controller.getUserButtonPressed(helper.lineReader("_Messages",21), helper.lineReader("_Messages",22));
+        while(deck.getLastCard().getCardDescription() == null){
+            chanceCards(deck.draw().getIndex());
+        }
+        gui_controller.getUserButtonPressed("Press when ready", "Continue");
         gui_controller.displayChanceCard(" ");
     }
 
@@ -438,7 +458,7 @@ public class GameController {
             case 0:
                 if(noPlayer >= 4) {
                     if (playerTurn == 2) {
-                        player[2].setHasCard(true);
+                        manageField();
                     } else {
                         player[2].setHasCard(true);
                         drawCard();
@@ -456,7 +476,7 @@ public class GameController {
                 gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
                 break;
             case 2:
-                int userChoice = Integer.parseInt(gui_controller.getUserButtonPressed(helper.lineReader("_Messages",23), "1", "2", "3", "4", "5"));
+                int userChoice = Integer.parseInt(gui_controller.getUserButtonPressed("DU MÅ RYKKE OP TIL 5 FELTER", "1", "2", "3", "4", "5"));
                 gui_controller.setGui_car(playerTurn, player[playerTurn].getPlayerPosition() + userChoice, player[playerTurn].getPlayerPosition());
                 player[playerTurn].addPlayerPosition(userChoice);
                 checkForOwner();
@@ -470,8 +490,8 @@ public class GameController {
                 moveToColor(15,10,11);
                 break;
             case 4:
-                String userChoice1 = gui_controller.getUserButtonPressed(helper.lineReader("_Messages",24), "1", helper.lineReader("_Messages",25));
-                if(userChoice1.equals(helper.lineReader("_Messages",25))) {
+                String userChoice1 = gui_controller.getUserButtonPressed("DU MÅ RYKKE ET FELT ELLER TRÆKKE ET KORT TIL", "1", "TRÆK ET KORT TIL");
+                if(userChoice1.equals("TRÆK ET KORT TIL")) {
                     drawCard();
                     break;
                 }
@@ -490,7 +510,7 @@ public class GameController {
             case 5:
                 if(noPlayer >= 3) {
                     if (playerTurn == 3) {
-                        player[3].setHasCard(true);
+                        manageField();
                     } else {
                         player[3].setHasCard(true);
                         drawCard();
@@ -504,12 +524,12 @@ public class GameController {
                 gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
                 break;
             case 7:
-                String userChoice2 = gui_controller.getUserButtonPressed(helper.lineReader("_Messages",26), helper.lineReader("_Messages",27), helper.lineReader("_Messages",28));
-                if(userChoice2.equals(helper.lineReader("_Messages",27))) {
+                String userChoice2 = gui_controller.getUserButtonPressed("ORANGE ELLER GRØN?", "ORANGE", "GRØN");
+                if(userChoice2.equals("ORANGE")) {
                     moveToColor(15, 10, 11);
                     break;
                 }
-                if(userChoice2.equals(helper.lineReader("_Messages",28))){
+                if(userChoice2.equals("GRØN")){
                     moveToColor(21,19,20);
                     break;
                 }
@@ -536,7 +556,7 @@ public class GameController {
                     break;
                 else {
                     if (playerTurn == 0) {
-                        player[0].setHasCard(true);
+                        manageField();
 
                     } else {
                         player[0].setHasCard(true);
@@ -549,7 +569,7 @@ public class GameController {
                     break;
                 else {
                     if (playerTurn == 1) {
-                        player[1].setHasCard(true);
+                        manageField();
                     } else {
                         player[1].setHasCard(true);
                         drawCard();
@@ -562,12 +582,12 @@ public class GameController {
                 gui_controller.setGUI_AccountBalance(playerTurn, player[playerTurn].getAccountBalance());
                 break;
             case 14:
-                String userChoice3 = gui_controller.getUserButtonPressed(helper.lineReader("_Messages",29), helper.lineReader("_Messages",30), helper.lineReader("_Messages",31));
-                if(userChoice3.equals(helper.lineReader("_Messages",30))) {
+                String userChoice3 = gui_controller.getUserButtonPressed("PINK ELLER MØRKEBLÅT?", "PINK", "MØRKEBLÅT");
+                if(userChoice3.equals("PINK")) {
                     moveToColor(9, 7, 8);
                     break;
                 }
-                if(userChoice3.equals(helper.lineReader("_Messages",31))){
+                if(userChoice3.equals("MØRKEBLÅT")){
                     moveToColor(22, 22, 23);
                     break;
                 }
@@ -594,24 +614,24 @@ public class GameController {
                 }
                 break;
             case 18:
-                String userChoice4 = gui_controller.getUserButtonPressed(helper.lineReader("_Messages",32), helper.lineReader("_Messages",33), helper.lineReader("_Messages",34));
-                if(userChoice4.equals(helper.lineReader("_Messages",33))) {
+                String userChoice4 = gui_controller.getUserButtonPressed("LYSEBLÅT ELLER RØDT?", "LYSEBLÅT", "RØDT");
+                if(userChoice4.equals("LYSEBLÅT")) {
                     moveToColor(9, 4, 5);
                     break;
 
                 }
-                if(userChoice4.equals(helper.lineReader("_Messages",34))){
-                    moveToColor(15, 14,13);
+                if(userChoice4.equals("RØDT")){
+                    moveToColor(15, 13,14);
                     break;
                 }
             case 19:
-                String userChoice5 = gui_controller.getUserButtonPressed(helper.lineReader("_Messages",35), helper.lineReader("_Messages",36), helper.lineReader("_Messages",37));
-                if(userChoice5.equals(helper.lineReader("_Messages",36))) {
+                String userChoice5 = gui_controller.getUserButtonPressed("BRUNT ELLER GULT?", "BRUNT", "GULT");
+                if(userChoice5.equals("BRUNT")) {
                     moveToColor(3, 1, 2);
                     break;
 
                 }
-                if(userChoice5.equals(helper.lineReader("_Messages",37))){
+                if(userChoice5.equals("GULT")){
                     moveToColor(21, 16,17);
                     break;
                 }
