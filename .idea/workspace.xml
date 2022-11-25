@@ -5,8 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1aa8222b-0e0f-4269-b2a7-255c3ae30a5b" name="Changes" comment="** Fixed bug where GUI didn't show the wrong number when landing on chance field&#10;** Fixed winner method such it works if more than one player has the same amount of end money&#10;** Fixed bug where GUI didn't show up correctly when landing on field owned by other player&#10;** Added functionality for the case where both cash and fields value is equal">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_11_17_2022_3_24_AM_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_11_17_2022_3_24_AM__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_17_2022_3_24_AM_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_17_2022_3_24_AM__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_11_2022__13_51__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_11_2022__13_51__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_11_2022__16_40__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_17_11_2022__16_40__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/Game/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/Game/GameController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -333,10 +339,5 @@
     <MESSAGE value="Working on win conditions.." />
     <MESSAGE value="** Fixed bug where GUI didn't show the wrong number when landing on chance field&#10;** Fixed winner method such it works if more than one player has the same amount of end money&#10;** Fixed bug where GUI didn't show up correctly when landing on field owned by other player&#10;** Added functionality for the case where both cash and fields value is equal" />
     <option name="LAST_COMMIT_MESSAGE" value="** Fixed bug where GUI didn't show the wrong number when landing on chance field&#10;** Fixed winner method such it works if more than one player has the same amount of end money&#10;** Fixed bug where GUI didn't show up correctly when landing on field owned by other player&#10;** Added functionality for the case where both cash and fields value is equal" />
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/CDIO3$Main.ic" NAME="Main Coverage Results" MODIFIED="1669033689472" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>org.Game.Field</FILTER>
-    </SUITE>
   </component>
 </project>
